@@ -16,8 +16,6 @@ public class ProceduralInput : MonoBehaviour
         Vector3 mySize = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.size;
         int length = (int) mySize.x;
         int width =  (int)mySize.z;
-        Debug.Log(length.ToString());
-        Debug.Log(width.ToString());
         m_squares = new int[length, width];
         for (int i = 0; i < length; i++)
         {
