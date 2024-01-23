@@ -23,12 +23,9 @@ public class ProceduralInput : MonoBehaviour
         {
             for (int j = 0; j < width; j++)
             {
-                Debug.Log(i.ToString());
-                Debug.Log(j.ToString());
                 m_squares[i,j] = 0;
             }
         }
-        Debug.Log("Hello world!");
     }
 
     bool ValidPosition(int x,int z,Vector3 size)
