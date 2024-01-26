@@ -62,33 +62,42 @@ public class ProceduralInput : MonoBehaviour
             {
                 int x = Random.Range(5, 95);
                 int z = Random.Range(5, 95);
+                int rotationAmount = Random.Range(0, 4) * 90;
+                m_house1.transform.rotation = transform.rotation;
+                m_house1.transform.Rotate(0, rotationAmount, 0,Space.Self);
                 Vector3 size = m_house1.transform.localScale;
                 if (ValidPosition(x,z,size))
                 {
                     var housePosition = new Vector3(x, 5.0f, z);
-                    Instantiate(m_house1, housePosition, transform.rotation);
+                    Instantiate(m_house1, housePosition, m_house1.transform.rotation);
                 }
             }
             if (choice == 2)
             {
                 int x = Random.Range(5, 95);
                 int z = Random.Range(5, 95);
+                int rotationAmount = Random.Range(0, 4) * 90;
+                m_house2.transform.rotation = transform.rotation;
+                m_house2.transform.Rotate(0, rotationAmount, 0, Space.Self);
                 Vector3 size = m_house2.transform.localScale;
                 if (ValidPosition(x, z, size))
                 {
                     var housePosition = new Vector3(x, 5.0f, z);
-                    Instantiate(m_house2, housePosition, transform.rotation);
+                    Instantiate(m_house2, housePosition, m_house2.transform.rotation);
                 }
             }
             if (choice == 3)
             {
                 int x = Random.Range(5, 95);
                 int z = Random.Range(5, 95);
+                int rotationAmount = Random.Range(0, 4) * 90;
+                m_house3.transform.rotation = transform.rotation;
+                m_house3.transform.Rotate(0, rotationAmount, 0, Space.Self);
                 Vector3 size = m_house3.transform.localScale;
                 if (ValidPosition(x, z, size))
                 {
                     var housePosition = new Vector3(x, 10.0f, z);
-                    Instantiate(m_house3, housePosition, transform.rotation);
+                    Instantiate(m_house3, housePosition, m_house3.transform.rotation);
                 }
             }
         }
