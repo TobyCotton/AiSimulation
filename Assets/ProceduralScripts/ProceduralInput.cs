@@ -45,52 +45,52 @@ public class ProceduralInput : MonoBehaviour
             }
         }
         CreateRoads();
-        for(int i = 0; i < 100; i++)
-        {
-            int choice = Random.Range(1, 4);
-            if (choice == 1)
-            {
-                int x = Random.Range(5, 95);
-                int z = Random.Range(5, 95);
-                int rotationAmount = Random.Range(0, 4) * 90;
-                m_house1.transform.rotation = transform.rotation;
-                m_house1.transform.Rotate(0, rotationAmount, 0, Space.Self);
-                Vector3 size = m_house1.transform.localScale;
-                if (ValidPosition(x, z, size, rotationAmount))
-                {
-                    var housePosition = new Vector3(x, 5.0f, z);
-                    Instantiate(m_house1, housePosition, m_house1.transform.rotation);
-                }
-            }
-            if (choice == 2)
-            {
-                int x = Random.Range(5, 95);
-                int z = Random.Range(5, 95);
-                int rotationAmount = Random.Range(0, 4) * 90;
-                m_house2.transform.rotation = transform.rotation;
-                m_house2.transform.Rotate(0, rotationAmount, 0, Space.Self);
-                Vector3 size = m_house2.transform.localScale;
-                if (ValidPosition(x, z, size, rotationAmount))
-                {
-                    var housePosition = new Vector3(x, 5.0f, z);
-                    Instantiate(m_house2, housePosition, m_house2.transform.rotation);
-                }
-            }
-            if (choice == 3)
-            {
-                int x = Random.Range(5, 95);
-                int z = Random.Range(5, 95);
-                int rotationAmount = Random.Range(0, 4) * 90;
-                m_house3.transform.rotation = transform.rotation;
-                m_house3.transform.Rotate(0, rotationAmount, 0, Space.Self);
-                Vector3 size = m_house3.transform.localScale;
-                if (ValidPosition(x, z, size, rotationAmount))
-                {
-                    var housePosition = new Vector3(x, 10.0f, z);
-                    Instantiate(m_house3, housePosition, m_house3.transform.rotation);
-                }
-            }
-        }
+        //for (int i = 0; i < 100; i++)
+        //{
+        //    int choice = Random.Range(1, 4);
+        //    if (choice == 1)
+        //    {
+        //        int x = Random.Range(5, 95);
+        //        int z = Random.Range(5, 95);
+        //        int rotationAmount = Random.Range(0, 4) * 90;
+        //        m_house1.transform.rotation = transform.rotation;
+        //        m_house1.transform.Rotate(0, rotationAmount, 0, Space.Self);
+        //        Vector3 size = m_house1.transform.localScale;
+        //        if (ValidPosition(x, z, size, rotationAmount))
+        //        {
+        //            var housePosition = new Vector3(x, 5.0f, z);
+        //            Instantiate(m_house1, housePosition, m_house1.transform.rotation);
+        //        }
+        //    }
+        //    if (choice == 2)
+        //    {
+        //        int x = Random.Range(5, 95);
+        //        int z = Random.Range(5, 95);
+        //        int rotationAmount = Random.Range(0, 4) * 90;
+        //        m_house2.transform.rotation = transform.rotation;
+        //        m_house2.transform.Rotate(0, rotationAmount, 0, Space.Self);
+        //        Vector3 size = m_house2.transform.localScale;
+        //        if (ValidPosition(x, z, size, rotationAmount))
+        //        {
+        //            var housePosition = new Vector3(x, 5.0f, z);
+        //            Instantiate(m_house2, housePosition, m_house2.transform.rotation);
+        //        }
+        //    }
+        //    if (choice == 3)
+        //    {
+        //        int x = Random.Range(5, 95);
+        //        int z = Random.Range(5, 95);
+        //        int rotationAmount = Random.Range(0, 4) * 90;
+        //        m_house3.transform.rotation = transform.rotation;
+        //        m_house3.transform.Rotate(0, rotationAmount, 0, Space.Self);
+        //        Vector3 size = m_house3.transform.localScale;
+        //        if (ValidPosition(x, z, size, rotationAmount))
+        //        {
+        //            var housePosition = new Vector3(x, 10.0f, z);
+        //            Instantiate(m_house3, housePosition, m_house3.transform.rotation);
+        //        }
+        //    }
+        //}
     }
 
     private void CreateRoads()
@@ -98,49 +98,178 @@ public class ProceduralInput : MonoBehaviour
         List<GameObject> usableTiles = new List<GameObject>();
         for(int i = 0; i < m_Tiles.Length;i++)
         {
-            usableTiles.Add(m_Tiles[i]);
+            if (i == 4) { }
+            else
+            {
+                usableTiles.Add(m_Tiles[i]);
+            }
         }
-        List<GameObject> revertCopy = usableTiles;
+        GameObject[] revertCopy = usableTiles.ToArray();
         for (int i = 0; i < length; i++)
         {
-            for (int j =0; j<width;j++)
+            for (int j = 0; j < width; j++)
             {
-                if (i == 0 && j == 0)
+                if (!m_Grid[i, j])
                 {
-                    usableTiles.Clear();
-                    usableTiles.Add(m_Tiles[3]);
-                }
-                else
-                {
-                    if (i == 0) { }
-                    else if (i == length-1)
+                    if (i == 0 && j == 0)
                     {
-                        GameObject itemCheck = m_Grid[i - 1, j];
-                        TileScript checkScript = itemCheck.GetComponent<TileScript>();
-                        if (checkScript != null)
+                        usableTiles.Clear();
+                        usableTiles.Add(m_Tiles[3]);
+                        GameObject chosen = usableTiles[Random.Range(0, usableTiles.Count)];
+                        m_Grid[i, j] = chosen;
+                        Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
+                        usableTiles = revertCopy.ToList();
+                    }
+                    else
+                    {
+                        if (i == 0) { }
+                        else if (i == length-1)
                         {
-                            for (int k = 0; k < usableTiles.Count; k++)
+                            GameObject itemCheck = m_Grid[i - 1, j];
+                            TileScript checkScript = itemCheck.GetComponent<TileScript>();
+                            if (checkScript != null)
                             {
-                                TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
-                                if (compareScript)
+                                for (int k = 0; k < usableTiles.Count; k++)
                                 {
-                                    if (checkScript.m_x1 != compareScript.m_x2)
+                                    TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
+                                    if (compareScript)
                                     {
-                                        usableTiles.Remove(usableTiles[k]);
+                                        if (checkScript.m_x1 != compareScript.m_x2)
+                                        {
+                                            usableTiles.Remove(usableTiles[k]);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    if (j == 0) { }
-                    else if (j == width-1)
-                    {
-
+                        else
+                        {
+                            GameObject itemCheck = m_Grid[i - 1, j];
+                            TileScript checkScript = itemCheck.GetComponent<TileScript>();
+                            if (checkScript != null)
+                            {
+                                for (int k = 0; k < usableTiles.Count; k++)
+                                {
+                                    TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
+                                    if (compareScript)
+                                    {
+                                        if (checkScript.m_x1 != compareScript.m_x2)
+                                        {
+                                            usableTiles.Remove(usableTiles[k]);
+                                        }
+                                    }
+                                }
+                            }
+                            itemCheck = m_Grid[i + 1, j];
+                            if (itemCheck)
+                            {
+                                checkScript = itemCheck.GetComponent<TileScript>();
+                                if (checkScript != null)
+                                {
+                                    for (int k = 0; k < usableTiles.Count; k++)
+                                    {
+                                        TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
+                                        if (compareScript)
+                                        {
+                                            if (checkScript.m_x2 != compareScript.m_x1)
+                                            {
+                                                usableTiles.Remove(usableTiles[k]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (j == 0) { }
+                        else if (j == width-1)
+                        {
+                            GameObject itemCheck = m_Grid[i, j - 1];
+                            TileScript checkScript = itemCheck.GetComponent<TileScript>();
+                            if (checkScript != null)
+                            {
+                                for (int k = 0; k < usableTiles.Count; k++)
+                                {
+                                    TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
+                                    if (compareScript)
+                                    {
+                                        if (checkScript.m_z1 != compareScript.m_z2)
+                                        {
+                                            usableTiles.Remove(usableTiles[k]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            GameObject itemCheck = m_Grid[i, j - 1];
+                            TileScript checkScript = itemCheck.GetComponent<TileScript>();
+                            if (checkScript != null)
+                            {
+                                for (int k = 0; k < usableTiles.Count; k++)
+                                {
+                                    TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
+                                    if (compareScript)
+                                    {
+                                        if (checkScript.m_z1 != compareScript.m_z2)
+                                        {
+                                            usableTiles.Remove(usableTiles[k]);
+                                        }
+                                    }
+                                }
+                            }
+                            itemCheck = m_Grid[i, j + 1];
+                            if (itemCheck)
+                            {
+                                checkScript = itemCheck.GetComponent<TileScript>();
+                                if (checkScript != null)
+                                {
+                                    for (int k = 0; k < usableTiles.Count; k++)
+                                    {
+                                        TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
+                                        if (compareScript)
+                                        {
+                                            if (checkScript.m_z2 != compareScript.m_z1)
+                                            {
+                                                usableTiles.Remove(usableTiles[k]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if(usableTiles.Count == 0)
+                        {
+                            Debug.Log("here");
+                        }
+                        GameObject chosen = usableTiles[Random.Range(0, usableTiles.Count)];
+                        //if (chosen == m_tile6 || chosen == m_tile7)
+                        //{
+                        //    for (int k = 0; k < 5; k++)
+                        //    {
+                        //        if (chosen == m_tile7)
+                        //        {
+                        //            if (i + k < length - 1)
+                        //            {
+                        //                m_Grid[i + k, j] = chosen;
+                        //                Instantiate(chosen, new Vector3(i + k + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
+                        //            }
+                        //        }
+                        //        else
+                        //        {
+                        //            if (j + k < width - 1)
+                        //            {
+                        //                m_Grid[i, j + k] = chosen;
+                        //                Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + k + 0.5f), chosen.transform.rotation);
+                        //            }
+                        //        }
+                        //    }
+                        //}
+                        m_Grid[i, j] = chosen;
+                        Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
+                        usableTiles = revertCopy.ToList();
                     }
                 }
-                GameObject chosen = usableTiles[Random.Range(0, usableTiles.Count)];
-                m_Grid[i, j] = chosen;
-                Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
             }
         }
     }
