@@ -10,15 +10,33 @@ public class ProceduralInput : MonoBehaviour
     public GameObject m_house1;
     public GameObject m_house2;
     public GameObject m_house3;
+    public GameObject m_tile1;
+    public GameObject m_tile2;
+    public GameObject m_tile3;
+    public GameObject m_tile4;
+    public GameObject m_tile5;
+    public GameObject m_tile6;
+    public GameObject m_tile7;
     private int[,] m_squares;
     private int length;
     private int width;
+    private GameObject[] m_Tiles;
+    private GameObject[,] m_Grid;
     private void Start()
     {
         Vector3 mySize = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.size;
         length = (int)mySize.x;
         width =  (int)mySize.z;
         m_squares = new int[length, width];
+        m_Tiles = new GameObject[7];
+        m_Grid = new GameObject[length, width];
+        m_Tiles[0] = m_tile1;
+        m_Tiles[1] = m_tile2;
+        m_Tiles[2] = m_tile3;
+        m_Tiles[3] = m_tile4;
+        m_Tiles[4] = m_tile5;
+        m_Tiles[5] = m_tile6;
+        m_Tiles[6] = m_tile7;
         for (int i = 0; i < length; i++)
         {
             for (int j = 0; j < width; j++)
@@ -26,6 +44,7 @@ public class ProceduralInput : MonoBehaviour
                 m_squares[i,j] = 0;
             }
         }
+        CreateRoads();
         for(int i = 0; i < 100; i++)
         {
             int choice = Random.Range(1, 4);
@@ -70,6 +89,58 @@ public class ProceduralInput : MonoBehaviour
                     var housePosition = new Vector3(x, 10.0f, z);
                     Instantiate(m_house3, housePosition, m_house3.transform.rotation);
                 }
+            }
+        }
+    }
+
+    private void CreateRoads()
+    {
+        List<GameObject> usableTiles = new List<GameObject>();
+        for(int i = 0; i < m_Tiles.Length;i++)
+        {
+            usableTiles.Add(m_Tiles[i]);
+        }
+        List<GameObject> revertCopy = usableTiles;
+        for (int i = 0; i < length; i++)
+        {
+            for (int j =0; j<width;j++)
+            {
+                if (i == 0 && j == 0)
+                {
+                    usableTiles.Clear();
+                    usableTiles.Add(m_Tiles[3]);
+                }
+                else
+                {
+                    if (i == 0) { }
+                    else if (i == length-1)
+                    {
+                        GameObject itemCheck = m_Grid[i - 1, j];
+                        TileScript checkScript = itemCheck.GetComponent<TileScript>();
+                        if (checkScript != null)
+                        {
+                            for (int k = 0; k < usableTiles.Count; k++)
+                            {
+                                TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
+                                if (compareScript)
+                                {
+                                    if (checkScript.m_x1 != compareScript.m_x2)
+                                    {
+                                        usableTiles.Remove(usableTiles[k]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (j == 0) { }
+                    else if (j == width-1)
+                    {
+
+                    }
+                }
+                GameObject chosen = usableTiles[Random.Range(0, usableTiles.Count)];
+                m_Grid[i, j] = chosen;
+                Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
             }
         }
     }
