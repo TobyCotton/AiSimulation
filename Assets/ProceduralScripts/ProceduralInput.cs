@@ -10,9 +10,9 @@ public class ProceduralInput : MonoBehaviour
     public GameObject m_house1;
     public GameObject m_house2;
     public GameObject m_house3;
-    private int[,] m_squares;
-    private int length;
-    private int width;
+    public int[,] m_squares;
+    public int length;
+    public int width;
     private void Start()
     {
         Vector3 mySize = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.size;
