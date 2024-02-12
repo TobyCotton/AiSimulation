@@ -8,14 +8,15 @@ using UnityEngine;
 public class AI_Movement : MonoBehaviour
 {
     private int[,] m_squares;
-    private Transform transform;
+    private Transform componentTransform;
     private ProceduralInput Terrain;
     private bool moving = true;
+    private int speed = 1;
     void Start()
     {
         Terrain = GameObject.Find("Terrain").GetComponent<ProceduralInput>();
         m_squares = Terrain.m_squares;
-        transform = GetComponent<Transform>();
+        componentTransform = GetComponent<Transform>();
     }
 
     // Update is called once per frame
@@ -23,35 +24,31 @@ public class AI_Movement : MonoBehaviour
     {
         if (moving)
         {
-            moveTo(new Vector3(-20, 1, -20));
+            moveTo(new Vector3(100, 1, 100));
         }
     }
 
     void moveTo(Vector3 endPositon)
     {
-        var direction = (transform.position - endPositon).normalized;
-        Vector3 distance = endPositon - transform.position;
+        var direction = (componentTransform.position - endPositon).normalized;
+        Vector3 distance = endPositon - componentTransform.position;
         var distanceBetween = distance.magnitude;
         //current distance is less than a very small amount
-        if (distanceBetween > 0.5)
+        if (Vector3.Distance(componentTransform.position, endPositon) > 0.5)
         {
-            moveOnGrid(direction);
-        }
-        else
-        {
-            moving = false;
+            componentTransform.position = Vector3.MoveTowards(componentTransform.position, endPositon, speed * Time.deltaTime);
         }
 
     }
     
     void moveOnGrid(Vector3 endPositon)
     {
-        Vector2 GridDistance = WorldPosToSquarePos(endPositon);
-        float SquaresLength = GridDistance.x / Terrain.length;
-        float SquaresWidth = GridDistance.y / Terrain.width;
-        Vector3 MovementVector = new Vector3(SquaresLength, 0,SquaresWidth);
-
-        transform.position += MovementVector;
+        //Vector2 GridDistance = WorldPosToSquarePos(endPositon);
+        //float SquaresLength = GridDistance.x / Terrain.length;
+        //float SquaresWidth = GridDistance.y / Terrain.width;
+        //Vector3 MovementVector = new Vector3(GridDistance.x, 0, GridDistance.y);
+        //print("MovementVector :" + MovementVector.ToString());
+        componentTransform.position = Vector2.MoveTowards(componentTransform.position, endPositon, Time.deltaTime) * Time.deltaTime;
     }
 
     Vector2 WorldPosToSquarePos(Vector3 worldPos)
