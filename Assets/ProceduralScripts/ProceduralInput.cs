@@ -25,8 +25,8 @@ public class ProceduralInput : MonoBehaviour
     private void Start()
     {
         Vector3 mySize = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.size;
-        length = (int)mySize.x;
-        width =  (int)mySize.z;
+        length = 9;//(int)mySize.x;
+        width = 9;//(int)mySize.z;
         m_squares = new int[length, width];
         m_Tiles = new GameObject[7];
         m_Grid = new GameObject[length, width];
@@ -98,11 +98,7 @@ public class ProceduralInput : MonoBehaviour
         List<GameObject> usableTiles = new List<GameObject>();
         for(int i = 0; i < m_Tiles.Length;i++)
         {
-            if (i == 4) { }
-            else
-            {
-                usableTiles.Add(m_Tiles[i]);
-            }
+            usableTiles.Add(m_Tiles[i]);
         }
         GameObject[] revertCopy = usableTiles.ToArray();
         for (int i = 0; i < length; i++)
@@ -123,25 +119,6 @@ public class ProceduralInput : MonoBehaviour
                     else
                     {
                         if (i == 0) { }
-                        else if (i == length-1)
-                        {
-                            GameObject itemCheck = m_Grid[i - 1, j];
-                            TileScript checkScript = itemCheck.GetComponent<TileScript>();
-                            if (checkScript != null)
-                            {
-                                for (int k = 0; k < usableTiles.Count; k++)
-                                {
-                                    TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
-                                    if (compareScript)
-                                    {
-                                        if (checkScript.m_x1 != compareScript.m_x2)
-                                        {
-                                            usableTiles.Remove(usableTiles[k]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
                         else
                         {
                             GameObject itemCheck = m_Grid[i - 1, j];
@@ -153,53 +130,15 @@ public class ProceduralInput : MonoBehaviour
                                     TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
                                     if (compareScript)
                                     {
-                                        if (checkScript.m_x1 != compareScript.m_x2)
+                                        if (compareScript.m_x2 != checkScript.m_x1)
                                         {
                                             usableTiles.Remove(usableTiles[k]);
-                                        }
-                                    }
-                                }
-                            }
-                            itemCheck = m_Grid[i + 1, j];
-                            if (itemCheck)
-                            {
-                                checkScript = itemCheck.GetComponent<TileScript>();
-                                if (checkScript != null)
-                                {
-                                    for (int k = 0; k < usableTiles.Count; k++)
-                                    {
-                                        TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
-                                        if (compareScript)
-                                        {
-                                            if (checkScript.m_x2 != compareScript.m_x1)
-                                            {
-                                                usableTiles.Remove(usableTiles[k]);
-                                            }
                                         }
                                     }
                                 }
                             }
                         }
                         if (j == 0) { }
-                        else if (j == width-1)
-                        {
-                            GameObject itemCheck = m_Grid[i, j - 1];
-                            TileScript checkScript = itemCheck.GetComponent<TileScript>();
-                            if (checkScript != null)
-                            {
-                                for (int k = 0; k < usableTiles.Count; k++)
-                                {
-                                    TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
-                                    if (compareScript)
-                                    {
-                                        if (checkScript.m_z1 != compareScript.m_z2)
-                                        {
-                                            usableTiles.Remove(usableTiles[k]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
                         else
                         {
                             GameObject itemCheck = m_Grid[i, j - 1];
@@ -211,63 +150,26 @@ public class ProceduralInput : MonoBehaviour
                                     TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
                                     if (compareScript)
                                     {
-                                        if (checkScript.m_z1 != compareScript.m_z2)
+                                        if (compareScript.m_z2 != checkScript.m_z1)
                                         {
                                             usableTiles.Remove(usableTiles[k]);
                                         }
                                     }
                                 }
                             }
-                            itemCheck = m_Grid[i, j + 1];
-                            if (itemCheck)
-                            {
-                                checkScript = itemCheck.GetComponent<TileScript>();
-                                if (checkScript != null)
-                                {
-                                    for (int k = 0; k < usableTiles.Count; k++)
-                                    {
-                                        TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
-                                        if (compareScript)
-                                        {
-                                            if (checkScript.m_z2 != compareScript.m_z1)
-                                            {
-                                                usableTiles.Remove(usableTiles[k]);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if(usableTiles.Count == 0)
-                        {
-                            Debug.Log("here");
                         }
                         GameObject chosen = usableTiles[Random.Range(0, usableTiles.Count)];
-                        //if (chosen == m_tile6 || chosen == m_tile7)
-                        //{
-                        //    for (int k = 0; k < 5; k++)
-                        //    {
-                        //        if (chosen == m_tile7)
-                        //        {
-                        //            if (i + k < length - 1)
-                        //            {
-                        //                m_Grid[i + k, j] = chosen;
-                        //                Instantiate(chosen, new Vector3(i + k + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
-                        //            }
-                        //        }
-                        //        else
-                        //        {
-                        //            if (j + k < width - 1)
-                        //            {
-                        //                m_Grid[i, j + k] = chosen;
-                        //                Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + k + 0.5f), chosen.transform.rotation);
-                        //            }
-                        //        }
-                        //    }
-                        //}
+                        chosen.GetComponent<TileScript>().i = i;
+                        chosen.GetComponent<TileScript>().j = j;
                         m_Grid[i, j] = chosen;
                         Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
-                        usableTiles = revertCopy.ToList();
+                        usableTiles.Clear();
+                        
+                        for (int o = 0; o < m_Tiles.Length; o++)
+                        {
+                            usableTiles.Add(m_Tiles[o]);
+                        }
+                        Debug.Log(usableTiles.Count());
                     }
                 }
             }
