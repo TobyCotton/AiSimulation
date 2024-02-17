@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using TMPro;
 using UnityEngine;
 
 public class AI_Movement : MonoBehaviour
@@ -10,35 +11,34 @@ public class AI_Movement : MonoBehaviour
     private int[,] m_squares;
     private Transform componentTransform;
     private ProceduralInput Terrain;
-    private bool moving = true;
-    private int speed = 1;
+    private int speed = 10;
+
+    private Vector3 TargetPosition;
+    private Agent PlannerAgent;
     void Start()
     {
         Terrain = GameObject.Find("Terrain").GetComponent<ProceduralInput>();
         m_squares = Terrain.m_squares;
         componentTransform = GetComponent<Transform>();
+        PlannerAgent = GetComponent<Agent>();
     }
 
     // Update is called once per frame
     void Update() 
     {
-        if (moving)
+        if (Vector3.Distance(componentTransform.position, TargetPosition) > 0.5)
         {
-            moveTo(new Vector3(100, 1, 100));
+            componentTransform.position = Vector3.MoveTowards(componentTransform.position, TargetPosition, speed * Time.deltaTime);
+        }
+        else
+        {
+            PlannerAgent.NotifyReachedGoal();
         }
     }
 
-    void moveTo(Vector3 endPositon)
+    public void moveTo(string TargetTag)
     {
-        var direction = (componentTransform.position - endPositon).normalized;
-        Vector3 distance = endPositon - componentTransform.position;
-        var distanceBetween = distance.magnitude;
-        //current distance is less than a very small amount
-        if (Vector3.Distance(componentTransform.position, endPositon) > 0.5)
-        {
-            componentTransform.position = Vector3.MoveTowards(componentTransform.position, endPositon, speed * Time.deltaTime);
-        }
-
+        TargetPosition = GameObject.FindWithTag(TargetTag).transform.position;
     }
     
     void moveOnGrid(Vector3 endPositon)

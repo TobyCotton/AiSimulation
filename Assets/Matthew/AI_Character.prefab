@@ -13,6 +13,10 @@ GameObject:
   - component: {fileID: 4927729657352577417}
   - component: {fileID: 7622526056563450791}
   - component: {fileID: 6246362937747250826}
+  - component: {fileID: 7048405455429867576}
+  - component: {fileID: 5026948454329761074}
+  - component: {fileID: 5284151879093507026}
+  - component: {fileID: 4295936057611077751}
   m_Layer: 0
   m_Name: AI_Character
   m_TagString: Untagged
@@ -63,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 2c6184a7110c15246b931454c797e9a0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,3 +124,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42240358bd120894ca25ba922b94ab53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7048405455429867576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6494566484168795622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da548323f7897614daf149c89ab40451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5026948454329761074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6494566484168795622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78eb8bbe5f25bc49ad8e6aa67187e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetTag: Objective1
+  Cost: 1
+  Duration: 2
+  EditorPreconditions: []
+  EditorAfterEffects:
+  - key: 0
+    value: 1
+  Executing: 0
+--- !u!114 &5284151879093507026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6494566484168795622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78eb8bbe5f25bc49ad8e6aa67187e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetTag: Objective2
+  Cost: 1
+  Duration: 5
+  EditorPreconditions:
+  - key: 0
+    value: 1
+  EditorAfterEffects:
+  - key: 1
+    value: 1
+  Executing: 0
+--- !u!114 &4295936057611077751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6494566484168795622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78eb8bbe5f25bc49ad8e6aa67187e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetTag: Objective3
+  Cost: 1
+  Duration: 15
+  EditorPreconditions:
+  - key: 1
+    value: 1
+  EditorAfterEffects:
+  - key: 2
+    value: 1
+  Executing: 0
