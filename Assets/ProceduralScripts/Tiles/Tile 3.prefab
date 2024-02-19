@@ -123,3 +123,4 @@ MonoBehaviour:
   m_x2: 1
   m_z1: 1
   m_z2: 0
+  m_gameObject: {fileID: 4803893809813949010}

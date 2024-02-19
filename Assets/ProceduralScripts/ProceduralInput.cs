@@ -2,9 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
 
+public enum Side
+{
+    m_x1,
+    m_x2,
+    m_z1,
+    m_z2,
+}
 public class ProceduralInput : MonoBehaviour
 {
     public GameObject m_house1;
@@ -20,30 +28,34 @@ public class ProceduralInput : MonoBehaviour
     private int[,] m_squares;
     private int length;
     private int width;
-    private GameObject[] m_Tiles;
-    private GameObject[,] m_Grid;
+    private TileInfo[,] m_Grid;
+    private List<TileInfo> m_toActivate = new List<TileInfo>();
     private void Start()
     {
         Vector3 mySize = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.size;
         length = 9;//(int)mySize.x;
         width = 9;//(int)mySize.z;
         m_squares = new int[length, width];
-        m_Tiles = new GameObject[7];
-        m_Grid = new GameObject[length, width];
-        m_Tiles[0] = m_tile1;
-        m_Tiles[1] = m_tile2;
-        m_Tiles[2] = m_tile3;
-        m_Tiles[3] = m_tile4;
-        m_Tiles[4] = m_tile5;
-        m_Tiles[5] = m_tile6;
-        m_Tiles[6] = m_tile7;
-        for (int i = 0; i < length; i++)
+        m_Grid = new TileInfo[length, width];
+        for (int o = 0; o < length; o++)
         {
-            for (int j = 0; j < width; j++)
+            for (int p = 0; p < width; p++)
             {
-                m_squares[i,j] = 0;
+                m_squares[o,p] = 0;
             }
         }
+        for (int o = 0; o < length; o++)
+        {
+            for (int p = 0; p < width; p++)
+            {
+                m_Grid[o, p] = new TileInfo();
+            }
+        }
+        int i = length / 2;
+        int j = width / 2;
+        m_Grid[i, j].i = i;
+        m_Grid[i, j].j = j;
+        m_toActivate.Add(m_Grid[i, j]);
         CreateRoads();
         //for (int i = 0; i < 100; i++)
         //{
@@ -95,85 +107,85 @@ public class ProceduralInput : MonoBehaviour
 
     private void CreateRoads()
     {
-        List<GameObject> usableTiles = new List<GameObject>();
-        for(int i = 0; i < m_Tiles.Length;i++)
-        {
-            usableTiles.Add(m_Tiles[i]);
-        }
-        GameObject[] revertCopy = usableTiles.ToArray();
-        for (int i = 0; i < length; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                if (!m_Grid[i, j])
-                {
-                    if (i == 0 && j == 0)
-                    {
-                        usableTiles.Clear();
-                        usableTiles.Add(m_Tiles[3]);
-                        GameObject chosen = usableTiles[Random.Range(0, usableTiles.Count)];
-                        m_Grid[i, j] = chosen;
-                        Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
-                        usableTiles = revertCopy.ToList();
-                    }
-                    else
-                    {
-                        if (i == 0) { }
-                        else
-                        {
-                            GameObject itemCheck = m_Grid[i - 1, j];
-                            TileScript checkScript = itemCheck.GetComponent<TileScript>();
-                            if (checkScript != null)
-                            {
-                                for (int k = 0; k < usableTiles.Count; k++)
-                                {
-                                    TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
-                                    if (compareScript)
-                                    {
-                                        if (compareScript.m_x2 != checkScript.m_x1)
-                                        {
-                                            usableTiles.Remove(usableTiles[k]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (j == 0) { }
-                        else
-                        {
-                            GameObject itemCheck = m_Grid[i, j - 1];
-                            TileScript checkScript = itemCheck.GetComponent<TileScript>();
-                            if (checkScript != null)
-                            {
-                                for (int k = 0; k < usableTiles.Count; k++)
-                                {
-                                    TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
-                                    if (compareScript)
-                                    {
-                                        if (compareScript.m_z2 != checkScript.m_z1)
-                                        {
-                                            usableTiles.Remove(usableTiles[k]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        GameObject chosen = usableTiles[Random.Range(0, usableTiles.Count)];
-                        chosen.GetComponent<TileScript>().i = i;
-                        chosen.GetComponent<TileScript>().j = j;
-                        m_Grid[i, j] = chosen;
-                        Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
-                        usableTiles.Clear();
+        //List<GameObject> usableTiles = new List<GameObject>();
+        //for(int i = 0; i < m_Tiles.Length;i++)
+        //{
+        //    usableTiles.Add(m_Tiles[i]);
+        //}
+        //GameObject[] revertCopy = usableTiles.ToArray();
+        //for (int i = 0; i < length; i++)
+        //{
+        //    for (int j = 0; j < width; j++)
+        //    {
+        //        if (!m_Grid[i, j])
+        //        {
+        //            if (i == 0 && j == 0)
+        //            {
+        //                usableTiles.Clear();
+        //                usableTiles.Add(m_Tiles[3]);
+        //                GameObject chosen = usableTiles[Random.Range(0, usableTiles.Count)];
+        //                m_Grid[i, j] = chosen;
+        //                Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
+        //                usableTiles = revertCopy.ToList();
+        //            }
+        //            else
+        //            {
+        //                if (i == 0) { }
+        //                else
+        //                {
+        //                    GameObject itemCheck = m_Grid[i - 1, j];
+        //                    TileScript checkScript = itemCheck.GetComponent<TileScript>();
+        //                    if (checkScript != null)
+        //                    {
+        //                        for (int k = 0; k < usableTiles.Count; k++)
+        //                        {
+        //                            TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
+        //                            if (compareScript)
+        //                            {
+        //                                if (compareScript.m_x2 != checkScript.m_x1)
+        //                                {
+        //                                    usableTiles.Remove(usableTiles[k]);
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //                if (j == 0) { }
+        //                else
+        //                {
+        //                    GameObject itemCheck = m_Grid[i, j - 1];
+        //                    TileScript checkScript = itemCheck.GetComponent<TileScript>();
+        //                    if (checkScript != null)
+        //                    {
+        //                        for (int k = 0; k < usableTiles.Count; k++)
+        //                        {
+        //                            TileScript compareScript = usableTiles[k].GetComponent<TileScript>();
+        //                            if (compareScript)
+        //                            {
+        //                                if (compareScript.m_z2 != checkScript.m_z1)
+        //                                {
+        //                                    usableTiles.Remove(usableTiles[k]);
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //                GameObject chosen = usableTiles[Random.Range(0, usableTiles.Count)];
+        //                chosen.GetComponent<TileScript>().i = i;
+        //                chosen.GetComponent<TileScript>().j = j;
+        //                m_Grid[i, j] = chosen;
+        //                Instantiate(chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), chosen.transform.rotation);
+        //                usableTiles.Clear();
                         
-                        for (int o = 0; o < m_Tiles.Length; o++)
-                        {
-                            usableTiles.Add(m_Tiles[o]);
-                        }
-                        Debug.Log(usableTiles.Count());
-                    }
-                }
-            }
-        }
+        //                for (int o = 0; o < m_Tiles.Length; o++)
+        //                {
+        //                    usableTiles.Add(m_Tiles[o]);
+        //                }
+        //                Debug.Log(usableTiles.Count());
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     bool ValidPosition(int x,int z,Vector3 size,int rotation)
@@ -216,9 +228,114 @@ public class ProceduralInput : MonoBehaviour
     }
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-
+            List<TileInfo> toAdd = new List<TileInfo>();
+            while(m_toActivate.Count != 0)
+            {
+                int i = m_toActivate[0].i;
+                int j = m_toActivate[0].j;
+                m_toActivate[0].m_chosen = m_toActivate[0].m_availableTiles[Random.Range(0, m_toActivate[0].m_availableTiles.Count)];
+                Instantiate(m_toActivate[0].m_chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), m_toActivate[0].m_chosen.transform.rotation);
+                if (i == 0) 
+                {
+                    if (m_Grid[i+1,j].m_chosen == null)
+                    {
+                        SelectTile(m_Grid[i + 1, j], m_Grid[i , j].m_chosen.m_x1,Side.m_x2);
+                        toAdd.Add(m_Grid[i+1 , j]);
+                    }
+                }
+                else if (i == length)
+                {
+                    if (m_Grid[i-1,j].m_chosen == null)
+                    {
+                        SelectTile(m_Grid[i - 1, j], m_Grid[i, j].m_chosen.m_x2, Side.m_x1);
+                        toAdd.Add(m_Grid[i - 1, j]);
+                    }
+                }
+                else
+                {
+                    if (m_Grid[i + 1, j].m_chosen == null)
+                    {
+                        SelectTile(m_Grid[i + 1, j], m_Grid[i, j].m_chosen.m_x1, Side.m_x2);
+                        toAdd.Add(m_Grid[i + 1, j]);
+                    }
+                    if (m_Grid[i - 1, j].m_chosen == null)
+                    {
+                        SelectTile(m_Grid[i - 1, j], m_Grid[i, j].m_chosen.m_x2, Side.m_x1);
+                        toAdd.Add(m_Grid[i - 1, j]);
+                    }
+                }
+                if (j == 0)
+                {
+                    if (m_Grid[i,j+1].m_chosen == null)
+                    {
+                        SelectTile(m_Grid[i, j + 1], m_Grid[i, j].m_chosen.m_z2, Side.m_z1);
+                        toAdd.Add(m_Grid[i, j+1]);
+                    }
+                }
+                else if (j == width)
+                {
+                    if (m_Grid[i, j + 1].m_chosen == null)
+                    {
+                        SelectTile(m_Grid[i, j - 1], m_Grid[i, j].m_chosen.m_z1, Side.m_z2);
+                        toAdd.Add(m_Grid[i, j - 1]);
+                    }
+                }
+                else
+                {
+                    if (m_Grid[i, j + 1].m_chosen == null)
+                    {
+                        SelectTile(m_Grid[i, j + 1], m_Grid[i, j].m_chosen.m_z2, Side.m_z1);
+                        toAdd.Add(m_Grid[i, j - 1]);
+                    }
+                    if (m_Grid[i, j + 1].m_chosen == null)
+                    {
+                        SelectTile(m_Grid[i, j - 1], m_Grid[i, j].m_chosen.m_z1, Side.m_z2);
+                        toAdd.Add(m_Grid[i, j + 1]);
+                    }
+                }
+            }
+            foreach(TileInfo tile in toAdd)
+            {
+                m_toActivate.Add(tile);
+            }
         }
+    }
+    void SelectTile(TileInfo toSelect,Orientation a, Side opposite)
+    {
+        Orientation b;
+        var availableTiles = toSelect.m_availableTiles;
+        List<TileScript> toRemove = new List<TileScript>();
+        foreach (TileScript tile in availableTiles)
+        {
+            switch (opposite)
+            {
+                case Side.m_x1:
+                    b = tile.m_x1;
+                    break;
+                case Side.m_x2:
+                    b = tile.m_x2;
+                    break;
+                case Side.m_z1:
+                    b = tile.m_z1;
+                    break;
+                case Side.m_z2:
+                    b = tile.m_z2;
+                    break;
+                default:
+                    b = Orientation.Road;
+                    break;
+            }
+            if (a != b)
+            {
+                toRemove.Add(tile);
+            }
+        }
+        foreach (TileScript tile in toRemove)
+        {
+            availableTiles.Remove(tile);
+        }
+        toSelect.m_chosen = toSelect.m_availableTiles[Random.Range(0, toSelect.m_availableTiles.Count)];
     }
 }
