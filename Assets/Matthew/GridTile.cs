@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 
 public class GridTile : MonoBehaviour
@@ -16,4 +17,11 @@ public class GridTile : MonoBehaviour
     public int f;
 
     public GridTile previousTile;
+
+    public GridTile(Vector3 worldPos, Vector2 gridPos)
+    {
+        isWalkable = true;
+        this.gridPos = gridPos;
+        this.worldPos = worldPos;
+    }
 }
