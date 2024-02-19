@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class AI_Movement : MonoBehaviour
 {
-    private int[,] m_squares;
+    private Grid grid;
     private Transform componentTransform;
     private ProceduralInput Terrain;
     private int speed = 10;
@@ -18,7 +18,7 @@ public class AI_Movement : MonoBehaviour
     void Start()
     {
         Terrain = GameObject.Find("Terrain").GetComponent<ProceduralInput>();
-        m_squares = Terrain.m_squares;
+        grid = Terrain.grid;
         componentTransform = GetComponent<Transform>();
         PlannerAgent = GetComponent<Agent>();
     }
