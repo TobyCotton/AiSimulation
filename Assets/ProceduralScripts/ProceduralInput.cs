@@ -10,7 +10,7 @@ public class ProceduralInput : MonoBehaviour
     public GameObject m_house1;
     public GameObject m_house2;
     public GameObject m_house3;
-    public int[,] m_squares;
+    public Grid grid;
     public int length;
     public int width;
     private void Start()
@@ -18,12 +18,13 @@ public class ProceduralInput : MonoBehaviour
         Vector3 mySize = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.size;
         length = (int)mySize.x;
         width =  (int)mySize.z;
-        m_squares = new int[length, width];
+        grid = new Grid(length,width);
         for (int i = 0; i < length; i++)
         {
             for (int j = 0; j < width; j++)
             {
-                m_squares[i,j] = 0;
+                GridTile gridTile = grid.gridArray[i, j];
+                gridTile.isWalkable = true;
             }
         }
         for(int i = 0; i < 100; i++)
@@ -88,7 +89,7 @@ public class ProceduralInput : MonoBehaviour
         {
             return false;
         }
-        //Debug.Log("x:" + m_squares.Length.ToString());
+        //Debug.Log("x:" + grid.gridArray.Length.ToString());
         //Debug.Log("x:" + x.ToString());
         //Debug.Log("z:" + z.ToString());
         //Debug.Log("Usex:" + UseX.ToString());
@@ -97,7 +98,7 @@ public class ProceduralInput : MonoBehaviour
         {
             for (int j = -UseZ; j < UseZ; j++)
             {
-                if (m_squares[x + i, z + j] != 0)
+                if (grid.gridArray[x + i, z + j].isWalkable != true)
                 {
                     return false;
                 }
@@ -107,7 +108,7 @@ public class ProceduralInput : MonoBehaviour
         {
             for (int j = -UseZ; j < UseZ; j++)
             {
-                m_squares[x + i, z + j] = 1;
+                grid.gridArray[x + i, z + j].isWalkable = false;
             }
         }
         return true;
