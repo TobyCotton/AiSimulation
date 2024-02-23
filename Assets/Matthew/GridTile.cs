@@ -14,7 +14,7 @@ public class GridTile : MonoBehaviour
 
     public int g;
     public int h;
-    public int f;
+    public int f { get { return g + h; } };
 
     public GridTile previousTile;
 
