@@ -51,13 +51,22 @@ public class AI_Movement : MonoBehaviour
         componentTransform.position = Vector2.MoveTowards(componentTransform.position, endPositon, Time.deltaTime) * Time.deltaTime;
     }
 
-    Vector2 WorldPosToSquarePos(Vector3 worldPos)
+    GridTile WorldPosToSquarePos(Vector3 worldPos)
     {
-        return new Vector2(worldPos.x - 0.5f, worldPos.z - 0.5f);
+        return grid[MathF.Floor(worldPos.x), MathF.Floor(worldPos.z)];
     }
 
     Vector3 SquarePosToWorldPos(Vector2 squarePos)
     {
         return new Vector3(squarePos.x + 0.5f, 1, squarePos.y + 0.5f);
+    }
+
+    void AStarPathing(Vector3 startPos, Vector3 endPos)
+    {
+        List<GridTile> openSet = new List<GridTile>();
+        List<GridTile> closedSet = new List<GridTile>();
+
+        GridTile startTile = grid(WorldPosToSquarePos(startPos));
+
     }
 }
