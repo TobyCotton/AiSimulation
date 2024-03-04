@@ -23,8 +23,7 @@ public class ProceduralInput : MonoBehaviour
         {
             for (int j = 0; j < width; j++)
             {
-                GridTile gridTile = grid.gridArray[i, j];
-                gridTile.isWalkable = true;
+                grid.gridArray[i, j].isWalkable = true;
             }
         }
         for(int i = 0; i < 100; i++)
