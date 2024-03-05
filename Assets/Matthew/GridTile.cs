@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
 
-public class GridTile : MonoBehaviour
+public class GridTile
 {
     
     public bool isWalkable;
