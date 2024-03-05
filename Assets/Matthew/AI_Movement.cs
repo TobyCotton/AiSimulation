@@ -17,31 +17,36 @@ public class AI_Movement : MonoBehaviour
     private Transform componentTransform;
     private ProceduralInput Terrain;
     private int speed = 10;
+    private List<GridTile> path;
 
     private Agent PlannerAgent;
 
     void Start()
     {
         Terrain = GameObject.Find("Terrain").GetComponent<ProceduralInput>();
-        grid = Terrain.grid;
         componentTransform = GetComponent<Transform>();
         PlannerAgent = GetComponent<Agent>();
+        //path = new List<GridTile>();
+        if (grid == null )
+        {
+            Debug.Log("GRID EMPTY");
+        }
     }
 
     // Update is called once per frame
     void Update() 
     {
-        if (grid.path.Count > 0)
+        if (path.Count > 0)
         {
-            componentTransform.position = Vector3.MoveTowards(componentTransform.position, grid.path[0].worldPos, speed * Time.deltaTime);
-            if (Vector3.Distance(componentTransform.position, grid.path[0].worldPos) < 0.000001f)
+            componentTransform.position = Vector3.MoveTowards(componentTransform.position, path[0].worldPos, speed * Time.deltaTime);
+            if (Vector3.Distance(componentTransform.position, path[0].worldPos) < 0.000001f)
             {
-                grid.path.RemoveAt(0);
+                path.RemoveAt(0);
             }
-        }
-        else
-        {
-            PlannerAgent.NotifyReachedGoal();
+            if (path.Count == 0 ) 
+            {
+                PlannerAgent.NotifyReachedGoal();
+            }
         }
 
         //if (Vector3.Distance(componentTransform.position, TargetPosition) > 0.5)
@@ -56,7 +61,7 @@ public class AI_Movement : MonoBehaviour
 
     public void moveTo(string TargetTag)
     {
-        AStarPathing(componentTransform.position, new Vector3(100, 1, 100));
+        AStarPathing(componentTransform.position, new Vector3(99, 1, 99));
     }
     
     void moveAlongPath(Vector3 endPositon)
@@ -82,53 +87,72 @@ public class AI_Movement : MonoBehaviour
 
     void AStarPathing(Vector3 startPos, Vector3 endPos)
     {
+        Debug.Log("ASTAR PATHING TRIGGERED");
         List<GridTile> openSet = new List<GridTile>();
         List<GridTile> closedSet = new List<GridTile>();
         Vector2 gridStartPos = WorldPosToSquarePos(startPos);
         Vector2 gridEndPos = WorldPosToSquarePos(endPos);
 
-        GridTile startTile = grid.gridArray[Convert.ToInt32(gridStartPos.x), Convert.ToInt32(gridStartPos.y)];
-        GridTile targetTile = grid.gridArray[Convert.ToInt32(gridEndPos.x), Convert.ToInt32(gridEndPos.y)];
+        Debug.Log("start X Pos: " + gridStartPos.x + " start Y Pos: " + gridStartPos.y);
+        Debug.Log("end X Pos: " + gridEndPos.x + " end Y Pos: " + gridEndPos.y);
+
+        GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
+        GridTile targetTile = Terrain.grid.TileFromWorldPoint(endPos);
+        if (startTile.gridPos == targetTile.gridPos) 
+        {
+            Debug.Log(" start tile X Pos: " + startTile.gridPos.x + " start Tile Y Pos: " + startTile.gridPos.y);
+            Debug.Log("target tile X Pos: " + targetTile.gridPos.x + " target Tile Y Pos: " + targetTile.gridPos.y);
+            Debug.Log("THE SAME");
+        }
 
         openSet.Add(startTile);
 
         while (openSet.Count > 0)
         {
-            GridTile tile = openSet[0];
-
-            for (int i = 1; i < openSet.Count; i++)
-            {
-                if (openSet[i].f < tile.f || openSet[i].f == tile.f)
-                {
-                    if (openSet[i].h < tile.h)
-                        tile = openSet[i];
-                }
-            }
+            GridTile tile = openSet.OrderBy(x => x.f).First();
 
             openSet.Remove(tile);
             closedSet.Add(tile);
 
-            if (tile == targetTile)
+            if (tile.gridPos == targetTile.gridPos)
             {
                 retracePath(startTile, targetTile);
                 return;
             }
 
-            foreach (GridTile neighbour in grid.GetNeighbours(tile))
+            Debug.Log("BEFORE NEIGHBOURS CHECK");
+            foreach (GridTile neighbour in Terrain.grid.GetNeighbours(tile))
             {
+                Debug.Log("CHECKING NEIGHBOURS");
                 if (!neighbour.isWalkable || closedSet.Contains(neighbour))
+                {
+                    if (!neighbour.isWalkable)
+                    {
+                        Debug.Log("NOT WALKABLE");
+                    }
+                    if (closedSet.Contains(neighbour))
+                    {
+                        Debug.Log("IN CLOSED SET");
+                    }
+                    Debug.Log("HERE 3");
                     continue;
+                }
 
+                Debug.Log("HERE 1");
                 int CostToNeighbour = tile.g + GetDistance(tile, neighbour);
 
                 if (CostToNeighbour < neighbour.g || !openSet.Contains(neighbour))
                 {
+                    Debug.Log("HERE 2");
                     neighbour.g = CostToNeighbour;
                     neighbour.h = GetDistance(neighbour, targetTile);
                     neighbour.previousTile = tile;
 
                     if (!openSet.Contains(neighbour))
+                    {
+                        Debug.Log("ADDING NEIGHBOURS");
                         openSet.Add(neighbour);
+                    }
                 }
             }
         }
@@ -136,6 +160,7 @@ public class AI_Movement : MonoBehaviour
 
     void retracePath(GridTile start, GridTile end)
     {
+        Debug.Log("RETRACING PATH");
         List<GridTile> newPath = new List<GridTile>();
 
         GridTile tile = end;
@@ -147,7 +172,7 @@ public class AI_Movement : MonoBehaviour
 
         newPath.Reverse();
 
-        grid.path = newPath;
+        path = newPath;
     }
 
     int GetDistance(GridTile tileA, GridTile tileB)

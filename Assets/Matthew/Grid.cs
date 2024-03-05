@@ -9,8 +9,6 @@ public class Grid
     int width;
     int height;
     public GridTile[,] gridArray;
-
-    public List<GridTile> path;
     
     public Grid(int width, int height)
     {
@@ -19,7 +17,7 @@ public class Grid
         this.height = height;
 
         gridArray = new GridTile[width, height];
-        path = new List<GridTile>();
+
         for (int i = 0; i < gridArray.GetLength(0); i++) 
         {
             for (int j = 0; j < gridArray.GetLength(1); j++)
@@ -32,7 +30,7 @@ public class Grid
     public List<GridTile> GetNeighbours(GridTile tile) 
     {
         List<GridTile> neighbours = new List<GridTile>();
-
+        //Debug.Log("ADDING NEIGHBOURS");
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 if (x == 0 && y == 0)
@@ -41,11 +39,20 @@ public class Grid
                 int checkY = Convert.ToInt32(tile.gridPos.y) + y;
 
                 if (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height) {
+                    Debug.Log("ADDING NEIGHBOURS");
                     neighbours.Add(gridArray[checkX, checkY]);
                 }
             }
         }
 
         return neighbours;
+    }
+
+    public GridTile TileFromWorldPoint(Vector3 worldPosition)
+    {
+        int x = Mathf.RoundToInt(MathF.Floor(worldPosition.x));
+        int y = Mathf.RoundToInt(MathF.Floor(worldPosition.z));
+        Debug.Log("X Pos: " + x + " Y Pos: " + y);
+        return gridArray[x, y];
     }
 }
