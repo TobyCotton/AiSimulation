@@ -1,12 +1,9 @@
 fileFormatVersion: 2
-guid: c5e603066232cf74289af2365f2c803a
+guid: fb4079979c22db246add3f2a3135fdb1
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - m_house1: {fileID: 7665914721764435929, guid: a5eb62ca701efc54193873c717ef4cf6, type: 3}
-  - m_house2: {fileID: 8062003602843011780, guid: 36d2099ffb31eee44a9cca48042fe217, type: 3}
-  - m_house3: {fileID: 1115763023343393137, guid: 9625f2e1e758d72458a3b5349326f617, type: 3}
   - m_tile1: {fileID: 4803893809813949010, guid: 41efc6e23d719bb438aaa74fb17d5e7c, type: 3}
   - m_tile2: {fileID: 4803893809813949010, guid: 79f0f011bbb637149ae6e3aa99a05ecc, type: 3}
   - m_tile3: {fileID: 4803893809813949010, guid: 102791797f1be9745ad112a347dbc26b, type: 3}
