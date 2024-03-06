@@ -17,5 +17,4 @@ public class TileScript : MonoBehaviour
     public Orientation m_x2;
     public Orientation m_z1;
     public Orientation m_z2;
-    public GameObject m_gameObject;
 }

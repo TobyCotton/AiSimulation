@@ -7,24 +7,28 @@ public class TileInfo : MonoBehaviour
 {
     public int i;
     public int j;
-    public List<TileScript> m_availableTiles;
-    [SerializeField] TileScript m_tile1;
-    [SerializeField] TileScript m_tile2;
-    [SerializeField] TileScript m_tile3;
-    [SerializeField] TileScript m_tile4;
-    [SerializeField] TileScript m_tile5;
-    [SerializeField] TileScript m_tile6;
-    [SerializeField] TileScript m_tile7;
-    public TileScript m_chosen;
-    public TileInfo()
+    public List<GameObject> m_availableTiles = new List<GameObject>();
+    public bool m_enabled = false;
+    public GameObject m_chosen;
+    public TileInfo(GameObject tile1, GameObject tile2, GameObject tile3, GameObject tile4, GameObject tile5, GameObject tile6, GameObject tile7,int i1,int j1)
     {
-        m_availableTiles.Add(m_tile1);
-        m_availableTiles.Add(m_tile2);
-        m_availableTiles.Add(m_tile3);
-        m_availableTiles.Add(m_tile4);
-        m_availableTiles.Add(m_tile5);
-        m_availableTiles.Add(m_tile6);
-        m_availableTiles.Add(m_tile7);
-        Debug.Log("Help");
+        m_availableTiles.Add(tile1);
+        m_availableTiles.Add(tile2);
+        m_availableTiles.Add(tile3);
+        m_availableTiles.Add(tile4);
+        for(int i =0; i < 30; i++)
+        {
+            m_availableTiles.Add(tile5);
+        }
+        for (int i = 0; i < 15; i++)
+        {
+            m_availableTiles.Add(tile6);
+        }
+        for (int i = 0; i < 15; i++)
+        {
+            m_availableTiles.Add(tile7);
+        }
+        i = i1;
+        j = j1;
     }
 }

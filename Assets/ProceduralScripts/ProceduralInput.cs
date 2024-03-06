@@ -33,8 +33,8 @@ public class ProceduralInput : MonoBehaviour
     private void Start()
     {
         Vector3 mySize = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.size;
-        length = 9;//(int)mySize.x;
-        width = 9;//(int)mySize.z;
+        length = 100;//(int)mySize.x;
+        width = 100;//(int)mySize.z;
         m_squares = new int[length, width];
         m_Grid = new TileInfo[length, width];
         for (int o = 0; o < length; o++)
@@ -48,13 +48,14 @@ public class ProceduralInput : MonoBehaviour
         {
             for (int p = 0; p < width; p++)
             {
-                m_Grid[o, p] = new TileInfo();
+                m_Grid[o, p] = new TileInfo(m_tile1,m_tile2,m_tile3,m_tile4,m_tile5,m_tile6,m_tile7,o,p);
             }
         }
         int i = length / 2;
         int j = width / 2;
         m_Grid[i, j].i = i;
         m_Grid[i, j].j = j;
+        m_Grid[i, j].m_chosen = m_Grid[i, j].m_availableTiles[Random.Range(0, m_Grid[i, j].m_availableTiles.Count)];
         m_toActivate.Add(m_Grid[i, j]);
         CreateRoads();
         //for (int i = 0; i < 100; i++)
@@ -235,70 +236,71 @@ public class ProceduralInput : MonoBehaviour
             {
                 int i = m_toActivate[0].i;
                 int j = m_toActivate[0].j;
-                m_toActivate[0].m_chosen = m_toActivate[0].m_availableTiles[Random.Range(0, m_toActivate[0].m_availableTiles.Count)];
-                Instantiate(m_toActivate[0].m_chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), m_toActivate[0].m_chosen.transform.rotation);
-                if (i == 0) 
+                if (!m_toActivate[0].m_enabled)
                 {
-                    if (m_Grid[i+1,j].m_chosen == null)
+                    m_toActivate[0].m_chosen = m_toActivate[0].m_availableTiles[Random.Range(0, m_toActivate[0].m_availableTiles.Count)];
+                    m_toActivate[0].m_enabled = true;
+                    Instantiate(m_toActivate[0].m_chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), m_toActivate[0].m_chosen.transform.rotation);
+                    if (i == 0)
                     {
-                        SelectTile(m_Grid[i + 1, j], m_Grid[i , j].m_chosen.m_x1,Side.m_x2);
-                        toAdd.Add(m_Grid[i+1 , j]);
+                        if (!m_Grid[i + 1, j].m_enabled)
+                        {
+                            SelectTile(m_Grid[i + 1, j], m_Grid[i, j].m_chosen.GetComponent<TileScript>().m_x1, Side.m_x2);
+                            m_toActivate.Add(m_Grid[i + 1, j]);
+                        }
+                    }
+                    else if (i == length - 1)
+                    {
+                        if (!m_Grid[i - 1, j].m_enabled)
+                        {
+                            SelectTile(m_Grid[i - 1, j], m_Grid[i, j].m_chosen.GetComponent<TileScript>().m_x2, Side.m_x1);
+                            m_toActivate.Add(m_Grid[i - 1, j]);
+                        }
+                    }
+                    else
+                    {
+                        if (!m_Grid[i + 1, j].m_enabled)
+                        {
+                            SelectTile(m_Grid[i + 1, j], m_Grid[i, j].m_chosen.GetComponent<TileScript>().m_x1, Side.m_x2);
+                            m_toActivate.Add(m_Grid[i + 1, j]);
+                        }
+                        if (!m_Grid[i - 1, j].m_enabled)
+                        {
+                            SelectTile(m_Grid[i - 1, j], m_Grid[i, j].m_chosen.GetComponent<TileScript>().m_x2, Side.m_x1);
+                            m_toActivate.Add(m_Grid[i - 1, j]);
+                        }
+                    }
+                    if (j == 0)
+                    {
+                        if (!m_Grid[i, j + 1].m_enabled)
+                        {
+                            SelectTile(m_Grid[i, j + 1], m_Grid[i, j].m_chosen.GetComponent<TileScript>().m_z1, Side.m_z2);
+                            m_toActivate.Add(m_Grid[i, j + 1]);
+                        }
+                    }
+                    else if (j == width - 1)
+                    {
+                        if (!m_Grid[i, j - 1].m_enabled)
+                        {
+                            SelectTile(m_Grid[i, j - 1], m_Grid[i, j].m_chosen.GetComponent<TileScript>().m_z2, Side.m_z1);
+                            m_toActivate.Add(m_Grid[i, j - 1]);
+                        }
+                    }
+                    else
+                    {
+                        if (!m_Grid[i, j + 1].m_enabled)
+                        {
+                            SelectTile(m_Grid[i, j + 1], m_Grid[i, j].m_chosen.GetComponent<TileScript>().m_z1, Side.m_z2);
+                            m_toActivate.Add(m_Grid[i, j + 1]);
+                        }
+                        if (!m_Grid[i, j - 1].m_enabled)
+                        {
+                            SelectTile(m_Grid[i, j - 1], m_Grid[i, j].m_chosen.GetComponent<TileScript>().m_z2, Side.m_z1);
+                            m_toActivate.Add(m_Grid[i, j - 1]);
+                        }
                     }
                 }
-                else if (i == length)
-                {
-                    if (m_Grid[i-1,j].m_chosen == null)
-                    {
-                        SelectTile(m_Grid[i - 1, j], m_Grid[i, j].m_chosen.m_x2, Side.m_x1);
-                        toAdd.Add(m_Grid[i - 1, j]);
-                    }
-                }
-                else
-                {
-                    if (m_Grid[i + 1, j].m_chosen == null)
-                    {
-                        SelectTile(m_Grid[i + 1, j], m_Grid[i, j].m_chosen.m_x1, Side.m_x2);
-                        toAdd.Add(m_Grid[i + 1, j]);
-                    }
-                    if (m_Grid[i - 1, j].m_chosen == null)
-                    {
-                        SelectTile(m_Grid[i - 1, j], m_Grid[i, j].m_chosen.m_x2, Side.m_x1);
-                        toAdd.Add(m_Grid[i - 1, j]);
-                    }
-                }
-                if (j == 0)
-                {
-                    if (m_Grid[i,j+1].m_chosen == null)
-                    {
-                        SelectTile(m_Grid[i, j + 1], m_Grid[i, j].m_chosen.m_z2, Side.m_z1);
-                        toAdd.Add(m_Grid[i, j+1]);
-                    }
-                }
-                else if (j == width)
-                {
-                    if (m_Grid[i, j + 1].m_chosen == null)
-                    {
-                        SelectTile(m_Grid[i, j - 1], m_Grid[i, j].m_chosen.m_z1, Side.m_z2);
-                        toAdd.Add(m_Grid[i, j - 1]);
-                    }
-                }
-                else
-                {
-                    if (m_Grid[i, j + 1].m_chosen == null)
-                    {
-                        SelectTile(m_Grid[i, j + 1], m_Grid[i, j].m_chosen.m_z2, Side.m_z1);
-                        toAdd.Add(m_Grid[i, j - 1]);
-                    }
-                    if (m_Grid[i, j + 1].m_chosen == null)
-                    {
-                        SelectTile(m_Grid[i, j - 1], m_Grid[i, j].m_chosen.m_z1, Side.m_z2);
-                        toAdd.Add(m_Grid[i, j + 1]);
-                    }
-                }
-            }
-            foreach(TileInfo tile in toAdd)
-            {
-                m_toActivate.Add(tile);
+                m_toActivate.Remove(m_toActivate[0]);
             }
         }
     }
@@ -306,22 +308,23 @@ public class ProceduralInput : MonoBehaviour
     {
         Orientation b;
         var availableTiles = toSelect.m_availableTiles;
-        List<TileScript> toRemove = new List<TileScript>();
-        foreach (TileScript tile in availableTiles)
+        List<GameObject> toRemove = new List<GameObject>();
+        foreach (GameObject tile in availableTiles)
         {
+            TileScript ScriptComponent = tile.GetComponent<TileScript>();
             switch (opposite)
             {
                 case Side.m_x1:
-                    b = tile.m_x1;
+                    b = ScriptComponent.m_x1;
                     break;
                 case Side.m_x2:
-                    b = tile.m_x2;
+                    b = ScriptComponent.m_x2;
                     break;
                 case Side.m_z1:
-                    b = tile.m_z1;
+                    b = ScriptComponent.m_z1;
                     break;
                 case Side.m_z2:
-                    b = tile.m_z2;
+                    b = ScriptComponent.m_z2;
                     break;
                 default:
                     b = Orientation.Road;
@@ -332,10 +335,9 @@ public class ProceduralInput : MonoBehaviour
                 toRemove.Add(tile);
             }
         }
-        foreach (TileScript tile in toRemove)
+        foreach (GameObject tile in toRemove)
         {
             availableTiles.Remove(tile);
         }
-        toSelect.m_chosen = toSelect.m_availableTiles[Random.Range(0, toSelect.m_availableTiles.Count)];
     }
 }
