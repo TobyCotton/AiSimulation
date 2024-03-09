@@ -4,34 +4,17 @@ using UnityEngine;
 
 using StatesDictionary = System.Collections.Generic.Dictionary<EStates, int>;
 
-public abstract class Action : MonoBehaviour
+public sealed class Action
 {
     // ~ public interface
-    public string TargetTag;
-    public float Cost = 1.0f;
-    public float Duration = 0.0f;
-    public WorldState[] EditorPreconditions;
-    public WorldState[] EditorAfterEffects;
-
     public bool Executing = false;
 
     public Action()
     {
+        PrePerformEffects = new List<Effects>();
+        PostPerformEffects = new List<Effects>();
         Preconditions = new StatesDictionary();
         AfterEffects = new StatesDictionary();
-    }
-
-    public void Awake()
-    {
-        foreach (var precondition in EditorPreconditions)
-        {
-            Preconditions.Add(precondition.key, precondition.value);
-        }
-
-        foreach (var aftereffect in EditorAfterEffects)
-        {
-            AfterEffects.Add(aftereffect.key, aftereffect.value);
-        }
     }
 
     public bool IsAchievable(StatesDictionary conditions = null)
@@ -52,8 +35,67 @@ public abstract class Action : MonoBehaviour
         return true;
     }
 
-    public abstract bool PrePerform();
-    public abstract bool PostPerform();
+    public Action SetCost(float cost)
+    {
+        Cost = cost;
+        return this;
+    }
+
+    public Action SetTargetTag(string targetTag)
+    {
+        TargetTag = targetTag;
+        return this;
+    }
+
+    public Action SetDuration(float duration)
+    {
+        Duration = duration;
+        return this;
+    }
+
+    public Action AddPrePerformEffect(Effects Effect)
+    {
+        PrePerformEffects.Add(Effect);
+        return this;
+    }
+
+    public Action AddPostPerformEffect(Effects Effect)
+    {
+        PostPerformEffects.Add(Effect);
+        return this;
+    }
+
+    public Action AddPrecondition(EStates Key, int Value)
+    {
+        Preconditions.Add(Key, Value);
+        return this;
+    }
+
+    public Action AddAfterEffects(EStates Key, int Value)
+    {
+        AfterEffects.Add(Key, Value);
+        return this;
+    }
+
+    public bool PrePerform()
+    {
+        bool result = true;
+        foreach(var Effect in PrePerformEffects)
+        {
+            result = result && Effect.Perform();
+        }
+        return result;
+    }
+
+    public bool PostPerform()
+    {
+        bool result = true;
+        foreach (var Effect in PostPerformEffects)
+        {
+            result = result && Effect.Perform();
+        }
+        return result;
+    }
 
     public bool CanFindTarget()
     {
@@ -65,7 +107,29 @@ public abstract class Action : MonoBehaviour
         return AfterEffects;
     }
 
+    public string GetTargetTag()
+    {
+        return TargetTag;
+    }
+
+    public float GetCost()
+    {
+        return Cost;
+    }
+
+    public float GetDuration()
+    {
+        return Duration;
+    }
+
     // ~ private interface
+    private string TargetTag;
+    private float Cost = 1.0f;
+    private float Duration = 0.0f;
+
+    private List<Effects> PrePerformEffects;
+    private List<Effects> PostPerformEffects;
+
     private StatesDictionary Preconditions;
     private StatesDictionary AfterEffects;
 }

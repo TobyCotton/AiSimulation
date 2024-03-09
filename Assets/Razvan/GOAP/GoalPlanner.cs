@@ -90,7 +90,7 @@ public class GoalPlanner
                     }
                 }
 
-                Node node = new Node(Parent, Parent.Cost + action.Cost, CurrentState, action);
+                Node node = new Node(Parent, Parent.Cost + action.GetCost(), CurrentState, action);
 
                 if(CurrentState.Intersect(Goal).Count() == Goal.Count())
                 {

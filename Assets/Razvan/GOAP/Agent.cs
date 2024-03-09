@@ -23,9 +23,13 @@ public class SubGoal
 public abstract class Agent : MonoBehaviour
 {
     // ~ public interface
-    public void Start()
+    public Agent()
     {
-        Actions = GetComponents<Action>().ToList<Action>();
+        Actions = new List<Action>();
+    }
+
+    public void Start()
+    {    
         MovementComponent = GetComponent<AI_Movement>();
     }
 
@@ -33,12 +37,18 @@ public abstract class Agent : MonoBehaviour
     {
         if (!invoked)
         {
-            Invoke("CompleteAction", CurrentAction.Duration);
+            Invoke("CompleteAction", CurrentAction.GetDuration());
             invoked = true;
         }
     }
 
     // ~ protected interface
+    protected Action AddAction(Action action)
+    {
+        Actions.Add(action);
+        return action;
+    }
+
     protected Dictionary<SubGoal, int> Goals = new Dictionary<SubGoal, int>();
 
     // ~ private interface
@@ -83,7 +93,7 @@ public abstract class Agent : MonoBehaviour
             {
                 CurrentAction.Executing = true;
 
-                MovementComponent.moveTo(CurrentAction.TargetTag);
+                MovementComponent.moveTo(CurrentAction.GetTargetTag());
             }
             else
             {
