@@ -49,7 +49,10 @@ public abstract class Agent : MonoBehaviour
         return action;
     }
 
-    protected Dictionary<SubGoal, int> Goals = new Dictionary<SubGoal, int>();
+    protected void AddGoal(SubGoal Key, int Value)
+    {
+        Goals.Add(Key, Value);
+    }
 
     // ~ private interface
     private void LateUpdate()
@@ -111,6 +114,7 @@ public abstract class Agent : MonoBehaviour
 
     private AI_Movement MovementComponent;
 
+    private Dictionary<SubGoal, int> Goals = new Dictionary<SubGoal, int>();
     private List<Action> Actions;
     private Queue<Action> ActionQueue;
     private Action CurrentAction;

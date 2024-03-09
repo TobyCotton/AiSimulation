@@ -14,7 +14,7 @@ public sealed class Action
         PrePerformEffects = new List<Effects>();
         PostPerformEffects = new List<Effects>();
         Preconditions = new StatesDictionary();
-        AfterEffects = new StatesDictionary();
+        Results = new StatesDictionary();
     }
 
     public bool IsAchievable(StatesDictionary conditions = null)
@@ -71,9 +71,9 @@ public sealed class Action
         return this;
     }
 
-    public Action AddAfterEffects(EStates Key, int Value)
+    public Action AddResults(EStates Key, int Value)
     {
-        AfterEffects.Add(Key, Value);
+        Results.Add(Key, Value);
         return this;
     }
 
@@ -102,9 +102,9 @@ public sealed class Action
         return TargetTag == "";
     }
 
-    public StatesDictionary GetAfterEffects()
+    public StatesDictionary GetResults()
     {
-        return AfterEffects;
+        return Results;
     }
 
     public string GetTargetTag()
@@ -131,5 +131,5 @@ public sealed class Action
     private List<Effects> PostPerformEffects;
 
     private StatesDictionary Preconditions;
-    private StatesDictionary AfterEffects;
+    private StatesDictionary Results;
 }

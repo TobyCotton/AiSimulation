@@ -82,7 +82,7 @@ public class GoalPlanner
             if(action.IsAchievable(Parent.State))
             {
                 StatesDictionary CurrentState = new StatesDictionary(Parent.State);
-                foreach(var effect in action.GetAfterEffects())
+                foreach(var effect in action.GetResults())
                 {
                     if (!CurrentState.ContainsKey(effect.Key))
                     {
