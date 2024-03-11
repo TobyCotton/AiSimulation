@@ -24,6 +24,7 @@ public class ProceduralInput : MonoBehaviour
     public GameObject m_tile5;
     public GameObject m_tile6;
     public GameObject m_tile7;
+    public GameObject m_tile8;
     public Grid grid;
     public int length;
     public int width;
@@ -47,7 +48,7 @@ public class ProceduralInput : MonoBehaviour
         {
             for (int p = 0; p < width; p++)
             {
-                m_Grid[o, p] = new TileInfo(m_tile1, m_tile2, m_tile3, m_tile4, m_tile5, m_tile6, m_tile7, o, p);
+                m_Grid[o, p] = new TileInfo(m_tile1, m_tile2, m_tile3, m_tile4, m_tile5, m_tile6, m_tile7,m_tile8, o, p);
             }
         }
         int l = length / 2;
@@ -56,52 +57,52 @@ public class ProceduralInput : MonoBehaviour
         m_Grid[l, d].j = d;
         m_Grid[l, d].m_chosen = m_Grid[l, d].m_availableTiles[Random.Range(0, m_Grid[l, d].m_availableTiles.Count)];
         m_toActivate.Add(m_Grid[l, d]);
-        for (int i = 0; i < 100; i++)
-        {
-            int choice = Random.Range(1, 4);
-            if (choice == 1)
-            {
-                int x = Random.Range(5, 95);
-                int z = Random.Range(5, 95);
-                int rotationAmount = Random.Range(0, 4) * 90;
-                m_house1.transform.rotation = transform.rotation;
-                m_house1.transform.Rotate(0, rotationAmount, 0, Space.Self);
-                Vector3 size = m_house1.transform.localScale;
-                if (ValidPosition(x, z, size, rotationAmount))
-                {
-                    var housePosition = new Vector3(x, 5.0f, z);
-                    Instantiate(m_house1, housePosition, m_house1.transform.rotation);
-                }
-            }
-            if (choice == 2)
-            {
-                int x = Random.Range(5, 95);
-                int z = Random.Range(5, 95);
-                int rotationAmount = Random.Range(0, 4) * 90;
-                m_house2.transform.rotation = transform.rotation;
-                m_house2.transform.Rotate(0, rotationAmount, 0, Space.Self);
-                Vector3 size = m_house2.transform.localScale;
-                if (ValidPosition(x, z, size, rotationAmount))
-                {
-                    var housePosition = new Vector3(x, 5.0f, z);
-                    Instantiate(m_house2, housePosition, m_house2.transform.rotation);
-                }
-            }
-            if (choice == 3)
-            {
-                int x = Random.Range(5, 95);
-                int z = Random.Range(5, 95);
-                int rotationAmount = Random.Range(0, 4) * 90;
-                m_house3.transform.rotation = transform.rotation;
-                m_house3.transform.Rotate(0, rotationAmount, 0, Space.Self);
-                Vector3 size = m_house3.transform.localScale;
-                if (ValidPosition(x, z, size, rotationAmount))
-                {
-                    var housePosition = new Vector3(x, 10.0f, z);
-                    Instantiate(m_house3, housePosition, m_house3.transform.rotation);
-                }
-            }
-        }
+        //for (int i = 0; i < 100; i++)
+        //{
+        //    int choice = Random.Range(1, 4);
+        //    if (choice == 1)
+        //    {
+        //        int x = Random.Range(5, 95);
+        //        int z = Random.Range(5, 95);
+        //        int rotationAmount = Random.Range(0, 4) * 90;
+        //        m_house1.transform.rotation = transform.rotation;
+        //        m_house1.transform.Rotate(0, rotationAmount, 0, Space.Self);
+        //        Vector3 size = m_house1.transform.localScale;
+        //        if (ValidPosition(x, z, size, rotationAmount))
+        //        {
+        //            var housePosition = new Vector3(x, 5.0f, z);
+        //            Instantiate(m_house1, housePosition, m_house1.transform.rotation);
+        //        }
+        //    }
+        //    if (choice == 2)
+        //    {
+        //        int x = Random.Range(5, 95);
+        //        int z = Random.Range(5, 95);
+        //        int rotationAmount = Random.Range(0, 4) * 90;
+        //        m_house2.transform.rotation = transform.rotation;
+        //        m_house2.transform.Rotate(0, rotationAmount, 0, Space.Self);
+        //        Vector3 size = m_house2.transform.localScale;
+        //        if (ValidPosition(x, z, size, rotationAmount))
+        //        {
+        //            var housePosition = new Vector3(x, 5.0f, z);
+        //            Instantiate(m_house2, housePosition, m_house2.transform.rotation);
+        //        }
+        //    }
+        //    if (choice == 3)
+        //    {
+        //        int x = Random.Range(5, 95);
+        //        int z = Random.Range(5, 95);
+        //        int rotationAmount = Random.Range(0, 4) * 90;
+        //        m_house3.transform.rotation = transform.rotation;
+        //        m_house3.transform.Rotate(0, rotationAmount, 0, Space.Self);
+        //        Vector3 size = m_house3.transform.localScale;
+        //        if (ValidPosition(x, z, size, rotationAmount))
+        //        {
+        //            var housePosition = new Vector3(x, 10.0f, z);
+        //            Instantiate(m_house3, housePosition, m_house3.transform.rotation);
+        //        }
+        //    }
+        //}
     }
 
     bool ValidPosition(int x,int z,Vector3 size,int rotation)
