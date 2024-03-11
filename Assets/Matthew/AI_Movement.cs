@@ -13,6 +13,13 @@ using System.Linq;
 
 public class AI_Movement : MonoBehaviour
 {
+    public enum PathingType
+    {
+        AStar,
+        Dijkstra
+    }
+
+    public PathingType aiPathingType;
     private Grid grid;
     private Transform componentTransform;
     private ProceduralInput Terrain;
@@ -49,28 +56,10 @@ public class AI_Movement : MonoBehaviour
     {
         AStarPathing(componentTransform.position, new Vector3(99, 1, 99));
     }
-    
-    void moveAlongPath(Vector3 endPositon)
-    {
-        componentTransform.position = Vector2.MoveTowards(componentTransform.position, endPositon, Time.deltaTime) * Time.deltaTime;
-    }
-
-    Vector2 WorldPosToSquarePos(Vector3 worldPos)
-    {
-        return new Vector2(Convert.ToInt32(MathF.Floor(worldPos.x)), Convert.ToInt32(MathF.Floor(worldPos.z)));
-    }
-
-    Vector3 SquarePosToWorldPos(Vector2 squarePos)
-    {
-        return new Vector3(squarePos.x + 0.5f, 1, squarePos.y + 0.5f);
-    }
-
     void AStarPathing(Vector3 startPos, Vector3 endPos)
     {
         List<GridTile> openSet = new List<GridTile>();
         List<GridTile> closedSet = new List<GridTile>();
-        Vector2 gridStartPos = WorldPosToSquarePos(startPos);
-        Vector2 gridEndPos = WorldPosToSquarePos(endPos);
 
         GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
         GridTile targetTile = Terrain.grid.TileFromWorldPoint(endPos);
@@ -79,7 +68,8 @@ public class AI_Movement : MonoBehaviour
 
         while (openSet.Count > 0)
         {
-            GridTile tile = openSet.OrderBy(x => x.f).First();
+            GridTile tile = GetNextTile(openSet);
+            
 
             openSet.Remove(tile);
             closedSet.Add(tile);
@@ -138,5 +128,14 @@ public class AI_Movement : MonoBehaviour
         if (dstX > dstY)
             return 14 * dstY + 10 * (dstX - dstY);
         return 14 * dstX + 10 * (dstY - dstX);
+    }
+
+    GridTile GetNextTile(List<GridTile> openSet)
+    {
+        if (aiPathingType == PathingType.AStar)
+        {
+            return openSet.OrderBy(x => x.f).First();
+        }
+        return openSet.OrderBy(x => x.g).First();
     }
 }
