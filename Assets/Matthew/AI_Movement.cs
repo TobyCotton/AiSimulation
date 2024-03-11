@@ -68,15 +68,8 @@ public class AI_Movement : MonoBehaviour
 
         while (openSet.Count > 0)
         {
-            GridTile tile = startTile;
-            if (aiPathingType == PathingType.AStar)
-            {
-                tile = openSet.OrderBy(x => x.f).First();
-            }
-            else
-            {
-                tile = openSet.OrderBy(x => x.g).First();
-            }
+            GridTile tile = GetNextTile(openSet);
+            
 
             openSet.Remove(tile);
             closedSet.Add(tile);
@@ -135,5 +128,14 @@ public class AI_Movement : MonoBehaviour
         if (dstX > dstY)
             return 14 * dstY + 10 * (dstX - dstY);
         return 14 * dstX + 10 * (dstY - dstX);
+    }
+
+    GridTile GetNextTile(List<GridTile> openSet)
+    {
+        if (aiPathingType == PathingType.AStar)
+        {
+            return openSet.OrderBy(x => x.f).First();
+        }
+        return openSet.OrderBy(x => x.g).First();
     }
 }
