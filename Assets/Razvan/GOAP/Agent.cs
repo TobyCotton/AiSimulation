@@ -37,6 +37,7 @@ public abstract class Agent : MonoBehaviour
     {
         if (!invoked)
         {
+            CurrentAction.PrePerform();
             Invoke("CompleteAction", CurrentAction.GetDuration());
             invoked = true;
         }
@@ -92,7 +93,7 @@ public abstract class Agent : MonoBehaviour
         if (ActionQueue != null && ActionQueue.Count() > 0)
         {
             CurrentAction = ActionQueue.Dequeue();
-            if (CurrentAction.PrePerform())
+            if (CurrentAction.AssertAditionalChecks())
             {
                 CurrentAction.Executing = true;
 

@@ -11,8 +11,9 @@ public sealed class Action
 
     public Action()
     {
-        PrePerformEffects = new List<Effects>();
-        PostPerformEffects = new List<Effects>();
+        AdditionalChecks = new List<AdditionalCheck>();
+        AditionalPreEffects = new List<AdditionalEffect>();
+        AditionalPostEffects = new List<AdditionalEffect>();
         Preconditions = new StatesDictionary();
         Results = new StatesDictionary();
     }
@@ -53,15 +54,21 @@ public sealed class Action
         return this;
     }
 
-    public Action AddPrePerformEffect(Effects Effect)
+    public Action AddAdditionalCheck(AdditionalCheck Check)
     {
-        PrePerformEffects.Add(Effect);
+        AdditionalChecks.Add(Check);
         return this;
     }
 
-    public Action AddPostPerformEffect(Effects Effect)
+    public Action AddAdditionalPreEffect(AdditionalEffect Effect)
     {
-        PostPerformEffects.Add(Effect);
+        AditionalPreEffects.Add(Effect);
+        return this;
+    }
+
+    public Action AddAdditionalPostEffect(AdditionalEffect Effect)
+    {
+        AditionalPostEffects.Add(Effect);
         return this;
     }
 
@@ -77,10 +84,20 @@ public sealed class Action
         return this;
     }
 
+    public bool AssertAditionalChecks()
+    {
+        bool result = true;
+        foreach(var Check in AdditionalChecks)
+        {
+            result = result && Check.Assert();
+        }
+        return result;
+    }
+
     public bool PrePerform()
     {
         bool result = true;
-        foreach(var Effect in PrePerformEffects)
+        foreach (var Effect in AditionalPreEffects)
         {
             result = result && Effect.Perform();
         }
@@ -90,7 +107,7 @@ public sealed class Action
     public bool PostPerform()
     {
         bool result = true;
-        foreach (var Effect in PostPerformEffects)
+        foreach (var Effect in AditionalPostEffects)
         {
             result = result && Effect.Perform();
         }
@@ -127,8 +144,9 @@ public sealed class Action
     private float Cost = 1.0f;
     private float Duration = 0.0f;
 
-    private List<Effects> PrePerformEffects;
-    private List<Effects> PostPerformEffects;
+    private List<AdditionalCheck> AdditionalChecks;
+    private List<AdditionalEffect> AditionalPreEffects;
+    private List<AdditionalEffect> AditionalPostEffects;
 
     private StatesDictionary Preconditions;
     private StatesDictionary Results;
