@@ -103,14 +103,14 @@ public sealed class Action
         return result;
     }
 
-    public bool GetPrePerformResult()
+    public bool LateUpdatePrePerformResult()
     {
         bool Result = true;
         foreach (var Effect in AditionalPreEffects)
         {
             if (Effect.GetResult() == EAdditionalEffectResult.Fail)
             {
-                Effect.Perform();
+                Effect.LateUpdate();
             }
 
             Result = Result && (Effect.GetResult() != EAdditionalEffectResult.Fail);
@@ -118,14 +118,14 @@ public sealed class Action
         return Result;
     }
 
-    public bool GetPostPerformResult()
+    public bool LateUpdatePostPerformResult()
     {
         bool Result = true;
         foreach (var Effect in AditionalPostEffects)
         {
             if (Effect.GetResult() == EAdditionalEffectResult.Fail)
             {
-                Effect.Perform();
+                Effect.LateUpdate();
             }
 
             Result = Result && (Effect.GetResult() != EAdditionalEffectResult.Fail);

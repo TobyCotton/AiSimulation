@@ -18,7 +18,7 @@ public enum EAdditionalEffectResult
 public abstract class AdditionalEffect
 {
     // ~ public interface
-    public abstract void Perform();
+    public abstract void LateUpdate();
     public EAdditionalEffectResult GetResult()
     {
         return CurrentResult;

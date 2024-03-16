@@ -68,7 +68,7 @@ public abstract class Agent : MonoBehaviour
                     }
                     return;
                 case EActionProgress.ExecutingPrePerform:
-                    if (CurrentAction.GetPrePerformResult())
+                    if (CurrentAction.LateUpdatePrePerformResult())
                     {
                         CurrentAction.Progress = EActionProgress.ExecutingMovement;
                         MovementComponent.moveTo(CurrentAction.GetTargetTag());
@@ -78,7 +78,7 @@ public abstract class Agent : MonoBehaviour
                     // Wait for NotifyReachedGoal.
                     return;
                 case EActionProgress.ExecutingPostPerform:
-                    if (CurrentAction.GetPostPerformResult())
+                    if (CurrentAction.LateUpdatePostPerformResult())
                     {
                         CurrentAction.Progress = EActionProgress.Finished;
                         CurrentAction = null;

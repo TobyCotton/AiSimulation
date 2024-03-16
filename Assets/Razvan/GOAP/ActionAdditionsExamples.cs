@@ -9,7 +9,7 @@ public class PrintEffect : AdditionalEffect
         DebugText = Text;
     }
 
-    public override void Perform()
+    public override void LateUpdate()
     {
         Debug.Log(DebugText);
         SetResult(EAdditionalEffectResult.Success);
@@ -25,7 +25,7 @@ public class AsyncPrintEffect : AdditionalEffect
         DebugText = Text;
     }
 
-    public override void Perform()
+    public override void LateUpdate()
     {
         if (i > 200)
         {
