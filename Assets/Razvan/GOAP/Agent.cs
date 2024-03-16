@@ -37,7 +37,6 @@ public abstract class Agent : MonoBehaviour
     {
         if (!invoked)
         {
-            CurrentAction.PrePerform();
             Invoke("CompleteAction", CurrentAction.GetDuration());
             invoked = true;
         }
@@ -58,9 +57,34 @@ public abstract class Agent : MonoBehaviour
     // ~ private interface
     private void LateUpdate()
     {
-        if (CurrentAction != null && CurrentAction.Executing)
+        if (CurrentAction != null)
         {
-            return;
+            switch (CurrentAction.Progress)
+            {
+                case EActionProgress.NotStarted:
+                    if (CurrentAction.AssertAditionalChecks())
+                    {
+                        CurrentAction.Progress = EActionProgress.ExecutingPrePerform;
+                    }
+                    return;
+                case EActionProgress.ExecutingPrePerform:
+                    if (CurrentAction.GetPrePerformResult())
+                    {
+                        CurrentAction.Progress = EActionProgress.ExecutingMovement;
+                        MovementComponent.moveTo(CurrentAction.GetTargetTag());
+                    }
+                    return;
+                case EActionProgress.ExecutingMovement:
+                    // Wait for NotifyReachedGoal.
+                    return;
+                case EActionProgress.ExecutingPostPerform:
+                    if (CurrentAction.GetPostPerformResult())
+                    {
+                        CurrentAction.Progress = EActionProgress.Finished;
+                        CurrentAction = null;
+                    }
+                    return;
+            }
         }
 
         if (Planner == null || ActionQueue == null)
@@ -93,23 +117,13 @@ public abstract class Agent : MonoBehaviour
         if (ActionQueue != null && ActionQueue.Count() > 0)
         {
             CurrentAction = ActionQueue.Dequeue();
-            if (CurrentAction.AssertAditionalChecks())
-            {
-                CurrentAction.Executing = true;
-
-                MovementComponent.moveTo(CurrentAction.GetTargetTag());
-            }
-            else
-            {
-                ActionQueue = null;
-            }
+            CurrentAction.Progress = EActionProgress.NotStarted;
         }
     }
 
     private void CompleteAction()
     {
-        CurrentAction.Executing = false;
-        CurrentAction.PostPerform();
+        CurrentAction.Progress = EActionProgress.ExecutingPostPerform;
         invoked = false;
     }
 

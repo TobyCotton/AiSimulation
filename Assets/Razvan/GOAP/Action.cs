@@ -4,10 +4,19 @@ using UnityEngine;
 
 using StatesDictionary = System.Collections.Generic.Dictionary<EStates, int>;
 
+public enum EActionProgress
+{
+    NotStarted,
+    ExecutingPrePerform,
+    ExecutingMovement,
+    ExecutingPostPerform,
+    Finished,
+}
+
 public sealed class Action
 {
     // ~ public interface
-    public bool Executing = false;
+    public EActionProgress Progress = EActionProgress.NotStarted;
 
     public Action()
     {
@@ -94,24 +103,34 @@ public sealed class Action
         return result;
     }
 
-    public bool PrePerform()
+    public bool GetPrePerformResult()
     {
-        bool result = true;
+        bool Result = true;
         foreach (var Effect in AditionalPreEffects)
         {
-            result = result && Effect.Perform();
+            if (Effect.GetResult() == EAdditionalEffectResult.Fail)
+            {
+                Effect.Perform();
+            }
+
+            Result = Result && (Effect.GetResult() != EAdditionalEffectResult.Fail);
         }
-        return result;
+        return Result;
     }
 
-    public bool PostPerform()
+    public bool GetPostPerformResult()
     {
-        bool result = true;
+        bool Result = true;
         foreach (var Effect in AditionalPostEffects)
         {
-            result = result && Effect.Perform();
+            if (Effect.GetResult() == EAdditionalEffectResult.Fail)
+            {
+                Effect.Perform();
+            }
+
+            Result = Result && (Effect.GetResult() != EAdditionalEffectResult.Fail);
         }
-        return result;
+        return Result;
     }
 
     public bool CanFindTarget()
