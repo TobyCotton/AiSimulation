@@ -266,11 +266,26 @@ public class ProceduralInput : MonoBehaviour
             int j = m_toActivate[0].j;
             if (!m_toActivate[0].m_enabled)
             {
-                m_toActivate[0].m_chosen = m_toActivate[0].m_availableTiles[Random.Range(0, m_toActivate[0].m_availableTiles.Count)];
+                if (m_toActivate[0].m_priority.Count > 0)
+                {
+                    m_toActivate[0].m_chosen = m_toActivate[0].m_priority[Random.Range(0, m_toActivate[0].m_priority.Count)];
+                }
+                else
+                {
+                    m_toActivate[0].m_chosen = m_toActivate[0].m_availableTiles[Random.Range(0, m_toActivate[0].m_availableTiles.Count)];
+                }
                 m_toActivate[0].m_enabled = true;
                 if (m_toActivate[0].m_chosen == m_tile5)
                 {
                     grid.gridArray[i, j].isGrass = true;
+                }
+                else if (m_toActivate[0].m_chosen == m_tile6)
+                {
+                    //up/down
+                }
+                else if (m_toActivate[0].m_chosen == m_tile7)
+                {
+                    //right/left
                 }
                 Instantiate(m_toActivate[0].m_chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), m_toActivate[0].m_chosen.transform.rotation);
                 if (i == 0)

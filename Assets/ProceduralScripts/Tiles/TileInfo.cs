@@ -8,6 +8,7 @@ public class TileInfo : MonoBehaviour
     public int i;
     public int j;
     public List<GameObject> m_availableTiles = new List<GameObject>();
+    public List<GameObject> m_priority = new List<GameObject>();
     public bool m_enabled = false;
     public GameObject m_chosen;
     public TileInfo(GameObject tile1, GameObject tile2, GameObject tile3, GameObject tile4, GameObject tile5, GameObject tile6, GameObject tile7, GameObject tile8, int i1,int j1)
