@@ -266,6 +266,18 @@ public class ProceduralInput : MonoBehaviour
             int j = m_toActivate[0].j;
             if (!m_toActivate[0].m_enabled)
             {
+                List<GameObject> toRemove = new List<GameObject>();
+                for (int l = 0; l < m_toActivate[0].m_priority.Count; l++)
+                {
+                    if (!m_toActivate[0].m_availableTiles.Contains(m_toActivate[0].m_priority[l]))
+                    {
+                        toRemove.Add(m_toActivate[0].m_priority[l]);
+                    }
+                }
+                foreach (GameObject tile in toRemove)
+                {
+                    m_toActivate[0].m_priority.Remove(tile);
+                }
                 if (m_toActivate[0].m_priority.Count > 0)
                 {
                     m_toActivate[0].m_chosen = m_toActivate[0].m_priority[Random.Range(0, m_toActivate[0].m_priority.Count)];
@@ -279,13 +291,95 @@ public class ProceduralInput : MonoBehaviour
                 {
                     grid.gridArray[i, j].isGrass = true;
                 }
-                else if (m_toActivate[0].m_chosen == m_tile6)
+                else if (m_toActivate[0].m_chosen == m_tile6 && !m_toActivate[0].m_priority.Contains(m_tile6))//only access if it isn't already a priority
                 {
-                    //up/down
+                    if(i < length/2)
+                    {
+                        for (int l = 1; l < 5; l++)//Straights 5 long
+                        {
+                            if(i-l > 0)
+                            {
+                                m_Grid[i - l, j].m_priority.Add(m_tile6);
+                            }
+                        }
+                        if (i - 5 > 0)
+                        {
+                            m_Grid[i - 5, j].m_priority.Add(m_tile8);//Cross road after straights
+                        }
+                        if (i - 6 > 0)
+                        {
+                            if (m_Grid[i-6,j].m_availableTiles.Contains(m_tile8))//dont have 2 Crossroads in a row
+                            {
+                                m_Grid[i - 6, j].m_availableTiles.Remove(m_tile8);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int l = 1; l < 5; l++)//Straights 5 long
+                        {
+                            if (i + l < length)
+                            {
+                                m_Grid[i + l, j].m_priority.Add(m_tile6);
+                            }
+                        }
+                        if (i + 5 < length)
+                        {
+                            m_Grid[i + 5, j].m_priority.Add(m_tile8);//Cross road after straights
+                        }
+                        if (i + 6 < length)
+                        {
+                            if (m_Grid[i + 6, j].m_availableTiles.Contains(m_tile8))//dont have 2 Crossroads in a row
+                            {
+                                m_Grid[i + 6, j].m_availableTiles.Remove(m_tile8);
+                            }
+                        }
+                    }
                 }
-                else if (m_toActivate[0].m_chosen == m_tile7)
+                else if (m_toActivate[0].m_chosen == m_tile7 && !m_toActivate[0].m_priority.Contains(m_tile7))//only access if it isn't already a priority
                 {
-                    //right/left
+                    if(j < width/2)
+                    {
+                        for(int l =1; l < 5; l++)//Straights 5 long
+                        {
+                            if (j-l > 0)
+                            {
+                                m_Grid[i, j - l].m_priority.Add(m_tile7);
+                            } 
+                        }
+                        if (j - 5 > 0)
+                        {
+                            m_Grid[i, j-5].m_priority.Add(m_tile8);//Cross road after straights
+                        }
+                        if (j - 6 > 0)
+                        {
+                            if (m_Grid[i, j-6].m_availableTiles.Contains(m_tile8))//dont have 2 Crossroads in a row
+                            {
+                                m_Grid[i, j-6].m_availableTiles.Remove(m_tile8);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int l = 1; l < 5; l++)//Straights 5 long
+                        {
+                            if (j + l < width)
+                            {
+                                m_Grid[i, j + l].m_priority.Add(m_tile7);
+                            }
+                        }
+                        if (j + 5 < width)
+                        {
+                            m_Grid[i, j+5].m_priority.Add(m_tile8);//Cross road after straights
+                        }
+                        if (j + 6 < width)
+                        {
+                            if (m_Grid[i, j + 6].m_availableTiles.Contains(m_tile8))//dont have 2 Crossroads in a row
+                            {
+                                m_Grid[i, j + 6].m_availableTiles.Remove(m_tile8);
+                            }
+                        }
+                    }
                 }
                 Instantiate(m_toActivate[0].m_chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), m_toActivate[0].m_chosen.transform.rotation);
                 if (i == 0)
