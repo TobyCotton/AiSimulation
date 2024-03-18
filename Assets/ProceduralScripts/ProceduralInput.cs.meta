@@ -7,6 +7,10 @@ MonoImporter:
   - m_house1: {fileID: 7665914721764435929, guid: a5eb62ca701efc54193873c717ef4cf6, type: 3}
   - m_house2: {fileID: 8062003602843011780, guid: 36d2099ffb31eee44a9cca48042fe217, type: 3}
   - m_house3: {fileID: 1115763023343393137, guid: 9625f2e1e758d72458a3b5349326f617, type: 3}
+  - m_house4: {fileID: 7665914721764435929, guid: af9c00824a1743648840f222f6d12f8c, type: 3}
+  - m_house5: {fileID: 7665914721764435929, guid: 629f2095ab6fdf941ab4b44d578cbe43, type: 3}
+  - m_house6: {fileID: 8062003602843011780, guid: 50b590bb9ab69ea4f8dd3195fcf4b49d, type: 3}
+  - m_house7: {fileID: 1115763023343393137, guid: e52657ea079f0374db23cf852058a704, type: 3}
   - m_tile1: {fileID: 4803893809813949010, guid: 41efc6e23d719bb438aaa74fb17d5e7c, type: 3}
   - m_tile2: {fileID: 4803893809813949010, guid: 79f0f011bbb637149ae6e3aa99a05ecc, type: 3}
   - m_tile3: {fileID: 4803893809813949010, guid: 102791797f1be9745ad112a347dbc26b, type: 3}
@@ -14,6 +18,7 @@ MonoImporter:
   - m_tile5: {fileID: 4803893809813949010, guid: 38d57c5d9c52d6e4eba4dff9cbf93b94, type: 3}
   - m_tile6: {fileID: 4803893809813949010, guid: f7886fa4f59a85b4c95415255e591328, type: 3}
   - m_tile7: {fileID: 4803893809813949010, guid: 8d179958246b3fd46b9deb8a31829841, type: 3}
+  - m_tile8: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

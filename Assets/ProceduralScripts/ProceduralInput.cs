@@ -17,6 +17,10 @@ public class ProceduralInput : MonoBehaviour
     public GameObject m_house1;
     public GameObject m_house2;
     public GameObject m_house3;
+    public GameObject m_house4;
+    public GameObject m_house5;
+    public GameObject m_house6;
+    public GameObject m_house7;
     public GameObject m_tile1;
     public GameObject m_tile2;
     public GameObject m_tile3;
@@ -58,50 +62,116 @@ public class ProceduralInput : MonoBehaviour
         m_Grid[l, d].m_chosen = m_Grid[l, d].m_availableTiles[Random.Range(0, m_Grid[l, d].m_availableTiles.Count)];
         m_toActivate.Add(m_Grid[l, d]);
         CreateRoads();
-        for (int i = 0; i < 10000; i++)
+        int amountOfEach = 10;
+        while (amountOfEach >0)
         {
-            int choice = Random.Range(1, 4);
-            if (choice == 1)
+            int x = Random.Range(5, 95);
+            int z = Random.Range(5, 95);
+            int rotationAmount = Random.Range(0, 4) * 90;
+            m_house1.transform.rotation = transform.rotation;
+            m_house1.transform.Rotate(0, rotationAmount, 0, Space.Self);
+            Vector3 size = m_house1.transform.localScale;
+            if (ValidPosition(x, z, size, rotationAmount))
             {
-                int x = Random.Range(5, 95);
-                int z = Random.Range(5, 95);
-                int rotationAmount = Random.Range(0, 4) * 90;
-                m_house1.transform.rotation = transform.rotation;
-                m_house1.transform.Rotate(0, rotationAmount, 0, Space.Self);
-                Vector3 size = m_house1.transform.localScale;
-                if (ValidPosition(x, z, size, rotationAmount))
-                {
-                    var housePosition = new Vector3(x, 2.0f, z);
-                    Instantiate(m_house1, housePosition, m_house1.transform.rotation);
-                }
+                amountOfEach--;
+                var housePosition = new Vector3(x, 2.0f, z);
+                Instantiate(m_house1, housePosition, m_house1.transform.rotation);
             }
-            if (choice == 2)
+        }
+        amountOfEach = 10;
+        while (amountOfEach > 0)
+        {
+            int x = Random.Range(5, 95);
+            int z = Random.Range(5, 95);
+            int rotationAmount = Random.Range(0, 4) * 90;
+            m_house2.transform.rotation = transform.rotation;
+            m_house2.transform.Rotate(0, rotationAmount, 0, Space.Self);
+            Vector3 size = m_house2.transform.localScale;
+            if (ValidPosition(x, z, size, rotationAmount))
             {
-                int x = Random.Range(5, 95);
-                int z = Random.Range(5, 95);
-                int rotationAmount = Random.Range(0, 4) * 90;
-                m_house2.transform.rotation = transform.rotation;
-                m_house2.transform.Rotate(0, rotationAmount, 0, Space.Self);
-                Vector3 size = m_house2.transform.localScale;
-                if (ValidPosition(x, z, size, rotationAmount))
-                {
-                    var housePosition = new Vector3(x, 2.0f, z);
-                    Instantiate(m_house2, housePosition, m_house2.transform.rotation);
-                }
+                amountOfEach--;
+                var housePosition = new Vector3(x, 2.0f, z);
+                Instantiate(m_house2, housePosition, m_house2.transform.rotation);
             }
-            if (choice == 3)
+        }
+        amountOfEach = 10;
+        while (amountOfEach > 0)
+        {
+            int x = Random.Range(5, 95);
+            int z = Random.Range(5, 95);
+            int rotationAmount = Random.Range(0, 4) * 90;
+            m_house3.transform.rotation = transform.rotation;
+            m_house3.transform.Rotate(0, rotationAmount, 0, Space.Self);
+            Vector3 size = m_house3.transform.localScale;
+            if (ValidPosition(x, z, size, rotationAmount))
             {
-                int x = Random.Range(5, 95);
-                int z = Random.Range(5, 95);
-                int rotationAmount = Random.Range(0, 4) * 90;
-                m_house3.transform.rotation = transform.rotation;
-                m_house3.transform.Rotate(0, rotationAmount, 0, Space.Self);
-                Vector3 size = m_house3.transform.localScale;
-                if (ValidPosition(x, z, size, rotationAmount))
-                {
-                    var housePosition = new Vector3(x, 5.0f, z);
-                    Instantiate(m_house3, housePosition, m_house3.transform.rotation);
-                }
+                amountOfEach--;
+                var housePosition = new Vector3(x, 5.0f, z);
+                Instantiate(m_house3, housePosition, m_house3.transform.rotation);
+            }
+        }
+        amountOfEach = 10;
+        while (amountOfEach > 0)
+        {
+            int x = Random.Range(5, 95);
+            int z = Random.Range(5, 95);
+            int rotationAmount = Random.Range(0, 4) * 90;
+            m_house4.transform.rotation = transform.rotation;
+            m_house4.transform.Rotate(0, rotationAmount, 0, Space.Self);
+            Vector3 size = m_house4.transform.localScale;
+            if (ValidPosition(x, z, size, rotationAmount))
+            {
+                amountOfEach--;
+                var housePosition = new Vector3(x, 2.0f, z);
+                Instantiate(m_house4, housePosition, m_house4.transform.rotation);
+            }
+        }
+        amountOfEach = 10;
+        while (amountOfEach > 0)
+        {
+            int x = Random.Range(5, 95);
+            int z = Random.Range(5, 95);
+            int rotationAmount = Random.Range(0, 4) * 90;
+            m_house5.transform.rotation = transform.rotation;
+            m_house5.transform.Rotate(0, rotationAmount, 0, Space.Self);
+            Vector3 size = m_house5.transform.localScale;
+            if (ValidPosition(x, z, size, rotationAmount))
+            {
+                amountOfEach--;
+                var housePosition = new Vector3(x, 2.0f, z);
+                Instantiate(m_house5, housePosition, m_house5.transform.rotation);
+            }
+        }
+        amountOfEach = 10;
+        while (amountOfEach > 0)
+        {
+            int x = Random.Range(5, 95);
+            int z = Random.Range(5, 95);
+            int rotationAmount = Random.Range(0, 4) * 90;
+            m_house6.transform.rotation = transform.rotation;
+            m_house6.transform.Rotate(0, rotationAmount, 0, Space.Self);
+            Vector3 size = m_house6.transform.localScale;
+            if (ValidPosition(x, z, size, rotationAmount))
+            {
+                amountOfEach--;
+                var housePosition = new Vector3(x, 2.0f, z);
+                Instantiate(m_house6, housePosition, m_house6.transform.rotation);
+            }
+        }
+        amountOfEach = 10;
+        while (amountOfEach > 0)
+        {
+            int x = Random.Range(5, 95);
+            int z = Random.Range(5, 95);
+            int rotationAmount = Random.Range(0, 4) * 90;
+            m_house7.transform.rotation = transform.rotation;
+            m_house7.transform.Rotate(0, rotationAmount, 0, Space.Self);
+            Vector3 size = m_house7.transform.localScale;
+            if (ValidPosition(x, z, size, rotationAmount))
+            {
+                amountOfEach--;
+                var housePosition = new Vector3(x, 5.0f, z);
+                Instantiate(m_house7, housePosition, m_house7.transform.rotation);
             }
         }
     }
