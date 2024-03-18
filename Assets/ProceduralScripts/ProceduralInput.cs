@@ -106,7 +106,7 @@ public class ProceduralInput : MonoBehaviour
             if (ValidPosition(x, z, size, rotationAmount))
             {
                 amountOfEach--;
-                var housePosition = new Vector3(x, 5.0f, z);
+                var housePosition = new Vector3(x, 2.0f, z);
                 Instantiate(m_house3, housePosition, m_house3.transform.rotation);
             }
         }
@@ -170,7 +170,7 @@ public class ProceduralInput : MonoBehaviour
             if (ValidPosition(x, z, size, rotationAmount))
             {
                 amountOfEach--;
-                var housePosition = new Vector3(x, 5.0f, z);
+                var housePosition = new Vector3(x, 2.0f, z);
                 Instantiate(m_house7, housePosition, m_house7.transform.rotation);
             }
         }
