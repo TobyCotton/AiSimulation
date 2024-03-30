@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ public class Agent_Worker : Agent
             SetTargetTag("Social").
             SetCost(100.0f).
             SetDuration(1.0f).
-            AddAdditionalPreEffect(new PrintEffect("Spending time at Social.")).
+            AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Spending time at Social.")).
             AddResults(EStates.Idle, 1);
 
         AddAction(new Action()).
@@ -25,7 +26,7 @@ public class Agent_Worker : Agent
             SetCost(3.0f).
             SetDuration(7.0f).
             AddAdditionalCheck(new IsTiredCheck(Stamina)).
-            AddAdditionalPreEffect(new PrintEffect("Resting at House.")).
+            AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Resting at House.")).
             AddResults(EStates.Idle, 1).
             AddAdditionalPostEffect(new RestEffect(Stamina));
 
@@ -35,7 +36,7 @@ public class Agent_Worker : Agent
             SetDuration(2.0f).
             AddAdditionalCheck(new IsTiredCheck(Stamina)).
             AddAdditionalCheck(new PaymentCheck(Money, 25)).
-            AddAdditionalPreEffect(new PrintEffect("Resting at Hotel.")).
+            AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Resting at Hotel.")).
             AddAdditionalPreEffect(new PayEffect(Money, 25)).
             AddResults(EStates.Idle, 1).
             AddAdditionalPostEffect(new RestEffect(Stamina));
@@ -45,7 +46,7 @@ public class Agent_Worker : Agent
             SetCost(3.0f).
             SetDuration(7.0f).
             AddAdditionalCheck(new IsHungryCheck(Hunger)).
-            AddAdditionalPreEffect(new PrintEffect("Eating at Cafeteria")).
+            AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Eating at Cafeteria")).
             AddResults(EStates.Idle, 1).
             AddAdditionalPostEffect(new EatEffect(Hunger));
 
@@ -55,7 +56,7 @@ public class Agent_Worker : Agent
             SetDuration(5.0f).
             AddAdditionalCheck(new IsHungryCheck(Hunger)).
             AddAdditionalCheck(new PaymentCheck(Money, 10)).
-            AddAdditionalPreEffect(new PrintEffect("Eating at Restaurant")).
+            AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Eating at Restaurant")).
             AddAdditionalPreEffect(new PayEffect(Money, 10)).
             AddResults(EStates.Idle, 1).
             AddAdditionalPostEffect(new EatEffect(Hunger));
@@ -66,7 +67,7 @@ public class Agent_Worker : Agent
             SetDuration(15.0f).
             AddPrecondition(EStates.Idle, 1).
             AddAdditionalCheck(new IsReadyToWorkCheck(Stamina, Hunger)).
-            AddAdditionalPreEffect(new PrintEffect("Working")).
+            AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Working")).
             AddResults(EStates.Working, 1).
             AddAdditionalPostEffect(new SalaryEffect(Money, 100));
 
@@ -77,4 +78,7 @@ public class Agent_Worker : Agent
     private HungerComponent Hunger;
     private StaminaComponent Stamina;
     private MoneyComponent Money;
+
+    [SerializeField]
+    private TextMeshProUGUI ActionText;
 }
