@@ -29,6 +29,11 @@ public sealed class Action
 
     public bool IsAchievable(StatesDictionary conditions = null)
     {
+        if(!AssertAditionalChecks())
+        { 
+            return false;
+        }
+
         if (conditions == null)
         {
             return true;

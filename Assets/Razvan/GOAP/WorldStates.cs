@@ -6,9 +6,8 @@ using StatesDictionary = System.Collections.Generic.Dictionary<EStates, int>;
 
 public enum EStates
 {
-    Objective1,
-    Objective2,
-    Objective3,
+    Idle,
+    Working,
 }
 
 [System.Serializable]

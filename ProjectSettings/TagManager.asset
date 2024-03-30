@@ -4,9 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Objective1
-  - Objective2
-  - Objective3
+  - Hotel
+  - Restaurant
+  - Workplace
+  - House
+  - Cafeteria
+  - Social
+  - Arcade
   layers:
   - Default
   - TransparentFX
