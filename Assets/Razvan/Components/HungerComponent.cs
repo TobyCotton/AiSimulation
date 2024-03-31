@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class HungerComponent : MonoBehaviour
@@ -13,6 +14,8 @@ public class HungerComponent : MonoBehaviour
     public void Update()
     {
         Nourishment = Mathf.Max(Nourishment - Time.deltaTime * 5.0f, 0.0f);
+
+        HungerText.SetText("Hunger: " + ((int)Nourishment).ToString());
     }
 
     public bool IsHungry()
@@ -26,6 +29,9 @@ public class HungerComponent : MonoBehaviour
     }
 
     // ~ private interface
+    [SerializeField]
+    private TextMeshProUGUI HungerText;
+
     private const float FullNourishment = 100.0f;
     private float Nourishment;
 }

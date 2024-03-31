@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
 
 public class MoneyComponent : MonoBehaviour
@@ -8,7 +9,7 @@ public class MoneyComponent : MonoBehaviour
     // ~ public interface
     public void Start()
     {
-        Money = 0;
+        ReceiveSalary(0);
     }
 
     public bool CanAfford(int Sum)
@@ -19,15 +20,22 @@ public class MoneyComponent : MonoBehaviour
     public void Pay(int Sum)
     {
         Money -= Sum;
+
+        MoneyText.SetText("Money: " + Money.ToString());
     }
 
     public void ReceiveSalary(int Sum)
     {
         Money += Sum;
+
+        MoneyText.SetText("Money: " + Money.ToString());
     }
 
     // ~ private interface
-    private int Money;
+    [SerializeField]
+    private TextMeshProUGUI MoneyText;
+
+    private int Money = 0;
 }
 
 public class PaymentCheck : AdditionalCheck

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class StaminaComponent : MonoBehaviour
@@ -20,14 +21,21 @@ public class StaminaComponent : MonoBehaviour
         Percentange = Mathf.Clamp(Percentange / 100.0f, 0.0f, 1.0f);
         Stamina -= Percentange * FullStamina;
         Stamina = Mathf.Clamp(Stamina, 0.0f, FullStamina);
+
+        StaminaText.SetText("Stamina: " + Stamina.ToString());
     }
 
     public void Rest()
     {
         Stamina = FullStamina;
+
+        StaminaText.SetText("Stamina: " + Stamina.ToString());
     }
 
     // ~ private interface
+    [SerializeField]
+    private TextMeshProUGUI StaminaText;
+
     private float FullStamina = 100.0f;
     private float Stamina;
 }
