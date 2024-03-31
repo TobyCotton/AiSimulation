@@ -32,6 +32,7 @@ public class ProceduralInput : MonoBehaviour
     public Grid grid;
     public int length;
     public int width;
+    public Sprite sprite;
     private TileInfo[,] m_Grid;
     private List<TileInfo> m_toActivate = new List<TileInfo>();
     private void Start()
@@ -40,6 +41,7 @@ public class ProceduralInput : MonoBehaviour
         length = (int)mySize.x;
         width =  (int)mySize.z;
         grid = new Grid(length,width);
+        grid.sprite = this.sprite;
         m_Grid = new TileInfo[length, width];
         for (int i = 0; i < length; i++)
         {
@@ -75,7 +77,16 @@ public class ProceduralInput : MonoBehaviour
             {
                 amountOfEach--;
                 var housePosition = new Vector3(x, 2.0f, z);
-                Instantiate(m_house1, housePosition, m_house1.transform.rotation);
+                GameObject house = Instantiate(m_house1, housePosition, m_house1.transform.rotation);
+                
+                var entrance = house.transform.Find("Entrance");
+                if (entrance != null)
+                {
+                    Debug.Log("HOUSE 1 FOUND");
+                    GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
+                    tile.isWalkable = true;
+                    tile.isEntrance = true;
+                }
             }
         }
         amountOfEach = 10;
@@ -91,7 +102,16 @@ public class ProceduralInput : MonoBehaviour
             {
                 amountOfEach--;
                 var housePosition = new Vector3(x, 2.0f, z);
-                Instantiate(m_house2, housePosition, m_house2.transform.rotation);
+                GameObject house = Instantiate(m_house2, housePosition, m_house2.transform.rotation);
+                
+                var entrance = house.transform.Find("Entrance");
+                if (entrance != null)
+                {
+                    Debug.Log("HOUSE 2 FOUND");
+                    GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
+                    tile.isWalkable = true;
+                    tile.isEntrance = true;
+                }
             }
         }
         amountOfEach = 10;
@@ -107,7 +127,16 @@ public class ProceduralInput : MonoBehaviour
             {
                 amountOfEach--;
                 var housePosition = new Vector3(x, 2.0f, z);
-                Instantiate(m_house3, housePosition, m_house3.transform.rotation);
+                GameObject house = Instantiate(m_house3, housePosition, m_house3.transform.rotation);
+                
+                var entrance = house.transform.Find("Entrance");
+                if (entrance != null)
+                {
+                    Debug.Log("HOUSE 3 FOUND");
+                    GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
+                    tile.isWalkable = true;
+                    tile.isEntrance = true;
+                }
             }
         }
         amountOfEach = 10;
@@ -123,7 +152,16 @@ public class ProceduralInput : MonoBehaviour
             {
                 amountOfEach--;
                 var housePosition = new Vector3(x, 2.0f, z);
-                Instantiate(m_house4, housePosition, m_house4.transform.rotation);
+                GameObject house = Instantiate(m_house4, housePosition, m_house4.transform.rotation);
+                
+                var entrance = house.transform.Find("Entrance");
+                if (entrance != null)
+                {
+                    Debug.Log("HOUSE 4 FOUND");
+                    GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
+                    tile.isWalkable = true;
+                    tile.isEntrance = true;
+                }
             }
         }
         amountOfEach = 10;
@@ -139,7 +177,16 @@ public class ProceduralInput : MonoBehaviour
             {
                 amountOfEach--;
                 var housePosition = new Vector3(x, 2.0f, z);
-                Instantiate(m_house5, housePosition, m_house5.transform.rotation);
+                GameObject house = Instantiate(m_house5, housePosition, m_house5.transform.rotation);
+                
+                var entrance = house.transform.Find("Entrance");
+                if (entrance != null)
+                {
+                    Debug.Log("HOUSE 5 FOUND");
+                    GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
+                    tile.isWalkable = true;
+                    tile.isEntrance = true;
+                }
             }
         }
         amountOfEach = 10;
@@ -155,7 +202,15 @@ public class ProceduralInput : MonoBehaviour
             {
                 amountOfEach--;
                 var housePosition = new Vector3(x, 2.0f, z);
-                Instantiate(m_house6, housePosition, m_house6.transform.rotation);
+                GameObject house = Instantiate(m_house6, housePosition, m_house6.transform.rotation);
+                var entrance = house.transform.Find("Entrance");
+                if (entrance != null)
+                {
+                    Debug.Log("HOUSE 6 FOUND");
+                    GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
+                    tile.isWalkable = true;
+                    tile.isEntrance = true;
+                }
             }
         }
         amountOfEach = 10;
@@ -171,9 +226,19 @@ public class ProceduralInput : MonoBehaviour
             {
                 amountOfEach--;
                 var housePosition = new Vector3(x, 2.0f, z);
-                Instantiate(m_house7, housePosition, m_house7.transform.rotation);
+                GameObject house = Instantiate(m_house7, housePosition, m_house7.transform.rotation);
+                
+                var entrance = house.transform.Find("Entrance");
+                if (entrance != null)
+                {
+                    Debug.Log("HOUSE 7 FOUND");
+                    GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
+                    tile.isWalkable = true;
+                    tile.isEntrance = true;
+                }
             }
         }
+        grid.RenderTiles();
     }
 
     bool ValidPosition(int x,int z,Vector3 size,int rotation)
@@ -209,7 +274,10 @@ public class ProceduralInput : MonoBehaviour
         {
             for (int j = -UseZ; j < UseZ; j++)
             {
-                grid.gridArray[x + i, z + j].isWalkable = false;
+                if (grid.gridArray[x + i, z + j].isEntrance == false)
+                {
+                    grid.gridArray[x + i, z + j].isWalkable = false;
+                }
             }
         }
         return true;

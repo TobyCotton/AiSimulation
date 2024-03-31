@@ -11,6 +11,10 @@ TagManager:
   - Cafeteria
   - Social
   - Arcade
+  - Objective1
+  - Objective2
+  - Objective3
+  - Entrance
   layers:
   - Default
   - TransparentFX
