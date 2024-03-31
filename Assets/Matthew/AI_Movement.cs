@@ -54,7 +54,8 @@ public class AI_Movement : MonoBehaviour
 
     public void moveTo(string TargetTag)
     {
-        AStarPathing(componentTransform.position, new Vector3(99, 1, 99));
+        Vector3 TargetPosition = GameObject.FindWithTag(TargetTag).transform.Find("Entrance").position;
+        AStarPathing(componentTransform.position, TargetPosition);
     }
     void AStarPathing(Vector3 startPos, Vector3 endPos)
     {
