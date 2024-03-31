@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class GridTile
 {
-    
+     
     public bool isWalkable;
     public bool isGrass;
+    public bool isEntrance;
 
     public Vector3 worldPos;
 

@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Grid
 {
+    public Sprite sprite;
     int width;
     int height;
     public GridTile[,] gridArray;
@@ -22,7 +24,7 @@ public class Grid
         {
             for (int j = 0; j < gridArray.GetLength(1); j++)
             {
-                gridArray[i, j] = new GridTile(new Vector3((1 * i) + 1 / 2, 1, (1 * j) + 1 / 2), new Vector2(i, j));
+                gridArray[i, j] = new GridTile(new Vector3((1 * i) + 0.5f, 1, (1 * j) + 0.5f), new Vector2(i, j));
             }
         }
     }
@@ -51,5 +53,28 @@ public class Grid
         int x = Mathf.RoundToInt(MathF.Floor(worldPosition.x));
         int y = Mathf.RoundToInt(MathF.Floor(worldPosition.z));
         return gridArray[x, y];
+    }
+
+    public void RenderTiles()
+    {
+        for (int i = 0; i < gridArray.GetLength(0); i++)
+        {
+            for (int j = 0; j < gridArray.GetLength(1); j++)
+            {
+                GameObject tile = new GameObject("x: " + gridArray[i, j].worldPos.x + " z: " + gridArray[i, j].worldPos.z);
+                tile.transform.position = gridArray[i, j].worldPos;
+                tile.transform.Rotate(new Vector3(90, 0, 0));
+                var s = tile.AddComponent<SpriteRenderer>();
+                s.sprite = sprite;
+                if (gridArray[i, j].isWalkable)
+                {
+                    s.color = Color.green;
+                }
+                else
+                {
+                    s.color = Color.red;
+                }
+            }
+        }
     }
 }
