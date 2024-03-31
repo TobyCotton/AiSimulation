@@ -12,7 +12,7 @@ public class HungerComponent : MonoBehaviour
 
     public void Update()
     {
-        Nourishment -= Time.deltaTime * 5.0f;
+        Nourishment = Mathf.Max(Nourishment - Time.deltaTime * 5.0f, 0.0f);
     }
 
     public bool IsHungry()
