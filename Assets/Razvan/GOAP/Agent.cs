@@ -66,6 +66,11 @@ public abstract class Agent : MonoBehaviour
                     {
                         CurrentAction.Progress = EActionProgress.ExecutingPrePerform;
                     }
+                    else
+                    {
+                        CurrentAction.Progress = EActionProgress.NotStarted;
+                        CurrentAction = null;
+                    }
                     return;
                 case EActionProgress.ExecutingPrePerform:
                     if (CurrentAction.LateUpdatePrePerformResult())
