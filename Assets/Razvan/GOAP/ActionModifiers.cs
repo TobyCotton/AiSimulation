@@ -24,6 +24,11 @@ public abstract class AdditionalEffect
         return CurrentResult;
     }
 
+    public void ResertResult()
+    {
+        CurrentResult = EAdditionalEffectResult.Fail;
+    }
+
     // ~ protected interface
     protected void SetResult(EAdditionalEffectResult Result)
     {

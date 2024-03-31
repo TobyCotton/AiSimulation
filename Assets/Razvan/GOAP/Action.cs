@@ -123,6 +123,14 @@ public sealed class Action
         return Result;
     }
 
+    public void ResetPrePerformEffects()
+    {
+        foreach (var Effect in AditionalPreEffects)
+        {
+            Effect.ResertResult();
+        }
+    }
+
     public bool LateUpdatePostPerformResult()
     {
         bool Result = true;
@@ -136,6 +144,14 @@ public sealed class Action
             Result = Result && (Effect.GetResult() != EAdditionalEffectResult.Fail);
         }
         return Result;
+    }
+
+    public void ResetPostPerformEffects()
+    {
+        foreach (var Effect in AditionalPostEffects)
+        {
+            Effect.ResertResult();
+        }
     }
 
     public bool CanFindTarget()

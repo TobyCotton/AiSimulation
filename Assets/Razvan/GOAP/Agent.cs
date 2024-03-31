@@ -70,6 +70,7 @@ public abstract class Agent : MonoBehaviour
                 case EActionProgress.ExecutingPrePerform:
                     if (CurrentAction.LateUpdatePrePerformResult())
                     {
+                        CurrentAction.ResetPrePerformEffects();
                         CurrentAction.Progress = EActionProgress.ExecutingMovement;
                         MovementComponent.moveTo(CurrentAction.GetTargetTag());
                     }
@@ -80,6 +81,7 @@ public abstract class Agent : MonoBehaviour
                 case EActionProgress.ExecutingPostPerform:
                     if (CurrentAction.LateUpdatePostPerformResult())
                     {
+                        CurrentAction.ResetPostPerformEffects();
                         CurrentAction.Progress = EActionProgress.Finished;
                         CurrentAction = null;
                     }

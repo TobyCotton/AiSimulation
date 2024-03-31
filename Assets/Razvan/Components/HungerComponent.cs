@@ -12,7 +12,7 @@ public class HungerComponent : MonoBehaviour
 
     public void Update()
     {
-        Nourishment -= Time.deltaTime / 2.0f;
+        Nourishment -= Time.deltaTime * 5.0f;
     }
 
     public bool IsHungry()
@@ -26,7 +26,7 @@ public class HungerComponent : MonoBehaviour
     }
 
     // ~ private interface
-    private const float FullNourishment = 1000.0f;
+    private const float FullNourishment = 100.0f;
     private float Nourishment;
 }
 

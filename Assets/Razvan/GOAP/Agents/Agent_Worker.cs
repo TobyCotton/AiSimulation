@@ -18,6 +18,7 @@ public class Agent_Worker : Agent
             SetTargetTag("Social").
             SetCost(100.0f).
             SetDuration(1.0f).
+            AddAdditionalCheck(new IsReadyToWorkCheck(Stamina, Hunger)).
             AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Spending time at Social.")).
             AddResults(EStates.Idle, 1);
 
@@ -66,10 +67,10 @@ public class Agent_Worker : Agent
             SetCost(1.0f).
             SetDuration(15.0f).
             AddPrecondition(EStates.Idle, 1).
-            AddAdditionalCheck(new IsReadyToWorkCheck(Stamina, Hunger)).
             AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Working")).
             AddResults(EStates.Working, 1).
-            AddAdditionalPostEffect(new SalaryEffect(Money, 100));
+            AddAdditionalPostEffect(new WorkEffect(Stamina, 50)).
+            AddAdditionalPostEffect(new SalaryEffect(Money, 5));
 
         AddGoal(new SubGoal(EStates.Working, 1, true), 1);
     }

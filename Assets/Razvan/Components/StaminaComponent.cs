@@ -66,3 +66,23 @@ public class RestEffect : AdditionalEffect
     // ~ private interface
     private StaminaComponent InjectedStamina;
 }
+
+public class WorkEffect : AdditionalEffect
+{
+    // ~ public interface
+    public WorkEffect(StaminaComponent Stamina, float percent)
+    {
+        InjectedStamina = Stamina;
+        Percent = percent;
+    }
+
+    public override void LateUpdate()
+    {
+        InjectedStamina.DepleteStamina(Percent);
+        SetResult(EAdditionalEffectResult.Success);
+    }
+
+    // ~ private interface
+    private StaminaComponent InjectedStamina;
+    private float Percent;
+}
