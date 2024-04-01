@@ -28,48 +28,32 @@ public class GoalPlanner
     // ~ public interface
     public Queue<Action> Plan(List<Action> Actions, StatesDictionary Goal)
     {
-        List<Action> AchievableActions = Actions.FindAll(action => action.IsAchievable());
+        var AchievableActions = Actions.FindAll(action => action.IsAchievable());
 
-        List<Node> Leaves = new List<Node>();
-        Node Start = new Node(null, 0, new StatesDictionary(), null);
+        var Leaves = new List<Node>();
+        var Start = new Node(null, 0, new StatesDictionary(), null);
 
-        bool Success = BuildGraph(Start, Leaves, AchievableActions, Goal);
-
-        if(!Success)
+        if(!BuildGraph(Start, Leaves, AchievableActions, Goal))
         {
             //Debug.Log("NO PLAN FOUND");
             return null;
         }
 
-        Node Cheapest = Leaves[0];
-        foreach(var leaf in Leaves)
+        var PlanList = new List<Action>();
+        var CurrentNode = (from Leaf in Leaves where Leaf.Cost <= Leaves.Min(l => l.Cost) select Leaf).ToList()[0];
+        while(CurrentNode != null)
         {
-            if(leaf.Cost < Cheapest.Cost)
+            if(CurrentNode.Action != null)
             {
-                Cheapest = leaf;
+                PlanList.Add(CurrentNode.Action);
             }
+            CurrentNode = CurrentNode.Parent;
         }
-
-        List<Action> Result = new List<Action>();
-        Node N = Cheapest;
-        while(N != null)
-        {
-            if(N.Action != null)
-            {
-                Result.Insert(0, N.Action);
-            }
-            N = N.Parent;
-        }
-
-        Queue<Action> Queue = new Queue<Action>();
-        foreach(var action in Result)
-        {
-            Queue.Enqueue(action);
-        }
+        PlanList.Reverse();
 
         //Debug.Log("PLAN FOUND");
 
-        return Queue;
+        return new Queue<Action>(PlanList);
     }
 
     // ~ private interface
@@ -77,33 +61,31 @@ public class GoalPlanner
     {
         bool FoundPath = false;
 
-        foreach(var action in Actions)
+        var AchievableActions = from Action in Actions where Action.IsAchievable(Parent.State) select Action;
+        foreach(var Action in AchievableActions)
         {
-            if(action.IsAchievable(Parent.State))
+            StatesDictionary CurrentState = new StatesDictionary(Parent.State);
+            foreach (var Effect in Action.GetResults())
             {
-                StatesDictionary CurrentState = new StatesDictionary(Parent.State);
-                foreach(var effect in action.GetResults())
+                if (!CurrentState.ContainsKey(Effect.Key))
                 {
-                    if (!CurrentState.ContainsKey(effect.Key))
-                    {
-                        CurrentState.Add(effect.Key, effect.Value);
-                    }
+                    CurrentState.Add(Effect.Key, Effect.Value);
                 }
+            }
 
-                Node node = new Node(Parent, Parent.Cost + action.GetCost(), CurrentState, action);
+            var node = new Node(Parent, Parent.Cost + Action.GetCost(), CurrentState, Action);
 
-                if(CurrentState.Intersect(Goal).Count() == Goal.Count())
-                {
-                    Leaves.Add(node);
-                    FoundPath = true;
-                }
-                else
-                {
-                    List<Action> Subset = new List<Action>(Actions);
-                    Subset.Remove(action);
+            if (CurrentState.Intersect(Goal).Count() == Goal.Count())
+            {
+                Leaves.Add(node);
+                FoundPath = true;
+            }
+            else
+            {
+                List<Action> Subset = new List<Action>(Actions);
+                Subset.Remove(Action);
 
-                    FoundPath = BuildGraph(node, Leaves, Subset, Goal);
-                }
+                FoundPath = BuildGraph(node, Leaves, Subset, Goal);
             }
         }
 

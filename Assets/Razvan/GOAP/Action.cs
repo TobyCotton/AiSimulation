@@ -111,7 +111,7 @@ public sealed class Action
     public bool LateUpdatePrePerformResult()
     {
         bool Result = true;
-        foreach (var Effect in AditionalPreEffects)
+        foreach(var Effect in AditionalPreEffects)
         {
             if (Effect.GetResult() == EAdditionalEffectResult.Fail)
             {
@@ -125,7 +125,7 @@ public sealed class Action
 
     public void ResetPrePerformEffects()
     {
-        foreach (var Effect in AditionalPreEffects)
+        foreach(var Effect in AditionalPreEffects)
         {
             Effect.ResertResult();
         }
@@ -134,7 +134,7 @@ public sealed class Action
     public bool LateUpdatePostPerformResult()
     {
         bool Result = true;
-        foreach (var Effect in AditionalPostEffects)
+        foreach(var Effect in AditionalPostEffects)
         {
             if (Effect.GetResult() == EAdditionalEffectResult.Fail)
             {

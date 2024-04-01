@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class UIPrintEffect : AdditionalEffect
 {
+    // ~ public interface
     public UIPrintEffect(TextMeshProUGUI ActionText, string Text)
     {
         InjectedActionText = ActionText;
@@ -17,12 +18,14 @@ public class UIPrintEffect : AdditionalEffect
         SetResult(EAdditionalEffectResult.Success);
     }
 
+    // ~ private interface
     private TextMeshProUGUI InjectedActionText;
     private string DebugText;
 }
 
 public class DebugPrintEffect : AdditionalEffect
 {
+    // ~ public interface
     public DebugPrintEffect(string Text)
     {
         DebugText = Text;
@@ -34,11 +37,13 @@ public class DebugPrintEffect : AdditionalEffect
         SetResult(EAdditionalEffectResult.Success);
     }
 
+    // ~ private interface
     private string DebugText;
 }
 
 public class DebugAsyncPrintEffect : AdditionalEffect
 {
+    // ~ public interface
     public DebugAsyncPrintEffect(string Text)
     {
         DebugText = Text;
@@ -54,6 +59,7 @@ public class DebugAsyncPrintEffect : AdditionalEffect
         i++;
     }
 
+    // ~ private interface
     private string DebugText;
     private uint i = 0;
 }

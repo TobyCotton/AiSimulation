@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class Agent_Worker : Agent
 {
-    new void Start()
+    // ~ public interface
+    new public void Start()
     {
         base.Start();
 

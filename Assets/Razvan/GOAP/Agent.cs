@@ -4,13 +4,11 @@ using UnityEngine;
 using System.Linq;
 
 using StatesDictionary = System.Collections.Generic.Dictionary<string, int>;
+using UnityEditor;
 
 public class SubGoal
 {
     // ~ public interface
-    public StatesDictionary SubGoals;
-    public bool Persistency = true;
-
     public SubGoal(string key, int value, bool persistency)
     {
         SubGoals = new StatesDictionary();
@@ -18,6 +16,9 @@ public class SubGoal
 
         Persistency = persistency;
     }
+
+    public StatesDictionary SubGoals;
+    public bool Persistency = true;
 }
 
 public abstract class Agent : MonoBehaviour
@@ -98,15 +99,14 @@ public abstract class Agent : MonoBehaviour
         {
             Planner = new GoalPlanner();
 
-            var SortedGoals = from goal in Goals orderby goal.Value descending select goal;
-
-            foreach (var goal in SortedGoals)
+            var SortedGoals = from Goal in Goals orderby Goal.Value descending select Goal;
+            foreach (var Goal in SortedGoals)
             {
-                ActionQueue = Planner.Plan(Actions, goal.Key.SubGoals);
+                ActionQueue = Planner.Plan(Actions, Goal.Key.SubGoals);
 
                 if (ActionQueue != null)
                 {
-                    CurrentGoal = goal.Key;
+                    CurrentGoal = Goal.Key;
                     break;
                 }
             }
