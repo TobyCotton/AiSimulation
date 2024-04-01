@@ -9,6 +9,7 @@ public class GridTile
     public bool isWalkable;
     public bool isGrass;
     public bool isEntrance;
+    public int weight;
 
     public Vector3 worldPos;
 
@@ -26,5 +27,11 @@ public class GridTile
         isWalkable = true;
         this.gridPos = gridPos;
         this.worldPos = worldPos;
+    }
+
+    public void SetIsGrass()
+    {
+        isGrass = true;
+        weight = 16;
     }
 }

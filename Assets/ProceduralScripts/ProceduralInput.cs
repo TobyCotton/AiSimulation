@@ -357,7 +357,7 @@ public class ProceduralInput : MonoBehaviour
                 m_toActivate[0].m_enabled = true;
                 if (m_toActivate[0].m_chosen == m_tile5)
                 {
-                    grid.gridArray[i, j].isGrass = true;
+                    grid.gridArray[i, j].SetIsGrass();
                 }
                 else if (m_toActivate[0].m_chosen == m_tile6 && !m_toActivate[0].m_priority.Contains(m_tile6))//only access if it isn't already a priority
                 {

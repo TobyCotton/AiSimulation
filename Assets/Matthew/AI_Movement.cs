@@ -89,7 +89,7 @@ public class AI_Movement : MonoBehaviour
                     continue;
                 }
 
-                int CostToNeighbour = tile.g + GetDistance(tile, neighbour);
+                int CostToNeighbour = tile.g + GetDistance(tile, neighbour) + tile.weight;
 
                 if (CostToNeighbour < neighbour.g || !openSet.Contains(neighbour))
                 {
