@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEditor;
 
-using StatesDictionary = System.Collections.Generic.Dictionary<EStates, int>;
+using StatesDictionary = System.Collections.Generic.Dictionary<string, int>;
 
 public class Node
 {
@@ -26,12 +26,12 @@ public class Node
 public class GoalPlanner
 {
     // ~ public interface
-    public Queue<Action> Plan(List<Action> Actions, StatesDictionary Goal, WorldStates States)
+    public Queue<Action> Plan(List<Action> Actions, StatesDictionary Goal)
     {
         List<Action> AchievableActions = Actions.FindAll(action => action.IsAchievable());
 
         List<Node> Leaves = new List<Node>();
-        Node Start = new Node(null, 0, World.Instance.GetWorld().GetStates(), null);
+        Node Start = new Node(null, 0, new StatesDictionary(), null);
 
         bool Success = BuildGraph(Start, Leaves, AchievableActions, Goal);
 

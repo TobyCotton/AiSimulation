@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using StatesDictionary = System.Collections.Generic.Dictionary<EStates, int>;
+using StatesDictionary = System.Collections.Generic.Dictionary<string, int>;
 
 public enum EActionProgress
 {
@@ -86,13 +86,13 @@ public sealed class Action
         return this;
     }
 
-    public Action AddPrecondition(EStates Key, int Value)
+    public Action AddPrecondition(string Key, int Value)
     {
         Preconditions.Add(Key, Value);
         return this;
     }
 
-    public Action AddResults(EStates Key, int Value)
+    public Action AddResults(string Key, int Value)
     {
         Results.Add(Key, Value);
         return this;

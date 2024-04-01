@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-using StatesDictionary = System.Collections.Generic.Dictionary<EStates, int>;
+using StatesDictionary = System.Collections.Generic.Dictionary<string, int>;
 
 public class SubGoal
 {
@@ -11,7 +11,7 @@ public class SubGoal
     public StatesDictionary SubGoals;
     public bool Persistency = true;
 
-    public SubGoal(EStates key, int value, bool persistency)
+    public SubGoal(string key, int value, bool persistency)
     {
         SubGoals = new StatesDictionary();
         SubGoals.Add(key, value);
@@ -102,7 +102,7 @@ public abstract class Agent : MonoBehaviour
 
             foreach (var goal in SortedGoals)
             {
-                ActionQueue = Planner.Plan(Actions, goal.Key.SubGoals, null);
+                ActionQueue = Planner.Plan(Actions, goal.Key.SubGoals);
 
                 if (ActionQueue != null)
                 {
