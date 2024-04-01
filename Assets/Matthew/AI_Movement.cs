@@ -54,7 +54,8 @@ public class AI_Movement : MonoBehaviour
 
     public void moveTo(string TargetTag)
     {
-        Vector3 TargetPosition = GameObject.FindWithTag(TargetTag).transform.Find("Entrance").position;
+        GameObject TargetBuilding = GetClosestObjectWithTag(TargetTag);
+        Vector3 TargetPosition = TargetBuilding.transform.Find("Entrance").position;
         AStarPathing(componentTransform.position, TargetPosition);
     }
     void AStarPathing(Vector3 startPos, Vector3 endPos)
@@ -138,5 +139,25 @@ public class AI_Movement : MonoBehaviour
             return openSet.OrderBy(x => x.f).First();
         }
         return openSet.OrderBy(x => x.g).First();
+    }
+
+    GameObject GetClosestObjectWithTag(string TargetTag)
+    {
+        GameObject Closest = new GameObject();
+        float ClosestDistance = 9999;
+        
+        GameObject[] ObjectsWithTag = GameObject.FindGameObjectsWithTag(TargetTag);
+        foreach (var Object in ObjectsWithTag)
+        {
+            float Distance = Vector3.Distance(componentTransform.position, Object.transform.position);
+
+            if (Distance < ClosestDistance)
+            {
+                Closest = Object;
+                ClosestDistance = Distance;
+            }
+        }
+
+        return Closest;
     }
 }
