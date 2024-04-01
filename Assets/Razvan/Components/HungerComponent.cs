@@ -13,7 +13,7 @@ public class HungerComponent : MonoBehaviour
 
     public void Update()
     {
-        Nourishment = Mathf.Max(Nourishment - Time.deltaTime * 5.0f, 0.0f);
+        Nourishment = Mathf.Max(Nourishment - Time.deltaTime * HungerRate, 0.0f);
 
         HungerText.SetText("Hunger: " + ((int)Nourishment).ToString());
     }
@@ -31,6 +31,9 @@ public class HungerComponent : MonoBehaviour
     // ~ private interface
     [SerializeField]
     private TextMeshProUGUI HungerText;
+
+    [SerializeField, Range(1.0f, 10.0f)]
+    private float HungerRate = 5.0f;
 
     private const float FullNourishment = 100.0f;
     private float Nourishment;
