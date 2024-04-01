@@ -37,7 +37,7 @@ public class GoalPlanner
 
         if(!Success)
         {
-            Debug.Log("NO PLAN FOUND");
+            //Debug.Log("NO PLAN FOUND");
             return null;
         }
 
@@ -67,7 +67,7 @@ public class GoalPlanner
             Queue.Enqueue(action);
         }
 
-        Debug.Log("PLAN FOUND");
+        //Debug.Log("PLAN FOUND");
 
         return Queue;
     }
