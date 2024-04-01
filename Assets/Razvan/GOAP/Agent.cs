@@ -99,7 +99,7 @@ public abstract class Agent : MonoBehaviour
         {
             Planner = new GoalPlanner();
 
-            var SortedGoals = from Goal in Goals orderby Goal.Value descending select Goal;
+            var SortedGoals = Goals.OrderByDescending(Goal => Goal.Value);
             foreach (var Goal in SortedGoals)
             {
                 ActionQueue = Planner.Plan(Actions, Goal.Key.SubGoals);

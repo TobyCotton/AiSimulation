@@ -28,7 +28,7 @@ public class GoalPlanner
     // ~ public interface
     public Queue<Action> Plan(List<Action> Actions, StatesDictionary Goal)
     {
-        var AchievableActions = Actions.FindAll(action => action.IsAchievable());
+        var AchievableActions = Actions.FindAll(Action => Action.IsAchievable());
 
         var Leaves = new List<Node>();
         var Start = new Node(null, 0, new StatesDictionary(), null);
@@ -40,7 +40,8 @@ public class GoalPlanner
         }
 
         var PlanList = new List<Action>();
-        var CurrentNode = (from Leaf in Leaves where Leaf.Cost <= Leaves.Min(l => l.Cost) select Leaf).ToList()[0];
+        var LeavesMin = Leaves.Min(Leaf => Leaf.Cost);
+        var CurrentNode = Leaves.FindAll(Leaf => Leaf.Cost <= LeavesMin).First();
         while(CurrentNode != null)
         {
             if(CurrentNode.Action != null)
@@ -61,7 +62,7 @@ public class GoalPlanner
     {
         bool FoundPath = false;
 
-        var AchievableActions = from Action in Actions where Action.IsAchievable(Parent.State) select Action;
+        var AchievableActions = Actions.FindAll(Action => Action.IsAchievable(Parent.State));
         foreach(var Action in AchievableActions)
         {
             StatesDictionary CurrentState = new StatesDictionary(Parent.State);
