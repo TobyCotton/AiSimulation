@@ -68,7 +68,14 @@ public class Grid
                 s.sprite = sprite;
                 if (gridArray[i, j].isWalkable)
                 {
-                    s.color = Color.green;
+                    if (gridArray[i,j].isGrass)
+                    {
+                        s.color = Color.green;
+                    }
+                    else
+                    {
+                        s.color = Color.blue;
+                    }
                 }
                 else
                 {
