@@ -16,7 +16,8 @@ public class AI_Movement : MonoBehaviour
     public enum PathingType
     {
         AStar,
-        Dijkstra
+        Dijkstra,
+        BreadthFirstSearch
     }
 
     public PathingType aiPathingType;
@@ -56,7 +57,21 @@ public class AI_Movement : MonoBehaviour
     {
         GameObject TargetBuilding = GetClosestObjectWithTag(TargetTag);
         Vector3 TargetPosition = TargetBuilding.transform.Find("Entrance").position;
-        AStarPathing(componentTransform.position, TargetPosition);
+        StartPathing(componentTransform.position, TargetPosition);
+    }
+
+    private void StartPathing(Vector3 startPos, Vector3 endPos)
+    {
+        switch (aiPathingType)
+        {
+            case PathingType.AStar:
+            case PathingType.Dijkstra:
+                AStarPathing(startPos, endPos);
+                break;
+            case PathingType.BreadthFirstSearch:
+                BreadthFirstSearch(startPos, endPos);
+                break;
+        }
     }
     void AStarPathing(Vector3 startPos, Vector3 endPos)
     {
@@ -95,6 +110,51 @@ public class AI_Movement : MonoBehaviour
                 {
                     neighbour.g = CostToNeighbour;
                     neighbour.h = GetDistance(neighbour, targetTile);
+                    neighbour.previousTile = tile;
+
+                    if (!openSet.Contains(neighbour))
+                    {
+                        openSet.Add(neighbour);
+                    }
+                }
+            }
+        }
+    }
+
+    void BreadthFirstSearch(Vector3 startPos, Vector3 endPos)
+    {
+        List<GridTile> openSet = new List<GridTile>();
+        List<GridTile> closedSet = new List<GridTile>();
+
+        GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
+        GridTile targetTile = Terrain.grid.TileFromWorldPoint(endPos);
+
+        openSet.Add(startTile);
+
+        while (openSet.Count > 0)
+        {
+            GridTile tile = GetNextTile(openSet);
+            
+
+            openSet.Remove(tile);
+            closedSet.Add(tile);
+
+            if (tile.gridPos == targetTile.gridPos)
+            {
+                retracePath(startTile, targetTile);
+                return;
+            }
+
+            foreach (GridTile neighbour in Terrain.grid.GetNeighbours(tile))
+            {
+                if (!neighbour.isWalkable || closedSet.Contains(neighbour))
+                {
+                    continue;
+                }
+                
+
+                if ( !openSet.Contains(neighbour))
+                {
                     neighbour.previousTile = tile;
 
                     if (!openSet.Contains(neighbour))
