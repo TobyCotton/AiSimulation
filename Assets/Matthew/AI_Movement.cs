@@ -17,7 +17,8 @@ public class AI_Movement : MonoBehaviour
     {
         AStar,
         Dijkstra,
-        BreadthFirstSearch
+        BreadthFirstSearch,
+        BestFirstSearch
     }
 
     public PathingType aiPathingType;
@@ -71,6 +72,9 @@ public class AI_Movement : MonoBehaviour
             case PathingType.BreadthFirstSearch:
                 BreadthFirstSearch(startPos, endPos);
                 break;
+            case PathingType.BestFirstSearch:
+                BestFirstSearch(startPos, endPos);
+                break;
         }
     }
     void AStarPathing(Vector3 startPos, Vector3 endPos)
@@ -123,6 +127,7 @@ public class AI_Movement : MonoBehaviour
 
     void BreadthFirstSearch(Vector3 startPos, Vector3 endPos)
     {
+        
         List<GridTile> openSet = new List<GridTile>();
         List<GridTile> closedSet = new List<GridTile>();
 
@@ -166,6 +171,53 @@ public class AI_Movement : MonoBehaviour
         }
     }
 
+    void BestFirstSearch(Vector3 startPos, Vector3 endPos)
+    {
+        
+        GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
+        GridTile targetTile = Terrain.grid.TileFromWorldPoint(endPos);
+        
+        List<GridTile> openSet = new List<GridTile>();
+
+        List<GridTile> closedSet = new List<GridTile>();
+        
+        openSet.Add(startTile);
+
+        while (openSet.Count > 0)
+        {
+            GridTile tile = GetNextTile(openSet);
+
+            openSet.Remove(tile);
+            closedSet.Add(tile);
+
+            if (tile == targetTile)
+            {
+                retracePath(startTile, targetTile);
+                return;
+            }
+
+            foreach (GridTile neighbour in Terrain.grid.GetNeighbours(tile))
+            {
+                if (!closedSet.Contains(neighbour) && neighbour.isWalkable)
+                {
+                    neighbour.h = GetDistance(neighbour, targetTile);
+                    if (tile.previousTile == null)
+                    {
+                        tile.previousTile = neighbour;
+                    }
+                    else
+                    {
+                        neighbour.previousTile = tile;
+                    }
+                    if (!openSet.Contains(neighbour))
+                    {
+                        openSet.Add(neighbour);
+                    }
+                }
+            }
+        }
+    }
+
     void retracePath(GridTile start, GridTile end)
     {
         List<GridTile> newPath = new List<GridTile>();
@@ -197,6 +249,10 @@ public class AI_Movement : MonoBehaviour
         if (aiPathingType == PathingType.AStar)
         {
             return openSet.OrderBy(x => x.f).First();
+        }
+        else if (aiPathingType == PathingType.BestFirstSearch)
+        {
+            return openSet.OrderBy(x => x.h).First();
         }
         return openSet.OrderBy(x => x.g).First();
     }
