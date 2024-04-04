@@ -73,8 +73,8 @@ public class Agent_Worker : Agent
             AddAdditionalPostEffect(new WorkEffect(Stamina, 25)).
             AddAdditionalPostEffect(new SalaryEffect(Money, 5));
 
-        AddGoal(new SubGoal("Working", true), 2);
-        AddGoal(new SubGoal("Idle", true), 1);
+        AddGoal(new Goal(new HashSet<string>() { "Working" }, true), 2);
+        AddGoal(new Goal(new HashSet<string>() { "Idle" }, true), 1);
     }
 
     // ~ private interface
