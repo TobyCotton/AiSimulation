@@ -20,7 +20,7 @@ public class Agent_Worker : Agent
             SetCost(100.0f).
             SetDuration(2.0f).
             AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Spending time at Social.")).
-            AddResults("Idle", 1);
+            AddResults("Idle");
 
         AddAction(new Action()).
             SetTargetTag("House").
@@ -28,7 +28,7 @@ public class Agent_Worker : Agent
             SetDuration(5.0f).
             AddAdditionalCheck(new IsTiredCheck(Stamina)).
             AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Resting at House.")).
-            AddResults("Idle", 1).
+            AddResults("Idle").
             AddAdditionalPostEffect(new RestEffect(Stamina));
 
         AddAction(new Action()).
@@ -39,7 +39,7 @@ public class Agent_Worker : Agent
             AddAdditionalCheck(new PaymentCheck(Money, 25)).
             AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Resting at Hotel.")).
             AddAdditionalPreEffect(new PayEffect(Money, 25)).
-            AddResults("Idle", 1).
+            AddResults("Idle").
             AddAdditionalPostEffect(new RestEffect(Stamina));
 
         AddAction(new Action()).
@@ -48,7 +48,7 @@ public class Agent_Worker : Agent
             SetDuration(5.0f).
             AddAdditionalCheck(new IsHungryCheck(Hunger)).
             AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Eating at Cafeteria")).
-            AddResults("Idle", 1).
+            AddResults("Idle").
             AddAdditionalPostEffect(new EatEffect(Hunger));
 
         AddAction(new Action()).
@@ -59,22 +59,22 @@ public class Agent_Worker : Agent
             AddAdditionalCheck(new PaymentCheck(Money, 10)).
             AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Eating at Restaurant")).
             AddAdditionalPreEffect(new PayEffect(Money, 10)).
-            AddResults("Idle", 1).
+            AddResults("Idle").
             AddAdditionalPostEffect(new EatEffect(Hunger));
 
         AddAction(new Action()).
             SetTargetTag("Workplace").
             SetCost(1.0f).
             SetDuration(7.0f).
-            AddPrecondition("Idle", 1).
+            AddPrecondition("Idle").
             AddAdditionalCheck(new IsReadyToWorkCheck(Stamina, Hunger)).
             AddAdditionalPreEffect(new UIPrintEffect(ActionText, "Working")).
-            AddResults("Working", 1).
+            AddResults("Working").
             AddAdditionalPostEffect(new WorkEffect(Stamina, 25)).
             AddAdditionalPostEffect(new SalaryEffect(Money, 5));
 
-        AddGoal(new SubGoal("Working", 1, true), 2);
-        AddGoal(new SubGoal("Idle", 1, true), 1);
+        AddGoal(new SubGoal("Working", true), 2);
+        AddGoal(new SubGoal("Idle", true), 1);
     }
 
     // ~ private interface

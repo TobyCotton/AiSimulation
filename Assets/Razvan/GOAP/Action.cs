@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using StatesDictionary = System.Collections.Generic.Dictionary<string, int>;
+using StatesSet = System.Collections.Generic.HashSet<string>;
 
 public enum EActionProgress
 {
@@ -23,11 +23,11 @@ public sealed class Action
         AdditionalChecks = new List<AdditionalCheck>();
         AditionalPreEffects = new List<AdditionalEffect>();
         AditionalPostEffects = new List<AdditionalEffect>();
-        Preconditions = new StatesDictionary();
-        Results = new StatesDictionary();
+        Preconditions = new StatesSet();
+        Results = new StatesSet();
     }
 
-    public bool IsAchievable(StatesDictionary conditions = null)
+    public bool IsAchievable(StatesSet conditions = null)
     {
         if(!AssertAditionalChecks())
         { 
@@ -41,7 +41,7 @@ public sealed class Action
 
         foreach (var precondition in Preconditions)
         {
-            if (!conditions.ContainsKey(precondition.Key))
+            if (!conditions.Contains(precondition))
             {
                 return false;
             }
@@ -86,15 +86,15 @@ public sealed class Action
         return this;
     }
 
-    public Action AddPrecondition(string Key, int Value)
+    public Action AddPrecondition(string Key)
     {
-        Preconditions.Add(Key, Value);
+        Preconditions.Add(Key);
         return this;
     }
 
-    public Action AddResults(string Key, int Value)
+    public Action AddResults(string Key)
     {
-        Results.Add(Key, Value);
+        Results.Add(Key);
         return this;
     }
 
@@ -154,12 +154,7 @@ public sealed class Action
         }
     }
 
-    public bool CanFindTarget()
-    {
-        return TargetTag == "";
-    }
-
-    public StatesDictionary GetResults()
+    public StatesSet GetResults()
     {
         return Results;
     }
@@ -188,6 +183,6 @@ public sealed class Action
     private List<AdditionalEffect> AditionalPreEffects;
     private List<AdditionalEffect> AditionalPostEffects;
 
-    private StatesDictionary Preconditions;
-    private StatesDictionary Results;
+    private StatesSet Preconditions;
+    private StatesSet Results;
 }

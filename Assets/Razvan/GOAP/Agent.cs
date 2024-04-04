@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-using StatesDictionary = System.Collections.Generic.Dictionary<string, int>;
-using UnityEditor;
+using StatesSet = System.Collections.Generic.HashSet<string>;
 
 public class SubGoal
 {
     // ~ public interface
-    public SubGoal(string key, int value, bool persistency)
+    public SubGoal(string subGoal, bool persistency)
     {
-        SubGoals = new StatesDictionary();
-        SubGoals.Add(key, value);
+        SubGoals = new StatesSet
+        {
+            subGoal
+        };
 
         Persistency = persistency;
     }
 
-    public StatesDictionary SubGoals;
-    public bool Persistency = true;
+    public StatesSet SubGoals;
+    public bool Persistency;
 }
 
 public abstract class Agent : MonoBehaviour
@@ -27,6 +28,7 @@ public abstract class Agent : MonoBehaviour
     public Agent()
     {
         Actions = new List<Action>();
+        Goals = new Dictionary<SubGoal, int>();
     }
 
     public void Start()
@@ -44,15 +46,15 @@ public abstract class Agent : MonoBehaviour
     }
 
     // ~ protected interface
-    protected Action AddAction(Action action)
+    protected Action AddAction(Action Action)
     {
-        Actions.Add(action);
-        return action;
+        Actions.Add(Action);
+        return Action;
     }
 
-    protected void AddGoal(SubGoal Key, int Value)
+    protected void AddGoal(SubGoal Goal, int Priority)
     {
-        Goals.Add(Key, Value);
+        Goals.Add(Goal, Priority);
     }
 
     // ~ private interface
@@ -136,7 +138,7 @@ public abstract class Agent : MonoBehaviour
 
     private AI_Movement MovementComponent;
 
-    private Dictionary<SubGoal, int> Goals = new Dictionary<SubGoal, int>();
+    private Dictionary<SubGoal, int> Goals;
     private List<Action> Actions;
     private Queue<Action> ActionQueue;
     private Action CurrentAction;

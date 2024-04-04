@@ -4,34 +4,34 @@ using UnityEngine;
 using System.Linq;
 using UnityEditor;
 
-using StatesDictionary = System.Collections.Generic.Dictionary<string, int>;
+using StatesSet = System.Collections.Generic.HashSet<string>;
 
 public class Node
 {
     // ~ public interface
-    public Node(Node parent, float cost, StatesDictionary state, Action action)
+    public Node(Node parent, float cost, StatesSet state, Action action)
     {
         Parent = parent;
         Cost = cost;
-        State = new StatesDictionary(state);
+        State = new StatesSet(state);
         Action = action;
     }
 
     public Node Parent;
     public float Cost;
-    public StatesDictionary State;
+    public StatesSet State;
     public Action Action;
 }
 
 public class GoalPlanner
 {
     // ~ public interface
-    public Queue<Action> Plan(List<Action> Actions, StatesDictionary Goal)
+    public Queue<Action> Plan(List<Action> Actions, StatesSet Goal)
     {
         var AchievableActions = Actions.FindAll(Action => Action.IsAchievable());
 
         var Leaves = new List<Node>();
-        var Start = new Node(null, 0, new StatesDictionary(), null);
+        var Start = new Node(null, 0, new StatesSet(), null);
 
         if(!BuildGraph(Start, Leaves, AchievableActions, Goal))
         {
@@ -58,19 +58,19 @@ public class GoalPlanner
     }
 
     // ~ private interface
-    private bool BuildGraph(Node Parent, List<Node> Leaves, List<Action> Actions, StatesDictionary Goal)
+    private bool BuildGraph(Node Parent, List<Node> Leaves, List<Action> Actions, StatesSet Goal)
     {
         bool FoundPath = false;
 
         var AchievableActions = Actions.FindAll(Action => Action.IsAchievable(Parent.State));
         foreach(var Action in AchievableActions)
         {
-            StatesDictionary CurrentState = new StatesDictionary(Parent.State);
+            StatesSet CurrentState = new StatesSet(Parent.State);
             foreach (var Effect in Action.GetResults())
             {
-                if (!CurrentState.ContainsKey(Effect.Key))
+                if (!CurrentState.Contains(Effect))
                 {
-                    CurrentState.Add(Effect.Key, Effect.Value);
+                    CurrentState.Add(Effect);
                 }
             }
 
