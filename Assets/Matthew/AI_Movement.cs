@@ -10,6 +10,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine.Tilemaps;
 using Unity.VisualScripting;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class AI_Movement : MonoBehaviour
 {
@@ -17,7 +18,8 @@ public class AI_Movement : MonoBehaviour
     {
         AStar,
         Dijkstra,
-        BreadthFirstSearch
+        BreadthFirstSearch,
+        BestFirstSearch
     }
 
     public PathingType aiPathingType;
@@ -26,8 +28,9 @@ public class AI_Movement : MonoBehaviour
     private ProceduralInput Terrain;
     private int speed = 10;
     private List<GridTile> path;
-
     private Agent PlannerAgent;
+
+    public bool Visualise;
 
     void Start()
     {
@@ -39,16 +42,32 @@ public class AI_Movement : MonoBehaviour
     // Update is called once per frame
     void Update() 
     {
-        if (path.Count > 0)
+        if (path != null)
         {
-            componentTransform.position = Vector3.MoveTowards(componentTransform.position, path[0].worldPos, speed * Time.deltaTime);
-            if (Vector3.Distance(componentTransform.position, path[0].worldPos) < 0.000001f)
+            if (path.Count > 0)
             {
-                path.RemoveAt(0);
-            }
-            if (path.Count == 0 ) 
-            {
-                PlannerAgent.NotifyReachedGoal();
+                if (Visualise)
+                {
+                    foreach (GridTile visualisingTile in path)
+                    {
+                        GameObject visualisedTile =
+                            GameObject.Find("x: " + visualisingTile.worldPos.x + " z: " + visualisingTile.worldPos.z);
+                        var s = visualisedTile.GetComponent<SpriteRenderer>();
+                        s.color = Color.yellow;
+                    }
+                }
+
+                componentTransform.position = Vector3.MoveTowards(componentTransform.position, path[0].worldPos,
+                    speed * Time.deltaTime);
+                if (Vector3.Distance(componentTransform.position, path[0].worldPos) < 0.000001f)
+                {
+                    path.RemoveAt(0);
+                }
+
+                if (path.Count == 0)
+                {
+                    PlannerAgent.NotifyReachedGoal();
+                }
             }
         }
     }
@@ -62,6 +81,7 @@ public class AI_Movement : MonoBehaviour
 
     private void StartPathing(Vector3 startPos, Vector3 endPos)
     {
+        changeTileColours();
         switch (aiPathingType)
         {
             case PathingType.AStar:
@@ -71,9 +91,12 @@ public class AI_Movement : MonoBehaviour
             case PathingType.BreadthFirstSearch:
                 BreadthFirstSearch(startPos, endPos);
                 break;
+            case PathingType.BestFirstSearch:
+                BestFirstSearch(startPos, endPos);
+                break;
         }
     }
-    void AStarPathing(Vector3 startPos, Vector3 endPos)
+    async void AStarPathing(Vector3 startPos, Vector3 endPos)
     {
         List<GridTile> openSet = new List<GridTile>();
         List<GridTile> closedSet = new List<GridTile>();
@@ -86,11 +109,10 @@ public class AI_Movement : MonoBehaviour
         while (openSet.Count > 0)
         {
             GridTile tile = GetNextTile(openSet);
-            
+
 
             openSet.Remove(tile);
             closedSet.Add(tile);
-
             if (tile.gridPos == targetTile.gridPos)
             {
                 retracePath(startTile, targetTile);
@@ -118,11 +140,24 @@ public class AI_Movement : MonoBehaviour
                     }
                 }
             }
+
+            if (Visualise)
+            {
+                VisualisePathing(openSet, closedSet);
+                await WaitOneSecondAsync();
+            }
         }
     }
-
-    void BreadthFirstSearch(Vector3 startPos, Vector3 endPos)
+    
+    private async Task WaitOneSecondAsync()
     {
+        await Task.Delay(TimeSpan.FromSeconds(0.01));
+        Debug.Log("Finished waiting.");
+    }
+
+    async void BreadthFirstSearch(Vector3 startPos, Vector3 endPos)
+    {
+        
         List<GridTile> openSet = new List<GridTile>();
         List<GridTile> closedSet = new List<GridTile>();
 
@@ -163,6 +198,63 @@ public class AI_Movement : MonoBehaviour
                     }
                 }
             }
+            if (Visualise)
+            {
+                VisualisePathing(openSet, closedSet);
+                await WaitOneSecondAsync();
+            }
+        }
+    }
+
+    async void BestFirstSearch(Vector3 startPos, Vector3 endPos)
+    {
+        
+        GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
+        GridTile targetTile = Terrain.grid.TileFromWorldPoint(endPos);
+        
+        List<GridTile> openSet = new List<GridTile>();
+
+        List<GridTile> closedSet = new List<GridTile>();
+        
+        openSet.Add(startTile);
+
+        while (openSet.Count > 0)
+        {
+            GridTile tile = GetNextTile(openSet);
+
+            openSet.Remove(tile);
+            closedSet.Add(tile);
+
+            if (tile == targetTile)
+            {
+                retracePath(startTile, targetTile);
+                return;
+            }
+
+            foreach (GridTile neighbour in Terrain.grid.GetNeighbours(tile))
+            {
+                if (!closedSet.Contains(neighbour) && neighbour.isWalkable)
+                {
+                    neighbour.h = GetDistance(neighbour, targetTile);
+                    if (tile.previousTile == null)
+                    {
+                        tile.previousTile = neighbour;
+                    }
+                    else
+                    {
+                        neighbour.previousTile = tile;
+                    }
+                    if (!openSet.Contains(neighbour))
+                    {
+                        openSet.Add(neighbour);
+                    }
+                }
+            }
+            if (Visualise)
+            {
+                VisualisePathing(openSet, closedSet);
+                await WaitOneSecondAsync();
+            }
         }
     }
 
@@ -198,6 +290,10 @@ public class AI_Movement : MonoBehaviour
         {
             return openSet.OrderBy(x => x.f).First();
         }
+        else if (aiPathingType == PathingType.BestFirstSearch)
+        {
+            return openSet.OrderBy(x => x.h).First();
+        }
         return openSet.OrderBy(x => x.g).First();
     }
 
@@ -219,5 +315,54 @@ public class AI_Movement : MonoBehaviour
         }
 
         return Closest;
+    }
+
+    void changeTileColours()
+    {
+        for (int i = 0; i < Terrain.grid.gridArray.GetLength(0); i++)
+        {
+            for (int j = 0; j < Terrain.grid.gridArray.GetLength(1); j++)
+            {
+                var s = Terrain.grid.gridArray[i,j].renderer;
+                if (Terrain.grid.gridArray[i,j].isGrass)
+                {
+                    if (Terrain.grid.gridArray[i,j].isWalkable)
+                    {
+                        s.color = Color.green;
+                    }
+                    else
+                    {
+                        s.color = Color.red;
+                    }
+                }
+                else
+                {
+                    s.color = Color.blue;
+                }
+            }
+        }
+    }
+
+    void VisualisePathing(List<GridTile> openSet, List<GridTile> closedSet)
+    {
+        foreach (GridTile visualisingTile in openSet)
+        {
+            var s = visualisingTile.renderer;
+            s.color = Color.white;
+        }
+
+        foreach (GridTile visualisingTile in closedSet)
+        {
+            var s = visualisingTile.renderer;
+            if (visualisingTile.isWalkable && !visualisingTile.isGrass)
+            {
+                
+                s.color = Color.grey;
+            }
+            else
+            {
+                s.color = Color.black;
+            }
+        }
     }
 }

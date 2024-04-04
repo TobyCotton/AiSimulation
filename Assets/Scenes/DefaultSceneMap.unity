@@ -365,6 +365,7 @@ MonoBehaviour:
   length: 0
   width: 0
   sprite: {fileID: 7482667652216324306, guid: e35058253897a104a9be7da5a9b859d1, type: 3}
+  VisualiseGrid: 1
 --- !u!1 &1735045441
 GameObject:
   m_ObjectHideFlags: 0

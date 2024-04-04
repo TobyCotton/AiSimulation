@@ -33,6 +33,7 @@ public class ProceduralInput : MonoBehaviour
     public int length;
     public int width;
     public Sprite sprite;
+    public bool VisualiseGrid;
     private TileInfo[,] m_Grid;
     private List<TileInfo> m_toActivate = new List<TileInfo>();
     private void Start()
@@ -238,7 +239,11 @@ public class ProceduralInput : MonoBehaviour
                 }
             }
         }
-        //grid.RenderTiles();
+
+        if (VisualiseGrid)
+        {
+            grid.RenderTiles();
+        }
     }
 
     bool ValidPosition(int x,int z,Vector3 size,int rotation)

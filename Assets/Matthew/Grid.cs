@@ -66,6 +66,7 @@ public class Grid
                 tile.transform.Rotate(new Vector3(90, 0, 0));
                 var s = tile.AddComponent<SpriteRenderer>();
                 s.sprite = sprite;
+               
                 if (gridArray[i, j].isWalkable)
                 {
                     if (gridArray[i,j].isGrass)
@@ -81,6 +82,7 @@ public class Grid
                 {
                     s.color = Color.red;
                 }
+                gridArray[i, j].renderer = s;
             }
         }
     }
