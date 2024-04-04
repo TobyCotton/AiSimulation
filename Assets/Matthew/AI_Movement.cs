@@ -46,12 +46,15 @@ public class AI_Movement : MonoBehaviour
         {
             if (path.Count > 0)
             {
-                foreach (GridTile visualisingTile in path)
+                if (Visualise)
                 {
-                    GameObject visualisedTile =
-                        GameObject.Find("x: " + visualisingTile.worldPos.x + " z: " + visualisingTile.worldPos.z);
-                    var s = visualisedTile.GetComponent<SpriteRenderer>();
-                    s.color = Color.yellow;
+                    foreach (GridTile visualisingTile in path)
+                    {
+                        GameObject visualisedTile =
+                            GameObject.Find("x: " + visualisingTile.worldPos.x + " z: " + visualisingTile.worldPos.z);
+                        var s = visualisedTile.GetComponent<SpriteRenderer>();
+                        s.color = Color.yellow;
+                    }
                 }
 
                 componentTransform.position = Vector3.MoveTowards(componentTransform.position, path[0].worldPos,
@@ -105,7 +108,6 @@ public class AI_Movement : MonoBehaviour
 
         while (openSet.Count > 0)
         {
-            await WaitOneSecondAsync();
             GridTile tile = GetNextTile(openSet);
 
 
@@ -142,6 +144,7 @@ public class AI_Movement : MonoBehaviour
             if (Visualise)
             {
                 VisualisePathing(openSet, closedSet);
+                await WaitOneSecondAsync();
             }
         }
     }
@@ -165,7 +168,6 @@ public class AI_Movement : MonoBehaviour
 
         while (openSet.Count > 0)
         {
-            await WaitOneSecondAsync();
             GridTile tile = GetNextTile(openSet);
             
 
@@ -199,6 +201,7 @@ public class AI_Movement : MonoBehaviour
             if (Visualise)
             {
                 VisualisePathing(openSet, closedSet);
+                await WaitOneSecondAsync();
             }
         }
     }
@@ -217,7 +220,6 @@ public class AI_Movement : MonoBehaviour
 
         while (openSet.Count > 0)
         {
-            await WaitOneSecondAsync();
             GridTile tile = GetNextTile(openSet);
 
             openSet.Remove(tile);
@@ -251,6 +253,7 @@ public class AI_Movement : MonoBehaviour
             if (Visualise)
             {
                 VisualisePathing(openSet, closedSet);
+                await WaitOneSecondAsync();
             }
         }
     }
