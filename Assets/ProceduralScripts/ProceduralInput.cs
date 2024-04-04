@@ -238,7 +238,7 @@ public class ProceduralInput : MonoBehaviour
                 }
             }
         }
-        //grid.RenderTiles();
+        grid.RenderTiles();
     }
 
     bool ValidPosition(int x,int z,Vector3 size,int rotation)

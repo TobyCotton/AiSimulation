@@ -21,6 +21,8 @@ public class GridTile
 
     public GridTile previousTile;
 
+    public SpriteRenderer renderer;
+
     public GridTile(Vector3 worldPos, Vector2 gridPos)
     {
         isGrass = false;
