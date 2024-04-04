@@ -4,6 +4,9 @@ using UnityEngine;
 
 using StatesSet = System.Collections.Generic.HashSet<string>;
 
+/*
+    An enum defining the steps of processing an action.
+*/
 public enum EActionProgress
 {
     NotStarted,
@@ -13,6 +16,19 @@ public enum EActionProgress
     Finished,
 }
 
+/*
+    A class used for building custom actions for the AI agents.
+    Each action must have:
+        - a target tag
+        - a cost
+        - a duration
+    Each action could have:
+        - pre conditions
+        - additional checks
+        - additional pre effects
+        - results
+        - additional post effects
+*/
 public sealed class Action
 {
     // ~ public interface
@@ -27,21 +43,27 @@ public sealed class Action
         Results = new StatesSet();
     }
 
-    public bool IsAchievable(StatesSet conditions = null)
+    /*
+        A function for checking if the action is achievable.
+    */
+    public bool IsAchievable(StatesSet Conditions = null)
     {
-        if(!AssertAditionalChecks())
+        // First assert the additional checks.
+        if(!AssertAdditionalChecks())
         { 
             return false;
         }
 
-        if (conditions == null)
+        // If no states are provided, ignore the preconditions.
+        if (Conditions == null)
         {
             return true;
         }
 
-        foreach (var precondition in Preconditions)
+        // If states are provided, check if the preconditions are met.
+        foreach (var Precondition in Preconditions)
         {
-            if (!conditions.Contains(precondition))
+            if (!Conditions.Contains(Precondition))
             {
                 return false;
             }
@@ -98,21 +120,30 @@ public sealed class Action
         return this;
     }
 
-    public bool AssertAditionalChecks()
+    /*
+        A function returning the aggregate result of
+        the additional checks.
+    */
+    public bool AssertAdditionalChecks()
     {
-        bool result = true;
+        bool Result = true;
         foreach(var Check in AdditionalChecks)
         {
-            result = result && Check.Assert();
+            Result = Result && Check.Assert();
         }
-        return result;
+        return Result;
     }
 
+    /*
+        A function running and returning the aggregate result of
+        the additional pre effects.
+    */
     public bool LateUpdatePrePerformResult()
     {
         bool Result = true;
         foreach(var Effect in AditionalPreEffects)
         {
+            // Only run the failed effects.
             if (Effect.GetResult() == EAdditionalEffectResult.Fail)
             {
                 Effect.LateUpdate();
@@ -123,6 +154,9 @@ public sealed class Action
         return Result;
     }
 
+    /*
+        A function for resetting the results of the pre effects.
+    */
     public void ResetPrePerformEffects()
     {
         foreach(var Effect in AditionalPreEffects)
@@ -131,11 +165,16 @@ public sealed class Action
         }
     }
 
+    /*
+        A function running and returning the aggregate result of
+        the additional post effects.
+    */
     public bool LateUpdatePostPerformResult()
     {
         bool Result = true;
         foreach(var Effect in AditionalPostEffects)
         {
+            // Only run the failed effects.
             if (Effect.GetResult() == EAdditionalEffectResult.Fail)
             {
                 Effect.LateUpdate();
@@ -146,6 +185,9 @@ public sealed class Action
         return Result;
     }
 
+    /*
+        A function for resetting the results of the post effects.
+    */
     public void ResetPostPerformEffects()
     {
         foreach (var Effect in AditionalPostEffects)

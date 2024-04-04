@@ -65,7 +65,7 @@ public abstract class Agent : MonoBehaviour
             switch (CurrentAction.Progress)
             {
                 case EActionProgress.NotStarted:
-                    if (CurrentAction.AssertAditionalChecks())
+                    if (CurrentAction.AssertAdditionalChecks())
                     {
                         CurrentAction.Progress = EActionProgress.ExecutingPrePerform;
                     }
