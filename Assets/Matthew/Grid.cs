@@ -29,22 +29,41 @@ public class Grid
         }
     }
 
-    public List<GridTile> GetNeighbours(GridTile tile) 
+    public List<GridTile> GetNeighbours(GridTile tile, bool diagonal) 
     {
         List<GridTile> neighbours = new List<GridTile>();
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                if (x == 0 && y == 0)
-                    continue;
-                int checkX = Convert.ToInt32(tile.gridPos.x) + x;
-                int checkY = Convert.ToInt32(tile.gridPos.y) + y;
+        if (diagonal)
+        {
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    if (x == 0 && y == 0)
+                        continue;
+                    int checkX = Convert.ToInt32(tile.gridPos.x) + x;
+                    int checkY = Convert.ToInt32(tile.gridPos.y) + y;
 
-                if (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height) {
-                    neighbours.Add(gridArray[checkX, checkY]);
+                    if (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height) {
+                        neighbours.Add(gridArray[checkX, checkY]);
+                    }
                 }
             }
         }
+        else
+        {
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    if ((x == 0 && y != 0) || (x != 0 && y == 0))
+                    {
+                        int checkX = Convert.ToInt32(tile.gridPos.x) + x;
+                        int checkY = Convert.ToInt32(tile.gridPos.y) + y;
 
+                        if (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height) {
+                            neighbours.Add(gridArray[checkX, checkY]);
+                        }
+                    }
+                   
+                }
+            }
+        }
         return neighbours;
     }
 
