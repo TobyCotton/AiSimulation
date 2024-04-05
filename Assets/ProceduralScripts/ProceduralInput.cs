@@ -83,7 +83,6 @@ public class ProceduralInput : MonoBehaviour
                 var entrance = house.transform.Find("Entrance");
                 if (entrance != null)
                 {
-                    Debug.Log("HOUSE 1 FOUND");
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
@@ -108,7 +107,6 @@ public class ProceduralInput : MonoBehaviour
                 var entrance = house.transform.Find("Entrance");
                 if (entrance != null)
                 {
-                    Debug.Log("HOUSE 2 FOUND");
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
@@ -133,7 +131,6 @@ public class ProceduralInput : MonoBehaviour
                 var entrance = house.transform.Find("Entrance");
                 if (entrance != null)
                 {
-                    Debug.Log("HOUSE 3 FOUND");
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
@@ -158,7 +155,6 @@ public class ProceduralInput : MonoBehaviour
                 var entrance = house.transform.Find("Entrance");
                 if (entrance != null)
                 {
-                    Debug.Log("HOUSE 4 FOUND");
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
@@ -183,7 +179,6 @@ public class ProceduralInput : MonoBehaviour
                 var entrance = house.transform.Find("Entrance");
                 if (entrance != null)
                 {
-                    Debug.Log("HOUSE 5 FOUND");
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
@@ -207,7 +202,6 @@ public class ProceduralInput : MonoBehaviour
                 var entrance = house.transform.Find("Entrance");
                 if (entrance != null)
                 {
-                    Debug.Log("HOUSE 6 FOUND");
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
@@ -232,7 +226,6 @@ public class ProceduralInput : MonoBehaviour
                 var entrance = house.transform.Find("Entrance");
                 if (entrance != null)
                 {
-                    Debug.Log("HOUSE 7 FOUND");
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
