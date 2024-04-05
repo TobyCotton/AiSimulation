@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    A base class used for creating custom additional checks.
+*/
 public abstract class AdditionalCheck
 {
     // ~ public interface
@@ -11,10 +14,12 @@ public abstract class AdditionalCheck
 public enum EAdditionalEffectResult
 {
     Success,
-    Abandoned,
     Fail,
 };
 
+/*
+    A base class used for creating custom additional effects.
+*/
 public abstract class AdditionalEffect
 {
     // ~ public interface

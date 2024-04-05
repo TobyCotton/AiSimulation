@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+
+/*
+    An effect which prints the text on the injected text mesh pro text box.
+*/
 public class UIPrintEffect : AdditionalEffect
 {
     // ~ public interface
@@ -23,6 +27,9 @@ public class UIPrintEffect : AdditionalEffect
     private string DebugText;
 }
 
+/*
+    An effect which prints the text in the log.
+*/
 public class DebugPrintEffect : AdditionalEffect
 {
     // ~ public interface
@@ -41,6 +48,9 @@ public class DebugPrintEffect : AdditionalEffect
     private string DebugText;
 }
 
+/*
+    An effect which prints the text in the log after 200 iteration of the update loop.
+*/
 public class DebugAsyncPrintEffect : AdditionalEffect
 {
     // ~ public interface

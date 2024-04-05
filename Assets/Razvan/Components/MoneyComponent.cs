@@ -4,6 +4,11 @@ using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 
+
+/*
+    A class which handles the Agent's 'money'.
+    The value can be changed by paying or receiving a salary.
+*/
 public class MoneyComponent : MonoBehaviour
 {
     // ~ public interface
@@ -38,6 +43,9 @@ public class MoneyComponent : MonoBehaviour
     private int Money = 0;
 }
 
+/*
+    An additional check for an Agent attempting to pay a price.
+*/
 public class PaymentCheck : AdditionalCheck
 {
     // ~ public interface
@@ -57,6 +65,10 @@ public class PaymentCheck : AdditionalCheck
     private int Price;
 }
 
+/*
+    An additional check for an Agent attempting to work.
+    The Agent needs to be rested and well fed in order to pass.
+*/
 public class IsReadyToWorkCheck : AdditionalCheck
 {
     // ~ public interface
@@ -78,6 +90,9 @@ public class IsReadyToWorkCheck : AdditionalCheck
     private HungerComponent InjectedHunger;
 }
 
+/*
+    An additional effect for an Agent paying a certain price.
+*/
 public class PayEffect : AdditionalEffect
 {
     // ~ public interface
@@ -105,6 +120,9 @@ public class PayEffect : AdditionalEffect
     private int Price;
 }
 
+/*
+    An additional effect for an Agent receiving a salary.
+*/
 public class SalaryEffect : AdditionalEffect
 {
     // ~ public interface

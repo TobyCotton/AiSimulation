@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/*
+    A class which handles the Agent's 'hunger'.
+    The hunger value decreases based on time and hunger rate.
+*/
 public class HungerComponent : MonoBehaviour
 {
     // ~ public interface
@@ -39,6 +43,9 @@ public class HungerComponent : MonoBehaviour
     private float Nourishment;
 }
 
+/*
+    An additional check for an Agent's hunger state.
+*/
 public class IsHungryCheck : AdditionalCheck
 {
     // ~ public interface
@@ -56,6 +63,9 @@ public class IsHungryCheck : AdditionalCheck
     private HungerComponent InjectedHunger;
 };
 
+/*
+    An additional effect which replenishes an Agent's hunger value.
+*/
 public class EatEffect : AdditionalEffect
 {
     // ~ public interface

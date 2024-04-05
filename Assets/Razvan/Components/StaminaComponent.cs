@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/*
+    A class which handles the Agent's 'stamina'.
+    The value can be changed by working or resting.
+*/
 public class StaminaComponent : MonoBehaviour
 {
     // ~ public interface
@@ -40,6 +44,9 @@ public class StaminaComponent : MonoBehaviour
     private float Stamina;
 }
 
+/*
+    An additional check for an Agent's tired state.
+*/
 public class IsTiredCheck : AdditionalCheck
 {
     // ~ public interface
@@ -57,6 +64,9 @@ public class IsTiredCheck : AdditionalCheck
     private StaminaComponent InjectedStamina;
 }
 
+/*
+    An additional effect for an Agent resting to full stamina.
+*/
 public class RestEffect : AdditionalEffect
 {
     // ~ public interface
@@ -75,6 +85,9 @@ public class RestEffect : AdditionalEffect
     private StaminaComponent InjectedStamina;
 }
 
+/*
+    An additional effect for an Agent working and depleting some stamina.
+*/
 public class WorkEffect : AdditionalEffect
 {
     // ~ public interface
