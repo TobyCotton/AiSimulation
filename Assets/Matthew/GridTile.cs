@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
-public class GridTile
+public class GridTile : IHeapItem<GridTile>
 {
      
     public bool isWalkable;
@@ -22,6 +23,7 @@ public class GridTile
     public GridTile previousTile;
 
     public SpriteRenderer renderer;
+    private int heapIndex;
 
     public GridTile(Vector3 worldPos, Vector2 gridPos)
     {
@@ -35,5 +37,11 @@ public class GridTile
     {
         isGrass = true;
         weight = 16;
+    }
+
+    public int HeapIndex
+    {
+        get { return heapIndex;} 
+        set { heapIndex = value; }
     }
 }

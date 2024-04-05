@@ -105,4 +105,9 @@ public class Grid
             }
         }
     }
+
+    public int MaxSize
+    {
+        get { return width * height; }
+    }
 }
