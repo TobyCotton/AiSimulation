@@ -155,7 +155,7 @@ public class AI_Movement : MonoBehaviour
                 int CostToNeighbour = tile.g + GetDistance(tile, neighbour);
                 if (usePaths)
                 {
-                    CostToNeighbour += tile.weight;
+                    CostToNeighbour += neighbour.weight;
                 }
 
                 if (CostToNeighbour < neighbour.g || !openSet.Contains(neighbour))
