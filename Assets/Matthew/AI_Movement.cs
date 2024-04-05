@@ -41,6 +41,7 @@ public class AI_Movement : MonoBehaviour
 
     public bool Visualise;
     public bool diagonal;
+    public bool usePaths;
 
     void Start()
     {
@@ -106,7 +107,7 @@ public class AI_Movement : MonoBehaviour
 
     private void StartPathing(Vector3 startPos, Vector3 endPos)
     {
-        changeTileColours();
+        resetTileColours();
         switch (aiPathingType)
         {
             case PathingType.AStar:
@@ -151,7 +152,11 @@ public class AI_Movement : MonoBehaviour
                     continue;
                 }
 
-                int CostToNeighbour = tile.g + GetDistance(tile, neighbour) + tile.weight;
+                int CostToNeighbour = tile.g + GetDistance(tile, neighbour);
+                if (usePaths)
+                {
+                    CostToNeighbour += tile.weight;
+                }
 
                 if (CostToNeighbour < neighbour.g || !openSet.Contains(neighbour))
                 {
@@ -168,7 +173,7 @@ public class AI_Movement : MonoBehaviour
 
             if (Visualise)
             {
-                VisualisePathing(openSet, closedSet);
+                VisualisePathing(openSet, closedSet, targetTile);
                 await WaitAsync();
             }
         }
@@ -224,7 +229,7 @@ public class AI_Movement : MonoBehaviour
             }
             if (Visualise)
             {
-                VisualisePathing(openSet, closedSet);
+                VisualisePathing(openSet, closedSet, targetTile);
                 await WaitAsync();
             }
         }
@@ -276,7 +281,7 @@ public class AI_Movement : MonoBehaviour
             }
             if (Visualise)
             {
-                VisualisePathing(openSet, closedSet);
+                VisualisePathing(openSet, closedSet, targetTile);
                 await WaitAsync();
             }
         }
@@ -341,7 +346,7 @@ public class AI_Movement : MonoBehaviour
         return Closest;
     }
 
-    void changeTileColours()
+    void resetTileColours()
     {
         for (int i = 0; i < Terrain.grid.gridArray.GetLength(0); i++)
         {
@@ -367,7 +372,7 @@ public class AI_Movement : MonoBehaviour
         }
     }
 
-    void VisualisePathing(List<GridTile> openSet, List<GridTile> closedSet)
+    void VisualisePathing(List<GridTile> openSet, List<GridTile> closedSet, GridTile targetTile)
     {
         foreach (GridTile visualisingTile in openSet)
         {
@@ -388,5 +393,8 @@ public class AI_Movement : MonoBehaviour
                 s.color = Color.black;
             }
         }
+
+        var visualiser = targetTile.renderer;
+        visualiser.color = Color.magenta;
     }
 }
