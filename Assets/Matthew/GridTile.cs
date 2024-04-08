@@ -24,6 +24,7 @@ public class GridTile : IHeapItem<GridTile>
 
     public SpriteRenderer renderer;
     private int heapIndex;
+    public AI_Movement.PathingType entrancePathingType;
 
     public GridTile(Vector3 worldPos, Vector2 gridPos)
     {

@@ -86,6 +86,7 @@ public class ProceduralInput : MonoBehaviour
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
+                    tile.entrancePathingType = AI_Movement.PathingType.AStar;
                 }
             }
         }
@@ -110,6 +111,7 @@ public class ProceduralInput : MonoBehaviour
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
+                    tile.entrancePathingType = AI_Movement.PathingType.Dijkstra;
                 }
             }
         }
@@ -134,6 +136,7 @@ public class ProceduralInput : MonoBehaviour
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
+                    tile.entrancePathingType = AI_Movement.PathingType.BreadthFirstSearch;
                 }
             }
         }
@@ -158,6 +161,7 @@ public class ProceduralInput : MonoBehaviour
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
+                    tile.entrancePathingType = AI_Movement.PathingType.BestFirstSearch;
                 }
             }
         }
@@ -182,6 +186,7 @@ public class ProceduralInput : MonoBehaviour
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
+                    tile.entrancePathingType = AI_Movement.PathingType.AStar;
                 }
             }
         }
@@ -205,6 +210,7 @@ public class ProceduralInput : MonoBehaviour
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
+                    tile.entrancePathingType = AI_Movement.PathingType.Dijkstra;
                 }
             }
         }
@@ -229,6 +235,7 @@ public class ProceduralInput : MonoBehaviour
                     GridTile tile = grid.TileFromWorldPoint(entrance.transform.position);
                     tile.isWalkable = true;
                     tile.isEntrance = true;
+                    tile.entrancePathingType = AI_Movement.PathingType.BreadthFirstSearch;
                 }
             }
         }

@@ -102,12 +102,16 @@ public class AI_Movement : MonoBehaviour
     {
         GameObject TargetBuilding = GetClosestObjectWithTag(TargetTag);
         Vector3 TargetPosition = TargetBuilding.transform.Find("Entrance").position;
+        aiPathingType = Terrain.grid.TileFromWorldPoint(TargetPosition).entrancePathingType;
         StartPathing(componentTransform.position, TargetPosition);
     }
 
     private void StartPathing(Vector3 startPos, Vector3 endPos)
     {
-        resetTileColours();
+        if (Visualise)
+        {
+            resetTileColours();
+        }
         switch (aiPathingType)
         {
             case PathingType.AStar:
