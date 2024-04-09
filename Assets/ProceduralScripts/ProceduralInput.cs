@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public enum Side
@@ -87,6 +88,7 @@ public class ProceduralInput : MonoBehaviour
                     tile.isWalkable = true;
                     tile.isEntrance = true;
                     tile.entrancePathingType = AI_Movement.PathingType.AStar;
+                    PostAvailable(rotationAmount, size, tile.gridPos.x, tile.gridPos.y);
                 }
             }
         }
@@ -112,6 +114,7 @@ public class ProceduralInput : MonoBehaviour
                     tile.isWalkable = true;
                     tile.isEntrance = true;
                     tile.entrancePathingType = AI_Movement.PathingType.Dijkstra;
+                    PostAvailable(rotationAmount, size, tile.gridPos.x, tile.gridPos.y);
                 }
             }
         }
@@ -137,6 +140,7 @@ public class ProceduralInput : MonoBehaviour
                     tile.isWalkable = true;
                     tile.isEntrance = true;
                     tile.entrancePathingType = AI_Movement.PathingType.BreadthFirstSearch;
+                    PostAvailable(rotationAmount, size, tile.gridPos.x, tile.gridPos.y);
                 }
             }
         }
@@ -162,6 +166,7 @@ public class ProceduralInput : MonoBehaviour
                     tile.isWalkable = true;
                     tile.isEntrance = true;
                     tile.entrancePathingType = AI_Movement.PathingType.BestFirstSearch;
+                    PostAvailable(rotationAmount, size, tile.gridPos.x, tile.gridPos.y);
                 }
             }
         }
@@ -187,6 +192,7 @@ public class ProceduralInput : MonoBehaviour
                     tile.isWalkable = true;
                     tile.isEntrance = true;
                     tile.entrancePathingType = AI_Movement.PathingType.AStar;
+                    PostAvailable(rotationAmount, size, tile.gridPos.x, tile.gridPos.y);
                 }
             }
         }
@@ -211,6 +217,7 @@ public class ProceduralInput : MonoBehaviour
                     tile.isWalkable = true;
                     tile.isEntrance = true;
                     tile.entrancePathingType = AI_Movement.PathingType.Dijkstra;
+                    PostAvailable(rotationAmount, size, tile.gridPos.x, tile.gridPos.y);
                 }
             }
         }
@@ -236,7 +243,15 @@ public class ProceduralInput : MonoBehaviour
                     tile.isWalkable = true;
                     tile.isEntrance = true;
                     tile.entrancePathingType = AI_Movement.PathingType.BreadthFirstSearch;
+                    PostAvailable(rotationAmount, size, tile.gridPos.x, tile.gridPos.y);
                 }
+            }
+        }
+        foreach(GridTile tile in grid.gridArray)
+        {
+            if(tile.availablePost)
+            {
+                tile.isWalkable = true;
             }
         }
 
@@ -245,11 +260,77 @@ public class ProceduralInput : MonoBehaviour
             grid.RenderTiles();
         }
     }
+    void PostAvailable(int rotation, Vector3 size,float fi, float fj)
+    {
+        int i = (int)fi;
+        int j = (int)fj;
+        int UseX = (int)size.x / 2;
+        int UseZ = (int)size.z / 2;
+        if (rotation == 0 || rotation == 180)
+        {
+            int temp = UseZ;
+            UseZ = UseX;
+            UseX = temp;
+        }
 
+        if (rotation == 90)
+        {
+            int TempX = UseX+1;
+            for (int u = 0; u < TempX; u++)
+            {
+                grid.gridArray[i, j - u].availablePost = true;
+            }
+            TempX = UseX;
+            for (int u = 0; u < TempX; u++)
+            {
+                grid.gridArray[i, j + u].availablePost = true;
+            }
+        }
+        else if(rotation == 270)
+        {
+            int TempX = UseX;
+            for (int u = 0; u < TempX; u++)
+            {
+                grid.gridArray[i, j - u].availablePost = true;
+            }
+            TempX = UseX+1;
+            for (int u = 0; u < TempX; u++)
+            {
+                grid.gridArray[i, j + u].availablePost = true;
+            }
+        }
+        else if (rotation == 0)
+        {
+            int TempZ = UseZ - 1;
+            for (int u = 1; u < TempZ + 1; u++)
+            {
+                grid.gridArray[i - u, j].availablePost = true;
+            }
+            TempZ = UseZ;
+            for (int u = 1; u < TempZ + 1; u++)
+            {
+                grid.gridArray[i + u, j].availablePost = true;
+            }
+        }
+        else
+        {
+            int TempZ = UseZ;
+            for (int u = 1; u < TempZ + 1; u++)
+            {
+                grid.gridArray[i - u, j].availablePost = true;
+            }
+            TempZ = UseZ - 1;
+            for (int u = 1; u < TempZ + 1; u++)
+            {
+                grid.gridArray[i + u, j].availablePost = true;
+            }
+        }
+    }
     bool ValidPosition(int x,int z,Vector3 size,int rotation)
     {
         int UseX = (int)size.x / 2;
         int UseZ = (int)size.z / 2;
+
         if (rotation == 90 || rotation == 270)
         {
             int temp = UseZ;
@@ -282,6 +363,67 @@ public class ProceduralInput : MonoBehaviour
                 if (grid.gridArray[x + i, z + j].isEntrance == false)
                 {
                     grid.gridArray[x + i, z + j].isWalkable = false;
+                }
+                else
+                {
+                    //if(upDown)
+                    //{
+                    //    if(rotation == 90)
+                    //    {
+                    //        int TempX = UseX-1;
+                    //        for(int u = 0; u < TempX; u++)
+                    //        {
+                    //            grid.gridArray[x + i - u, z + j].availablePost = true;
+                    //        }
+                    //        TempX = UseX;
+                    //        for(int u = 0; u < TempX; u++)
+                    //        {
+                    //            grid.gridArray[x + i + u, z + j].availablePost = true;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        int TempX = UseX;
+                    //        for (int u = 0; u < TempX; u++)
+                    //        {
+                    //            grid.gridArray[x + i - u, z + j].availablePost = true;
+                    //        }
+                    //        TempX = UseX-1;
+                    //        for (int u = 0; u < TempX; u++)
+                    //        {
+                    //            grid.gridArray[x + i + u, z + j].availablePost = true;
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (rotation == 0)
+                    //    {
+                    //        int TempZ = UseZ - 1;
+                    //        for (int u = 1; u < TempZ + 1; u++)
+                    //        {
+                    //            grid.gridArray[x + i, z + j - u].availablePost = true;
+                    //        }
+                    //        TempZ = UseZ;
+                    //        for (int u = 1; u < TempZ + 1; u++)
+                    //        {
+                    //            grid.gridArray[x + i, z + j + u].availablePost = true;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        int TempZ = UseZ;
+                    //        for (int u = 1; u < TempZ + 1; u++)
+                    //        {
+                    //            grid.gridArray[x + i, z + j - u].availablePost = true;
+                    //        }
+                    //        TempZ = UseZ-1;
+                    //        for (int u = 1; u < TempZ + 1; u++)
+                    //        {
+                    //            grid.gridArray[x + i, z + j + u].availablePost = true;
+                    //        }
+                    //    }
+                    //}
                 }
             }
         }

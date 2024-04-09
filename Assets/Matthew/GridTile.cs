@@ -10,6 +10,7 @@ public class GridTile : IHeapItem<GridTile>
     public bool isWalkable;
     public bool isGrass;
     public bool isEntrance;
+    public bool availablePost;
     public int weight;
 
     public Vector3 worldPos;
