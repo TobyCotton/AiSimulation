@@ -102,7 +102,6 @@ public class AI_Movement : MonoBehaviour
     {
         GameObject TargetBuilding = GetClosestObjectWithTag(TargetTag);
         Vector3 TargetPosition = TargetBuilding.transform.Find("Entrance").position;
-        aiPathingType = Terrain.grid.TileFromWorldPoint(TargetPosition).entrancePathingType;
         StartPathing(componentTransform.position, TargetPosition);
     }
 
