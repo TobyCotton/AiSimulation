@@ -391,7 +391,7 @@ GameObject:
   - component: {fileID: 3920213327118812706}
   - component: {fileID: 5135366264720563455}
   m_Layer: 0
-  m_Name: AI_Character
+  m_Name: AI_Character_GreedyBFS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -441,7 +441,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2c6184a7110c15246b931454c797e9a0, type: 2}
+  - {fileID: 2100000, guid: b270338381d60d64f8c988adcd0b2aee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -498,7 +498,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42240358bd120894ca25ba922b94ab53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aiPathingType: 0
+  aiPathingType: 3
+  VisulisationSpeed: 0
+  Visualise: 0
+  diagonal: 1
+  usePaths: 0
 --- !u!114 &7048405455429867576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,6 +529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HungerText: {fileID: 4302845491870504502}
+  HungerRate: 5
 --- !u!114 &3920213327118812706
 MonoBehaviour:
   m_ObjectHideFlags: 0
