@@ -489,7 +489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_width: 100
   m_height: 100
-  m_scale: 6.26
+  m_scale: 9.49
   m_autoUpdate: 1
   m_octaves: 3
   m_persistance: 0.527
