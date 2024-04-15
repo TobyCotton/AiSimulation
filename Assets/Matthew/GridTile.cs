@@ -11,15 +11,15 @@ public class GridTile : IHeapItem<GridTile>
     public bool isGrass;
     public bool isEntrance;
     public bool availablePost;
-    public int weight;
+    public float weight;
 
     public Vector3 worldPos;
 
     public Vector2 gridPos;
 
-    public int g;
-    public int h;
-    public int f { get { return g + h; } }
+    public float g;
+    public float h;
+    public float f { get { return g + h; } }
 
     public GridTile previousTile;
 
@@ -37,7 +37,7 @@ public class GridTile : IHeapItem<GridTile>
     public void SetIsGrass()
     {
         isGrass = true;
-        weight = 16;
+        weight = 1.6f;
     }
 
     public int HeapIndex
