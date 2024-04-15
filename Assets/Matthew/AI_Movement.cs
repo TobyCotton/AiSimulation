@@ -11,6 +11,8 @@ using UnityEngine.Tilemaps;
 using Unity.VisualScripting;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 public class AI_Movement : MonoBehaviour
 {
@@ -114,8 +116,10 @@ public class AI_Movement : MonoBehaviour
         switch (aiPathingType)
         {
             case PathingType.AStar:
-            case PathingType.Dijkstra:
                 AStarPathing(startPos, endPos);
+                break;
+            case PathingType.Dijkstra:
+                Dijkstra(startPos, endPos);
                 break;
             case PathingType.BreadthFirstSearch:
                 BreadthFirstSearch(startPos, endPos);
@@ -127,6 +131,8 @@ public class AI_Movement : MonoBehaviour
     }
     async void AStarPathing(Vector3 startPos, Vector3 endPos)
     {
+        Stopwatch timer = Stopwatch.StartNew();
+
         Comparison<GridTile> comparison;
         if (aiPathingType == PathingType.AStar)
         {
@@ -165,6 +171,7 @@ public class AI_Movement : MonoBehaviour
             
             if (tile.gridPos == targetTile.gridPos)
             {
+                timer.Stop();
                 retracePath(startTile, targetTile);
                 return;
             }
@@ -176,7 +183,8 @@ public class AI_Movement : MonoBehaviour
                     continue;
                 }
 
-                int CostToNeighbour = tile.g + GetDistance(tile, neighbour);
+                float CostToNeighbour = tile.g + GetDistance(tile, neighbour);
+
                 if (usePaths)
                 {
                     CostToNeighbour += neighbour.weight;
@@ -206,7 +214,81 @@ public class AI_Movement : MonoBehaviour
             }
         }
     }
-    
+
+    async void Dijkstra(Vector3 startPos, Vector3 endPos)
+    {
+        Stopwatch timer = Stopwatch.StartNew();
+
+        Comparison<GridTile> comparison;
+        comparison = (lhs, rhs) =>
+        {
+            int compare = lhs.g.CompareTo(rhs.g);
+            return -compare;
+        };
+
+        Dictionary<GridTile, float> dist = new Dictionary<GridTile, float>();
+        foreach (GridTile tile in Terrain.grid.gridArray)
+        {
+            dist.Add(tile, float.PositiveInfinity);
+        }
+        Comparer<GridTile> comparer = Comparer<GridTile>.Create(comparison);
+        Heap<GridTile> openSet = new Heap<GridTile>(Terrain.grid.MaxSize, comparer);
+        List<GridTile> closedSet = new List<GridTile>();
+
+        GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
+        GridTile targetTile = Terrain.grid.TileFromWorldPoint(endPos);
+
+        openSet.Add(startTile);
+
+        while (openSet.Count > 0)
+        {
+            GridTile tile = openSet.RemoveFirst();
+            closedSet.Add(tile);
+
+            if (tile.gridPos == targetTile.gridPos)
+            {
+                retracePath(startTile, targetTile);
+
+                timer.Stop();
+                TimeSpan timespan = timer.Elapsed;
+                Debug.Log("Dijkstra's: " + timespan.Milliseconds);
+                return;
+            }
+
+            foreach (GridTile neighbour in Terrain.grid.GetNeighbours(tile, diagonal))
+            {
+                if (!neighbour.isWalkable || closedSet.Contains(neighbour))
+                {
+                    continue;
+                }
+
+
+                float CostToNeighbour = tile.g + GetDistance(tile, neighbour);
+                if (usePaths)
+                {
+                    CostToNeighbour += neighbour.weight;
+                }
+                if (CostToNeighbour < dist[neighbour])
+                {
+                    dist[neighbour] = CostToNeighbour;
+                    neighbour.g = CostToNeighbour;
+                    neighbour.previousTile = tile;
+
+                    if (!openSet.Contains(neighbour))
+                    {
+                        openSet.Add(neighbour);
+                    }
+                }
+            }
+
+            if (Visualise)
+            {
+                VisualisePathing(openSet, closedSet, targetTile);
+                await WaitAsync();
+            }
+        }
+    }
+
     private async Task WaitAsync()
     {
         await Task.Delay(TimeSpan.FromSeconds(WaitTime));
@@ -214,6 +296,7 @@ public class AI_Movement : MonoBehaviour
 
     async void BreadthFirstSearch(Vector3 startPos, Vector3 endPos)
     {
+        Stopwatch timer = Stopwatch.StartNew();
         Queue<GridTile> openSet = new Queue<GridTile>();
         
         List<GridTile> closedSet = new List<GridTile>();
@@ -232,6 +315,9 @@ public class AI_Movement : MonoBehaviour
             if (tile.gridPos == targetTile.gridPos)
             {
                 retracePath(startTile, targetTile);
+                timer.Stop();
+                TimeSpan timespan = timer.Elapsed;
+                Debug.Log("Breadth first time: " + timespan.Milliseconds);
                 return;
             }
 
@@ -283,6 +369,7 @@ public class AI_Movement : MonoBehaviour
 
     async void BestFirstSearch(Vector3 startPos, Vector3 endPos)
     {
+        Stopwatch timer = Stopwatch.StartNew();
         Comparison<GridTile> comparison = (lhs, rhs) =>
         {
             int compare = lhs.h.CompareTo(rhs.h);
@@ -308,6 +395,8 @@ public class AI_Movement : MonoBehaviour
             if (tile == targetTile)
             {
                 retracePath(startTile, targetTile);
+                timer.Stop();
+                Debug.Log("Best First Search: " + timer.Elapsed.Milliseconds);
                 return;
             }
 
@@ -352,6 +441,22 @@ public class AI_Movement : MonoBehaviour
         newPath.Reverse();
 
         path = newPath;
+
+        switch (aiPathingType)
+        {
+            case PathingType.AStar:
+                Debug.Log("A Star path length: " + path.Count);
+                break;
+            case PathingType.Dijkstra:
+                Debug.Log("Dijkstra path length: " + path.Count);
+                break;
+            case PathingType.BreadthFirstSearch:
+                Debug.Log("BreadthFirstSearch path length: " + path.Count);
+                break;
+            case PathingType.BestFirstSearch:
+                Debug.Log("BestFirstSearch length: " + path.Count);
+                break;
+        }
     }
 
     int GetDistance(GridTile tileA, GridTile tileB)
@@ -362,19 +467,6 @@ public class AI_Movement : MonoBehaviour
         if (dstX > dstY)
             return 14 * dstY + 10 * (dstX - dstY);
         return 14 * dstX + 10 * (dstY - dstX);
-    }
-
-    GridTile GetNextTile(List<GridTile> openSet)
-    {
-        if (aiPathingType == PathingType.AStar)
-        {
-            return openSet.OrderBy(x => x.f).First();
-        }
-        else if (aiPathingType == PathingType.BestFirstSearch)
-        {
-            return openSet.OrderBy(x => x.h).First();
-        }
-        return openSet.OrderBy(x => x.g).First();
     }
 
     GameObject GetClosestObjectWithTag(string TargetTag)
