@@ -489,13 +489,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_width: 100
   m_height: 100
-  m_scale: 12.03
+  m_scale: 6.26
   m_autoUpdate: 1
-  m_octaves: 1
-  m_persistance: 1
-  m_octaveFrequency: 1.24
-  m_seed: 25
-  m_offset: {x: 69.78, y: 1}
+  m_octaves: 3
+  m_persistance: 0.527
+  m_octaveFrequency: 4.51
+  m_seed: 48
+  m_offset: {x: 277.86, y: 1}
 --- !u!154 &1571255324
 TerrainCollider:
   m_ObjectHideFlags: 0

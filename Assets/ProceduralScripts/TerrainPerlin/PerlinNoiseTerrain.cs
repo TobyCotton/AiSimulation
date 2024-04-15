@@ -40,8 +40,8 @@ public static class PerlinNoiseTerrain
 
                 for (int i = 0; i < octaves; i++)
                 {
-                    float sampleX = (x- halfW) / scale * frequency + octaveOffsets[i].x;
-                    float sampleY = (y-halfH) / scale * frequency + octaveOffsets[i].y;
+                    float sampleX = (x- halfW) / (scale * frequency) + octaveOffsets[i].x;
+                    float sampleY = (y-halfH) / (scale * frequency) + octaveOffsets[i].y;
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 -1;
                     noiseHeight += perlinValue * amplitude;
