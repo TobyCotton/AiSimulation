@@ -70,7 +70,7 @@ public class PerlinNoiseTerrain
 
         return heights;
     }
-    public static float Noise2D(float x, float y, int[] Permutation)
+    public static float Noise2D(float x, float y, int[] Permutation)//Based of pseudocode from https://rtouti.github.io/graphics/perlin-noise-algorithm
     {
         int X = (int)Math.Floor(x) & 255;
         int Y = (int)Math.Floor(y) & 255;
@@ -83,8 +83,8 @@ public class PerlinNoiseTerrain
         Vector2 bottomRight = new Vector2(xf - 1.0f, yf);
         Vector2 bottomLeft = new Vector2(xf, yf);
 
-        int valueTopRight = Permutation[(Permutation[(X + 1)&255] + Y + 1) & 255];
-        int valueTopLeft = Permutation[(Permutation[X] + Y + 1) & 255];
+        int valueTopRight = Permutation[(Permutation[(X + 1)&255] + Y + 1) & 255];//Added in bitwise operations to stop overflow
+        int valueTopLeft = Permutation[(Permutation[X] + Y + 1) & 255];// also allows for it to overflow down to 0 instead of going to 256
         int valueBottomRight = Permutation[(Permutation[(X + 1) & 255] + Y) & 255];
         int valueBottomLeft = Permutation[(Permutation[X] + Y) & 255];
 
@@ -98,12 +98,12 @@ public class PerlinNoiseTerrain
         Vector2 bottomRightVector = SelectCorner(temp3);
         Vector2 bottomLeftVector = SelectCorner(temp4);
 
-        float dotTopRight = (topRight.x * topRightVector.x) + (topRight.y * topRightVector.y);
+        float dotTopRight = (topRight.x * topRightVector.x) + (topRight.y * topRightVector.y);//added in brackets as bidmas isn't followed in c# here
         float dotTopLeft = (topLeft.x * topLeftVector.x) + (topLeft.y * topLeftVector.y);
         float dotBottomRight = (bottomRight.x * bottomRightVector.x) + (bottomRight.y * bottomRightVector.y);
         float dotBottomLeft = (bottomLeft.x * bottomLeftVector.x) + (bottomLeft.y * bottomLeftVector.y);
 
-        float u = ((6 * xf - 15) * xf + 10) * xf * xf * xf;
+        float u = ((6 * xf - 15) * xf + 10) * xf * xf * xf;// Fade from the point to the edges
         float v = ((6 * yf - 15) * yf + 10) * yf * yf * yf;
 
         return LerpMine(u,
