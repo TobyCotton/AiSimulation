@@ -334,11 +334,7 @@ public class ProceduralInput : MonoBehaviour
         {
             return false;
         }
-        //Debug.Log("x:" + grid.gridArray.Length.ToString());
-        //Debug.Log("x:" + x.ToString());
-        //Debug.Log("z:" + z.ToString());
-        //Debug.Log("Usex:" + UseX.ToString());
-        //Debug.Log("UseZ:" + UseZ.ToString());
+
         for (int i = -UseX; i < UseX; i++)
         {
             for (int j = -UseZ; j < UseZ; j++)
