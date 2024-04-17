@@ -63,9 +63,9 @@ public class Generator : MonoBehaviour
         {
             m_octaves = 1;
         }
-        if(m_scale < 0)
+        if(m_scale < 1)
         {
-            m_scale = 0;
+            m_scale = 1;
         }
     }
 }
