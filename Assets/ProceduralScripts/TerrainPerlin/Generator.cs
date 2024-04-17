@@ -33,10 +33,13 @@ public class Generator : MonoBehaviour
     public Vector2 m_offset;
     public Terrain theTerrain;
     public AnimationCurve perlinSlope;
+    public AnimationCurve perlinSlope2;
+    [Range(0,1)]
+    public float m_weight;
 
     public void GenerateMap()
     {
-        float[,] heights = PerlinNoiseTerrain.GenerateNoise(m_width, m_height, m_scale,m_octaves,m_persistance,m_octaveFrequency,m_seed, m_offset,permutation,perlinSlope);
+        float[,] heights = PerlinNoiseTerrain.GenerateNoise(m_width, m_height, m_scale,m_octaves,m_persistance,m_octaveFrequency,m_seed, m_offset,permutation,perlinSlope,perlinSlope2,m_weight);
 
         TerrainData thisData = theTerrain.terrainData;
         if (thisData != null)

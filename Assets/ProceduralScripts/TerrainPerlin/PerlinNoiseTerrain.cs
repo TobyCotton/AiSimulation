@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PerlinNoiseTerrain
 {
-    public static float[,] GenerateNoise(int width,int height, float scale,int octaves, float persistance, float octaveIncrease,int seed, Vector2 offset, int[] Permutation, AnimationCurve slope)
+    public static float[,] GenerateNoise(int width,int height, float scale,int octaves, float persistance, float octaveIncrease,int seed, Vector2 offset, int[] Permutation, AnimationCurve slope, AnimationCurve slope2,float weight)
     {
         float[,] heights = new float[width,height];
         Vector2[] octaveOffsets = new Vector2[octaves];
@@ -64,7 +64,9 @@ public class PerlinNoiseTerrain
         {
             for (int x = 0; x < width; x++)
             {
-                heights[x, y] = slope.Evaluate(Mathf.InverseLerp(min, max, heights[x, y]));//mathf inverselerp will return 0-1 with the min and max
+                float secondaryWeight = 1.0f - weight;//weight is in reference to how much of slope 1 to use and secondary weight how much of slope 2
+                heights[x, y] = (slope.Evaluate(Mathf.InverseLerp(min, max, heights[x, y]))* weight) +
+                    (slope2.Evaluate(Mathf.InverseLerp(min, max, heights[x, y]))* secondaryWeight);//mathf inverselerp will return 0-1 with the min and max
             }//animation curve evaluate will then further edit these values to allow more custimisation by the user to get there ideal terrain instead of just slopes
         }
 
