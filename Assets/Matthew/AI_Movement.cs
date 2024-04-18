@@ -40,6 +40,7 @@ public class AI_Movement : MonoBehaviour
     private float WaitTime;
     private List<GridTile> path;
     private Agent PlannerAgent;
+    private Heap<GridTile> openSet;
 
     public bool Visualise;
     public bool diagonal;
@@ -156,7 +157,7 @@ public class AI_Movement : MonoBehaviour
         
         
         Comparer<GridTile> comparer = Comparer<GridTile>.Create(comparison);
-        Heap<GridTile> openSet = new Heap<GridTile>(Terrain.grid.MaxSize,comparer);
+        openSet = new Heap<GridTile>(Terrain.grid.MaxSize,comparer);
         List<GridTile> closedSet = new List<GridTile>();
 
         GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
@@ -173,6 +174,7 @@ public class AI_Movement : MonoBehaviour
             {
                 timer.Stop();
                 retracePath(startTile, targetTile);
+                openSet.Clear();
                 return;
             }
 
@@ -232,7 +234,7 @@ public class AI_Movement : MonoBehaviour
             dist.Add(tile, float.PositiveInfinity);
         }
         Comparer<GridTile> comparer = Comparer<GridTile>.Create(comparison);
-        Heap<GridTile> openSet = new Heap<GridTile>(Terrain.grid.MaxSize, comparer);
+        openSet = new Heap<GridTile>(Terrain.grid.MaxSize, comparer);
         List<GridTile> closedSet = new List<GridTile>();
 
         GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
@@ -248,7 +250,7 @@ public class AI_Movement : MonoBehaviour
             if (tile.gridPos == targetTile.gridPos)
             {
                 retracePath(startTile, targetTile);
-
+                openSet.Clear();
                 timer.Stop();
                 TimeSpan timespan = timer.Elapsed;
                 Debug.Log("Dijkstra's: " + timespan.Milliseconds);
@@ -397,6 +399,7 @@ public class AI_Movement : MonoBehaviour
                 retracePath(startTile, targetTile);
                 timer.Stop();
                 Debug.Log("Best First Search: " + timer.Elapsed.Milliseconds);
+                openSet.Clear();
                 return;
             }
 

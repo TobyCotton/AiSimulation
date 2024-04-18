@@ -46,7 +46,13 @@ public class Heap<T> where T : IHeapItem<T>
 	}
     
     public bool Contains(T item) {
-        return Equals(items[item.HeapIndex], item);
+        if (item.HeapIndex < currentItemCount)
+        {
+            return Equals(items[item.HeapIndex], item);
+        } else
+        {
+            return false;
+        }
     }
 
     void SortDown(T item)
@@ -104,6 +110,11 @@ public class Heap<T> where T : IHeapItem<T>
         int itemAIndex = itemA.HeapIndex;
         itemA.HeapIndex = itemB.HeapIndex;
         itemB.HeapIndex = itemAIndex;
+    }
+    
+    public void Clear()
+    { 
+        currentItemCount = 0;
     }
 }
 
