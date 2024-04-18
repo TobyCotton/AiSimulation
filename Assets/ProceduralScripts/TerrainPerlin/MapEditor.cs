@@ -21,5 +21,11 @@ public class MapEditor : Editor
         {
             gen.GenerateMap();
         }
+
+        if (GUILayout.Button("Output Map"))
+        {
+            gen.GenerateMap();
+            gen.m_display.OutputMap();
+        }
     }
 }

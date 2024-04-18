@@ -492,6 +492,7 @@ GameObject:
   - component: {fileID: 433100359}
   - component: {fileID: 433100358}
   - component: {fileID: 433100361}
+  - component: {fileID: 433100362}
   m_Layer: 0
   m_Name: East
   m_TagString: Untagged
@@ -644,6 +645,21 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_weight: 0.49
+  m_display: {fileID: 433100362}
+  m_name: East
+--- !u!114 &433100362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 433100357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e296eaa2a33022e48a5397378bd9e40a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_name: East
 --- !u!1 &770289974
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,6 +672,7 @@ GameObject:
   - component: {fileID: 770289976}
   - component: {fileID: 770289975}
   - component: {fileID: 770289978}
+  - component: {fileID: 770289979}
   m_Layer: 0
   m_Name: South
   m_TagString: Untagged
@@ -835,6 +852,21 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_weight: 0.395
+  m_display: {fileID: 770289979}
+  m_name: South
+--- !u!114 &770289979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770289974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e296eaa2a33022e48a5397378bd9e40a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_name: South
 --- !u!1 &1156251172
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,6 +879,7 @@ GameObject:
   - component: {fileID: 1156251174}
   - component: {fileID: 1156251173}
   - component: {fileID: 1156251176}
+  - component: {fileID: 1156251177}
   m_Layer: 0
   m_Name: West
   m_TagString: Untagged
@@ -943,7 +976,7 @@ MonoBehaviour:
   m_width: 513
   m_height: 513
   m_scale: 71.04
-  m_autoUpdate: 0
+  m_autoUpdate: 1
   m_octaves: 1
   m_persistance: 1
   m_octaveFrequency: 1
@@ -1035,6 +1068,21 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_weight: 0.765
+  m_display: {fileID: 1156251177}
+  m_name: West
+--- !u!114 &1156251177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156251172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e296eaa2a33022e48a5397378bd9e40a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_name: West
 --- !u!1 &1735045441
 GameObject:
   m_ObjectHideFlags: 0
@@ -1202,6 +1250,7 @@ GameObject:
   - component: {fileID: 1931797616}
   - component: {fileID: 1931797615}
   - component: {fileID: 1931797618}
+  - component: {fileID: 1931797619}
   m_Layer: 0
   m_Name: North
   m_TagString: Untagged
@@ -1303,7 +1352,7 @@ MonoBehaviour:
   m_persistance: 1
   m_octaveFrequency: 1
   m_seed: 8768567
-  m_offset: {x: 0, y: 0}
+  m_offset: {x: -0.3, y: 1.94}
   theTerrain: {fileID: 1931797616}
   perlinSlope:
     serializedVersion: 2
@@ -1317,6 +1366,33 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.22466664
+      value: 0.42404467
+      inSlope: 1.8366361
+      outSlope: 1.8366361
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.592415
+      value: 0.10124445
+      inSlope: -0.44510922
+      outSlope: -0.44510922
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.67882895
+      value: 0.8516058
+      inSlope: 3.087727
+      outSlope: 3.087727
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 1
@@ -1354,6 +1430,21 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_weight: 0.63
+  m_display: {fileID: 1931797619}
+  m_name: North
+--- !u!114 &1931797619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931797614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e296eaa2a33022e48a5397378bd9e40a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_name: North
 --- !u!1001 &2115773234
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -353,67 +353,6 @@ public class ProceduralInput : MonoBehaviour
                 {
                     grid.gridArray[x + i, z + j].isWalkable = false;
                 }
-                else
-                {
-                    //if(upDown)
-                    //{
-                    //    if(rotation == 90)
-                    //    {
-                    //        int TempX = UseX-1;
-                    //        for(int u = 0; u < TempX; u++)
-                    //        {
-                    //            grid.gridArray[x + i - u, z + j].availablePost = true;
-                    //        }
-                    //        TempX = UseX;
-                    //        for(int u = 0; u < TempX; u++)
-                    //        {
-                    //            grid.gridArray[x + i + u, z + j].availablePost = true;
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        int TempX = UseX;
-                    //        for (int u = 0; u < TempX; u++)
-                    //        {
-                    //            grid.gridArray[x + i - u, z + j].availablePost = true;
-                    //        }
-                    //        TempX = UseX-1;
-                    //        for (int u = 0; u < TempX; u++)
-                    //        {
-                    //            grid.gridArray[x + i + u, z + j].availablePost = true;
-                    //        }
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (rotation == 0)
-                    //    {
-                    //        int TempZ = UseZ - 1;
-                    //        for (int u = 1; u < TempZ + 1; u++)
-                    //        {
-                    //            grid.gridArray[x + i, z + j - u].availablePost = true;
-                    //        }
-                    //        TempZ = UseZ;
-                    //        for (int u = 1; u < TempZ + 1; u++)
-                    //        {
-                    //            grid.gridArray[x + i, z + j + u].availablePost = true;
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        int TempZ = UseZ;
-                    //        for (int u = 1; u < TempZ + 1; u++)
-                    //        {
-                    //            grid.gridArray[x + i, z + j - u].availablePost = true;
-                    //        }
-                    //        TempZ = UseZ-1;
-                    //        for (int u = 1; u < TempZ + 1; u++)
-                    //        {
-                    //            grid.gridArray[x + i, z + j + u].availablePost = true;
-                    //        }
-                    //    }
-                    //}
-                }
             }
         }
         return true;
