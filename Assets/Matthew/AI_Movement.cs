@@ -33,7 +33,7 @@ public class AI_Movement : MonoBehaviour
 
     public PathingType aiPathingType;
     public VisualisationSpeed VisulisationSpeed;
-    private Grid grid;
+    public Grid grid;
     private Transform componentTransform;
     private ProceduralInput Terrain;
     private int speed = 10;
@@ -45,10 +45,20 @@ public class AI_Movement : MonoBehaviour
     public bool Visualise;
     public bool diagonal;
     public bool usePaths;
+    public bool test;
 
     void Start()
     {
         Terrain = GameObject.Find("Terrain").GetComponent<ProceduralInput>();
+        if (Terrain != null)
+        {
+            if (Terrain.grid != null)
+            {
+                grid = Terrain.grid;
+                
+                Debug.Log("ADDING GRID");
+            }
+        }
         componentTransform = GetComponent<Transform>();
         PlannerAgent = GetComponent<Agent>();
         switch (VisulisationSpeed)
@@ -103,13 +113,22 @@ public class AI_Movement : MonoBehaviour
 
     public void moveTo(string TargetTag)
     {
-        GameObject TargetBuilding = GetClosestObjectWithTag(TargetTag);
-        Vector3 TargetPosition = TargetBuilding.transform.Find("Entrance").position;
-        StartPathing(componentTransform.position, TargetPosition);
+        if (!test)
+        {
+            GameObject TargetBuilding = GetClosestObjectWithTag(TargetTag);
+            Vector3 TargetPosition = TargetBuilding.transform.Find("Entrance").position;
+            StartPathing(componentTransform.position, TargetPosition);
+        }
     }
 
-    private void StartPathing(Vector3 startPos, Vector3 endPos)
+    public void StartPathing(Vector3 startPos, Vector3 endPos)
     {
+        
+
+        if (grid == null)
+        {
+            grid = Terrain.grid;
+        }
         if (Visualise)
         {
             resetTileColours();
@@ -157,11 +176,11 @@ public class AI_Movement : MonoBehaviour
         
         
         Comparer<GridTile> comparer = Comparer<GridTile>.Create(comparison);
-        openSet = new Heap<GridTile>(Terrain.grid.MaxSize,comparer);
+        openSet = new Heap<GridTile>(grid.MaxSize,comparer);
         List<GridTile> closedSet = new List<GridTile>();
 
-        GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
-        GridTile targetTile = Terrain.grid.TileFromWorldPoint(endPos);
+        GridTile startTile = grid.TileFromWorldPoint(startPos);
+        GridTile targetTile = grid.TileFromWorldPoint(endPos);
 
         openSet.Add(startTile);
 
@@ -178,7 +197,7 @@ public class AI_Movement : MonoBehaviour
                 return;
             }
 
-            foreach (GridTile neighbour in Terrain.grid.GetNeighbours(tile, diagonal))
+            foreach (GridTile neighbour in grid.GetNeighbours(tile, diagonal))
             {
                 if (!neighbour.isWalkable || closedSet.Contains(neighbour))
                 {
@@ -229,16 +248,16 @@ public class AI_Movement : MonoBehaviour
         };
 
         Dictionary<GridTile, float> dist = new Dictionary<GridTile, float>();
-        foreach (GridTile tile in Terrain.grid.gridArray)
+        foreach (GridTile tile in grid.gridArray)
         {
             dist.Add(tile, float.PositiveInfinity);
         }
         Comparer<GridTile> comparer = Comparer<GridTile>.Create(comparison);
-        openSet = new Heap<GridTile>(Terrain.grid.MaxSize, comparer);
+        openSet = new Heap<GridTile>(grid.MaxSize, comparer);
         List<GridTile> closedSet = new List<GridTile>();
 
-        GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
-        GridTile targetTile = Terrain.grid.TileFromWorldPoint(endPos);
+        GridTile startTile = grid.TileFromWorldPoint(startPos);
+        GridTile targetTile = grid.TileFromWorldPoint(endPos);
 
         openSet.Add(startTile);
 
@@ -257,7 +276,7 @@ public class AI_Movement : MonoBehaviour
                 return;
             }
 
-            foreach (GridTile neighbour in Terrain.grid.GetNeighbours(tile, diagonal))
+            foreach (GridTile neighbour in grid.GetNeighbours(tile, diagonal))
             {
                 if (!neighbour.isWalkable || closedSet.Contains(neighbour))
                 {
@@ -303,8 +322,8 @@ public class AI_Movement : MonoBehaviour
         
         List<GridTile> closedSet = new List<GridTile>();
 
-        GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
-        GridTile targetTile = Terrain.grid.TileFromWorldPoint(endPos);
+        GridTile startTile = grid.TileFromWorldPoint(startPos);
+        GridTile targetTile = grid.TileFromWorldPoint(endPos);
 
         openSet.Enqueue(startTile);
 
@@ -323,7 +342,7 @@ public class AI_Movement : MonoBehaviour
                 return;
             }
 
-            foreach (GridTile neighbour in Terrain.grid.GetNeighbours(tile, diagonal))
+            foreach (GridTile neighbour in grid.GetNeighbours(tile, diagonal))
             {
                 if (!neighbour.isWalkable || closedSet.Contains(neighbour))
                 {
@@ -379,20 +398,19 @@ public class AI_Movement : MonoBehaviour
         };
         
         Comparer<GridTile> comparer = Comparer<GridTile>.Create(comparison);
-        Heap<GridTile> openSet = new Heap<GridTile>(Terrain.grid.MaxSize,comparer);
+        Heap<GridTile> openSet = new Heap<GridTile>(grid.MaxSize,comparer);
         
-        GridTile startTile = Terrain.grid.TileFromWorldPoint(startPos);
-        GridTile targetTile = Terrain.grid.TileFromWorldPoint(endPos);
+        GridTile startTile = grid.TileFromWorldPoint(startPos);
+        GridTile targetTile = grid.TileFromWorldPoint(endPos);
 
         List<GridTile> closedSet = new List<GridTile>();
         
         openSet.Add(startTile);
+        closedSet.Add(startTile);
 
         while (openSet.Count > 0)
         {
             GridTile tile = openSet.RemoveFirst();
-
-            closedSet.Add(tile);
 
             if (tile == targetTile)
             {
@@ -403,11 +421,13 @@ public class AI_Movement : MonoBehaviour
                 return;
             }
 
-            foreach (GridTile neighbour in Terrain.grid.GetNeighbours(tile, diagonal))
+            foreach (GridTile neighbour in grid.GetNeighbours(tile, diagonal))
             {
                 if (!closedSet.Contains(neighbour) && neighbour.isWalkable)
                 {
                     neighbour.h = GetDistance(neighbour, targetTile);
+                    openSet.Add(neighbour);
+                    closedSet.Add(neighbour);
                     if (tile.previousTile == null)
                     {
                         tile.previousTile = neighbour;
@@ -415,10 +435,6 @@ public class AI_Movement : MonoBehaviour
                     else
                     {
                         neighbour.previousTile = tile;
-                    }
-                    if (!openSet.Contains(neighbour))
-                    {
-                        openSet.Add(neighbour);
                     }
                 }
             }
@@ -494,16 +510,16 @@ public class AI_Movement : MonoBehaviour
 
     void resetTileColours()
     {
-        for (int i = 0; i < Terrain.grid.gridArray.GetLength(0); i++)
+        for (int i = 0; i < grid.gridArray.GetLength(0); i++)
         {
-            for (int j = 0; j < Terrain.grid.gridArray.GetLength(1); j++)
+            for (int j = 0; j < grid.gridArray.GetLength(1); j++)
             {
-                var s = Terrain.grid.gridArray[i,j].renderer;
-                if (Terrain.grid.gridArray[i,j].isGrass)
+                var s = grid.gridArray[i,j].renderer;
+                if (grid.gridArray[i,j].isGrass)
                 {
-                    if (Terrain.grid.gridArray[i,j].isWalkable)
+                    if (grid.gridArray[i,j].isWalkable)
                     {
-                        s.color = Color.green;
+                        s.color = Color.clear;
                     }
                     else
                     {
@@ -520,12 +536,6 @@ public class AI_Movement : MonoBehaviour
 
     void VisualisePathing(Heap<GridTile> openSet, List<GridTile> closedSet, GridTile targetTile)
     {
-        for (int i = 0; i < openSet.Count; i++)
-        {
-            GridTile tile = openSet.items[i];
-            var s = tile.renderer;
-            s.color = Color.white;
-        }
         foreach (GridTile visualisingTile in closedSet)
         {
             var s = visualisingTile.renderer;
@@ -538,6 +548,12 @@ public class AI_Movement : MonoBehaviour
             {
                 s.color = Color.black;
             }
+        }
+        for (int i = 0; i < openSet.Count; i++)
+        {
+            GridTile tile = openSet.items[i];
+            var s = tile.renderer;
+            s.color = Color.white;
         }
 
         var visualiser = targetTile.renderer;
