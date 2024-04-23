@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Grid
 {
@@ -80,22 +81,23 @@ public class Grid
         {
             for (int j = 0; j < gridArray.GetLength(1); j++)
             {
-                GameObject tile = new GameObject("x: " + gridArray[i, j].worldPos.x + " z: " + gridArray[i, j].worldPos.z);
-                tile.transform.position = gridArray[i, j].worldPos;
-                tile.transform.Rotate(new Vector3(90, 0, 0));
-                var s = tile.AddComponent<SpriteRenderer>();
+                gridArray[i, j].Tile = new GameObject("x: " + gridArray[i, j].worldPos.x + " z: " + gridArray[i, j].worldPos.z);
+                gridArray[i, j].Tile.transform.position = gridArray[i, j].worldPos;
+                gridArray[i, j].Tile.transform.position = new Vector3(gridArray[i, j].Tile.transform.position.x, 0.001f, gridArray[i, j].Tile.transform.position.z);
+                gridArray[i, j].Tile.transform.Rotate(new Vector3(90, 0, 0));
+                gridArray[i, j].Tile.layer = LayerMask.NameToLayer("GridTile");
+                
+                var s = gridArray[i, j].Tile.AddComponent<SpriteRenderer>();
+//                var k = gridArray[i, j].Tile.GetComponent<GridTile>();
+                // if (k != null)
+                // {
+                //     Debug.Log("NOT NULL");
+                // }
                 s.sprite = sprite;
                
                 if (gridArray[i, j].isWalkable)
                 {
-                    if (gridArray[i,j].isGrass)
-                    {
-                        s.color = Color.green;
-                    }
-                    else
-                    {
-                        s.color = Color.blue;
-                    }
+                    s.color = gridArray[i,j].isGrass ? Color.clear : Color.blue;
                 }
                 else
                 {

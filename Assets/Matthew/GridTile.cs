@@ -26,6 +26,8 @@ public class GridTile : IHeapItem<GridTile>
     public SpriteRenderer renderer;
     private int heapIndex;
 
+    public GameObject Tile;
+
     public GridTile(Vector3 worldPos, Vector2 gridPos)
     {
         isGrass = false;
@@ -40,9 +42,21 @@ public class GridTile : IHeapItem<GridTile>
         weight = 1.6f;
     }
 
+    public void SetIsPath()
+    {
+        isGrass = false;
+        weight = 0;
+    }
+
     public int HeapIndex
     {
         get { return heapIndex;} 
         set { heapIndex = value; }
     }
+
+    void OnMouseEnter()
+    {
+        Debug.Log(Tile.name);
+    }
+    
 }
