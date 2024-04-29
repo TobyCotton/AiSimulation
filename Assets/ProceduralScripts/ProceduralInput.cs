@@ -42,9 +42,11 @@ public class ProceduralInput : MonoBehaviour
         Vector3 mySize = GameObject.Find("Terrain").GetComponent<Terrain>().terrainData.size;
         length = (int)mySize.x;
         width =  (int)mySize.z;
+        //creates the grid
         grid = new Grid(length,width);
         grid.sprite = this.sprite;
         m_Grid = new TileInfo[length, width];
+        //sets all the tiles to be walkable
         for (int i = 0; i < length; i++)
         {
             for (int j = 0; j < width; j++)
@@ -349,6 +351,7 @@ public class ProceduralInput : MonoBehaviour
         {
             for (int j = -UseZ; j < UseZ; j++)
             {
+                //sets the tile to not be walkable if it is not the building's entrance
                 if (grid.gridArray[x + i, z + j].isEntrance == false)
                 {
                     grid.gridArray[x + i, z + j].isWalkable = false;
@@ -430,6 +433,7 @@ public class ProceduralInput : MonoBehaviour
                     m_toActivate[0].m_chosen = m_toActivate[0].m_availableTiles[Random.Range(0, m_toActivate[0].m_availableTiles.Count)];
                 }
                 m_toActivate[0].m_enabled = true;
+                //sets the tile to be grass
                 if (m_toActivate[0].m_chosen == m_tile5)
                 {
                     grid.gridArray[i, j].SetIsGrass();

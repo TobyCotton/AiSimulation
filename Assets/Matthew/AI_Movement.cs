@@ -133,6 +133,7 @@ public class AI_Movement : MonoBehaviour
         {
             resetTileColours();
         }
+        //this chooses the pathing type to be used
         switch (aiPathingType)
         {
             case PathingType.AStar:
@@ -154,31 +155,24 @@ public class AI_Movement : MonoBehaviour
         Stopwatch timer = Stopwatch.StartNew();
 
         Comparison<GridTile> comparison;
-        if (aiPathingType == PathingType.AStar)
+        
+        //this creates the comparison used for the heap
+        comparison = (lhs, rhs) =>
         {
-            comparison = (lhs, rhs) =>
-            {
-                int compare = lhs.f.CompareTo(rhs.f);
-                if (compare == 0) {
-                    compare = lhs.h.CompareTo(rhs.h);
-                }
-                return -compare;
-            };
-        }
-        else
-        {
-            comparison = (lhs, rhs) =>
-            {
-                int compare = lhs.g.CompareTo(rhs.g);
-                return -compare;
-            };
-        }
+            int compare = lhs.f.CompareTo(rhs.f);
+            if (compare == 0) {
+                compare = lhs.h.CompareTo(rhs.h);
+            }
+            return -compare;
+        };
         
         
         Comparer<GridTile> comparer = Comparer<GridTile>.Create(comparison);
+        //sets the heap
         openSet = new Heap<GridTile>(grid.MaxSize,comparer);
         List<GridTile> closedSet = new List<GridTile>();
 
+        //gets the grid tiles for the start and end
         GridTile startTile = grid.TileFromWorldPoint(startPos);
         GridTile targetTile = grid.TileFromWorldPoint(endPos);
 
@@ -186,37 +180,48 @@ public class AI_Movement : MonoBehaviour
 
         while (openSet.Count > 0)
         {
+            //gets next tile in heap
             GridTile tile = openSet.RemoveFirst();
             closedSet.Add(tile);
             
+            //checks if current tile is the end tile
             if (tile.gridPos == targetTile.gridPos)
             {
                 timer.Stop();
                 retracePath(startTile, targetTile);
+                TimeSpan timespan = timer.Elapsed;
+                Debug.Log("A*'s: " + timespan.Milliseconds + " milliseconds");
                 openSet.Clear();
                 return;
             }
 
+            //checks the neighbours
             foreach (GridTile neighbour in grid.GetNeighbours(tile, diagonal))
             {
+                //checks if neighbour is blocked or already explored
                 if (!neighbour.isWalkable || closedSet.Contains(neighbour))
                 {
                     continue;
                 }
 
+                //creates new cost for the neighbour tile
                 float CostToNeighbour = tile.g + GetDistance(tile, neighbour);
 
+                //adds weight for tile if it is being used
                 if (usePaths)
                 {
                     CostToNeighbour += neighbour.weight;
                 }
 
+                //checks if the new g cost is less than the neighbours current or if it is not in the heap
                 if (CostToNeighbour < neighbour.g || !openSet.Contains(neighbour))
                 {
+                    //sets the G cost, H cost and the parent tile for the neighbour
                     neighbour.g = CostToNeighbour;
                     neighbour.h = GetDistance(neighbour, targetTile);
                     neighbour.previousTile = tile;
 
+                    //adds the tile to the heap if its not already in, or updates it if it is
                     if (!openSet.Contains(neighbour))
                     {
                         openSet.Add(neighbour);
@@ -228,6 +233,7 @@ public class AI_Movement : MonoBehaviour
                 }
             }
 
+            //for the visualisation of the grid
             if (Visualise)
             {
                 VisualisePathing(openSet, closedSet, targetTile);
@@ -239,7 +245,8 @@ public class AI_Movement : MonoBehaviour
     async void Dijkstra(Vector3 startPos, Vector3 endPos)
     {
         Stopwatch timer = Stopwatch.StartNew();
-
+        
+        //this creates the comparison used for the heap
         Comparison<GridTile> comparison;
         comparison = (lhs, rhs) =>
         {
@@ -247,15 +254,18 @@ public class AI_Movement : MonoBehaviour
             return -compare;
         };
 
+        //creates list of distances for each tile
         Dictionary<GridTile, float> dist = new Dictionary<GridTile, float>();
         foreach (GridTile tile in grid.gridArray)
         {
             dist.Add(tile, float.PositiveInfinity);
         }
         Comparer<GridTile> comparer = Comparer<GridTile>.Create(comparison);
+        //sets the heap
         openSet = new Heap<GridTile>(grid.MaxSize, comparer);
         List<GridTile> closedSet = new List<GridTile>();
 
+        //gets the grid tiles for the start and end from the world positions
         GridTile startTile = grid.TileFromWorldPoint(startPos);
         GridTile targetTile = grid.TileFromWorldPoint(endPos);
 
@@ -263,38 +273,47 @@ public class AI_Movement : MonoBehaviour
 
         while (openSet.Count > 0)
         {
+            //gets next tile in heap
             GridTile tile = openSet.RemoveFirst();
             closedSet.Add(tile);
 
+            //checks if current tile is the end tile
             if (tile.gridPos == targetTile.gridPos)
             {
                 retracePath(startTile, targetTile);
                 openSet.Clear();
                 timer.Stop();
                 TimeSpan timespan = timer.Elapsed;
-                Debug.Log("Dijkstra's: " + timespan.Milliseconds);
+                Debug.Log("Dijkstra's: " + timespan.Milliseconds + " milliseconds");
                 return;
             }
 
+            //checks the neighbours
             foreach (GridTile neighbour in grid.GetNeighbours(tile, diagonal))
             {
+                //checks if neighbour is blocked or has already been explored
                 if (!neighbour.isWalkable || closedSet.Contains(neighbour))
                 {
                     continue;
                 }
 
-
+                //creates new cost for the neighbour tile
                 float CostToNeighbour = tile.g + GetDistance(tile, neighbour);
+                
+                //adds weight for tile if it is being used
                 if (usePaths)
                 {
                     CostToNeighbour += neighbour.weight;
                 }
+                //checks if the cost to the neighbour is less than its stored distance
                 if (CostToNeighbour < dist[neighbour])
                 {
+                    //updates the distance, g cost and neighbours parent
                     dist[neighbour] = CostToNeighbour;
                     neighbour.g = CostToNeighbour;
                     neighbour.previousTile = tile;
 
+                    //adds it to the heap or updates it if already in
                     if (!openSet.Contains(neighbour))
                     {
                         openSet.Add(neighbour);
@@ -306,6 +325,7 @@ public class AI_Movement : MonoBehaviour
                 }
             }
 
+            //for the visualisation of the grid
             if (Visualise)
             {
                 VisualisePathing(openSet, closedSet, targetTile);
@@ -322,48 +342,59 @@ public class AI_Movement : MonoBehaviour
     async void BreadthFirstSearch(Vector3 startPos, Vector3 endPos)
     {
         Stopwatch timer = Stopwatch.StartNew();
+        
+        //creates queue for explorable tile
         Queue<GridTile> openSet = new Queue<GridTile>();
         
+        //creates list for explored tile
         List<GridTile> closedSet = new List<GridTile>();
 
+        //gets the grid tiles for the start and end from the world positions
         GridTile startTile = grid.TileFromWorldPoint(startPos);
         GridTile targetTile = grid.TileFromWorldPoint(endPos);
 
+        //adds the start tile to the queue
         openSet.Enqueue(startTile);
 
         while (openSet.Count > 0)
         {
+            //removes the tile from the front of the queue
             GridTile tile = openSet.Dequeue();
             
             closedSet.Add(tile);
 
+            //checks if current tile is the end tile
             if (tile.gridPos == targetTile.gridPos)
             {
                 retracePath(startTile, targetTile);
                 timer.Stop();
                 TimeSpan timespan = timer.Elapsed;
-                Debug.Log("Breadth first time: " + timespan.Milliseconds);
+                Debug.Log("Breadth first time: " + timespan.Milliseconds + " milliseconds");
                 return;
             }
-
+            
+            //checks the neighbours
             foreach (GridTile neighbour in grid.GetNeighbours(tile, diagonal))
             {
+                //checks if neighbour is blocked or has already been explored
                 if (!neighbour.isWalkable || closedSet.Contains(neighbour))
                 {
                     continue;
                 }
                 
-
+                //checks if tile has already been explored
                 if (!openSet.Contains(neighbour))
                 {
+                    //sets the tiles parent to be the current tile
                     neighbour.previousTile = tile;
-
+                    //adds it to the queue if its not already in it
                     if (!openSet.Contains(neighbour))
                     {
                         openSet.Enqueue(neighbour);
                     }
                 }
             }
+            //for visualisation
             if (Visualise)
             {
                 foreach (GridTile visualisingTile in openSet)
@@ -395,6 +426,8 @@ public class AI_Movement : MonoBehaviour
     async void BestFirstSearch(Vector3 startPos, Vector3 endPos)
     {
         Stopwatch timer = Stopwatch.StartNew();
+        
+        //creates comparision for heap
         Comparison<GridTile> comparison = (lhs, rhs) =>
         {
             int compare = lhs.h.CompareTo(rhs.h);
@@ -402,8 +435,10 @@ public class AI_Movement : MonoBehaviour
         };
         
         Comparer<GridTile> comparer = Comparer<GridTile>.Create(comparison);
+        //sets heap
         Heap<GridTile> openSet = new Heap<GridTile>(grid.MaxSize,comparer);
         
+        //gets the grid tiles for the start and end from the world positions
         GridTile startTile = grid.TileFromWorldPoint(startPos);
         GridTile targetTile = grid.TileFromWorldPoint(endPos);
 
@@ -416,25 +451,29 @@ public class AI_Movement : MonoBehaviour
         {
             GridTile tile = openSet.RemoveFirst();
 
+            //checks if current tile is the end tile
             if (tile == targetTile)
             {
                 retracePath(startTile, targetTile);
                 timer.Stop();
-                Debug.Log("Best First Search: " + timer.Elapsed.Milliseconds);
+                Debug.Log("Best First Search: " + timer.Elapsed.Milliseconds + " milliseconds");
                 openSet.Clear();
                 return;
             }
 
             foreach (GridTile neighbour in grid.GetNeighbours(tile, diagonal))
             {
+                //checks if neighbour is blocked or has already been explored
                 if (!closedSet.Contains(neighbour) && neighbour.isWalkable)
                 {
+                    //sets the h cost and tiles parent and adds it to the heap
                     neighbour.h = GetDistance(neighbour, targetTile);
                     openSet.Add(neighbour);
                     closedSet.Add(neighbour);
                     neighbour.previousTile = tile;
                 }
             }
+            //for visualisation
             if (Visualise)
             {
                 VisualisePathing(openSet, closedSet, targetTile);
@@ -449,11 +488,13 @@ public class AI_Movement : MonoBehaviour
 
         GridTile tile = end;
 
+        //goes through each tiles parent starting with the end tile until it reaches the start tile to get the path
         while (tile != start) {
             newPath.Add(tile);
             tile = tile.previousTile;
         }
 
+        //reverse the path so that it starts with the start tile
         newPath.Reverse();
 
         path = newPath;
@@ -487,6 +528,7 @@ public class AI_Movement : MonoBehaviour
 
     GameObject GetClosestObjectWithTag(string TargetTag)
     {
+        //gets the closest object with a tag so that the building being moved to is the closest instead of the first in the list
         GameObject Closest = new GameObject();
         float ClosestDistance = 9999;
         
