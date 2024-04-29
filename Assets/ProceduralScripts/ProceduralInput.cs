@@ -67,9 +67,9 @@ public class ProceduralInput : MonoBehaviour
         m_Grid[l, d].j = d;
         m_Grid[l, d].m_chosen = m_Grid[l, d].m_availableTiles[Random.Range(0, m_Grid[l, d].m_availableTiles.Count)];
         m_toActivate.Add(m_Grid[l, d]);
-        CreateRoads();
+        CreateRoads();//Wave sine function collapse
         int amountOfEach = 10;
-        while (amountOfEach >0)
+        while (amountOfEach >0)//Generating houses
         {
             int x = Random.Range(5, 95);
             int z = Random.Range(5, 95);
@@ -77,7 +77,7 @@ public class ProceduralInput : MonoBehaviour
             m_house1.transform.rotation = transform.rotation;
             m_house1.transform.Rotate(0, rotationAmount, 0, Space.Self);
             Vector3 size = m_house1.transform.localScale;
-            if (ValidPosition(x, z, size, rotationAmount))
+            if (ValidPosition(x, z, size, rotationAmount))//Make sure house being placed is a valid position to be placed in
             {
                 amountOfEach--;
                 var housePosition = new Vector3(x, 2.0f, z);
@@ -242,7 +242,7 @@ public class ProceduralInput : MonoBehaviour
                 }
             }
         }
-        foreach(GridTile tile in grid.gridArray)
+        foreach(GridTile tile in grid.gridArray)//Post make tiles next to entrance of a house walkable
         {
             if(tile.availablePost)
             {
@@ -250,7 +250,7 @@ public class ProceduralInput : MonoBehaviour
             }
         }
 
-        if (VisualiseGrid)
+        if (VisualiseGrid)//Debug option
         {
             grid.RenderTiles();
         }
@@ -360,7 +360,7 @@ public class ProceduralInput : MonoBehaviour
         }
         return true;
     }
-    void Update()
+    void Update()//Used to be able to impement Key inputs quickly for testing purposes
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -393,12 +393,12 @@ public class ProceduralInput : MonoBehaviour
                     b = Orientation.Road;
                     break;
             }
-            if (a != b)
+            if (a != b)//Check if the side is valid based on the tile next to it
             {
                 toRemove.Add(tile);
             }
         }
-        foreach (GameObject tile in toRemove)
+        foreach (GameObject tile in toRemove)//Remove invalid tiles
         {
             availableTiles.Remove(tile);
         }
@@ -406,11 +406,11 @@ public class ProceduralInput : MonoBehaviour
     void CreateRoads()
     {
         List<TileInfo> toAdd = new List<TileInfo>();
-        while (m_toActivate.Count != 0)
+        while (m_toActivate.Count != 0)//Always begins as we intialise the ativate function earlier on
         {
             int i = m_toActivate[0].i;
             int j = m_toActivate[0].j;
-            if (!m_toActivate[0].m_enabled)
+            if (!m_toActivate[0].m_enabled)// Dont want to waste computation time on already enabled and visible tiles
             {
                 List<GameObject> toRemove = new List<GameObject>();
                 for (int l = 0; l < m_toActivate[0].m_priority.Count; l++)
@@ -420,11 +420,11 @@ public class ProceduralInput : MonoBehaviour
                         toRemove.Add(m_toActivate[0].m_priority[l]);
                     }
                 }
-                foreach (GameObject tile in toRemove)
+                foreach (GameObject tile in toRemove)//Remove invalid priority tiles
                 {
                     m_toActivate[0].m_priority.Remove(tile);
                 }
-                if (m_toActivate[0].m_priority.Count > 0)
+                if (m_toActivate[0].m_priority.Count > 0)//If we have priority tiles use them
                 {
                     m_toActivate[0].m_chosen = m_toActivate[0].m_priority[Random.Range(0, m_toActivate[0].m_priority.Count)];
                 }
@@ -529,7 +529,7 @@ public class ProceduralInput : MonoBehaviour
                     }
                 }
                 Instantiate(m_toActivate[0].m_chosen, new Vector3(i + 0.5f, 0.1f, j + 0.5f), m_toActivate[0].m_chosen.transform.rotation);
-                if (i == 0)
+                if (i == 0)//Check for if at bounds extremes
                 {
                     if (!m_Grid[i + 1, j].m_enabled)
                     {
@@ -537,7 +537,7 @@ public class ProceduralInput : MonoBehaviour
                         m_toActivate.Add(m_Grid[i + 1, j]);
                     }
                 }
-                else if (i == length - 1)
+                else if (i == length - 1)//Check for if at bounds extremes
                 {
                     if (!m_Grid[i - 1, j].m_enabled)
                     {
@@ -558,7 +558,7 @@ public class ProceduralInput : MonoBehaviour
                         m_toActivate.Add(m_Grid[i - 1, j]);
                     }
                 }
-                if (j == 0)
+                if (j == 0)//Check for if at bounds extremes
                 {
                     if (!m_Grid[i, j + 1].m_enabled)
                     {
@@ -566,7 +566,7 @@ public class ProceduralInput : MonoBehaviour
                         m_toActivate.Add(m_Grid[i, j + 1]);
                     }
                 }
-                else if (j == width - 1)
+                else if (j == width - 1)//Check for if at bounds extremes
                 {
                     if (!m_Grid[i, j - 1].m_enabled)
                     {
@@ -588,7 +588,7 @@ public class ProceduralInput : MonoBehaviour
                     }
                 }
             }
-            m_toActivate.Remove(m_toActivate[0]);
+            m_toActivate.Remove(m_toActivate[0]);//We have finished with this tile now remove it from the activation list
         }
     }
 }
