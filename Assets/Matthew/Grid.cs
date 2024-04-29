@@ -19,8 +19,10 @@ public class Grid
         this.width = width;
         this.height = height;
 
+        //sets the size of the grid
         gridArray = new GridTile[width, height];
 
+        //sets the position for every tile in the grid
         for (int i = 0; i < gridArray.GetLength(0); i++) 
         {
             for (int j = 0; j < gridArray.GetLength(1); j++)
@@ -32,9 +34,11 @@ public class Grid
 
     public List<GridTile> GetNeighbours(GridTile tile, bool diagonal) 
     {
+        
         List<GridTile> neighbours = new List<GridTile>();
         if (diagonal)
         {
+            //gets all the neighbours for the current tile, including the diagonal ones
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
                     if (x == 0 && y == 0)
@@ -50,6 +54,7 @@ public class Grid
         }
         else
         {
+            //gets all the neighbours for the current tile except for the diagonal ones
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
                     if ((x == 0 && y != 0) || (x != 0 && y == 0))
@@ -70,6 +75,7 @@ public class Grid
 
     public GridTile TileFromWorldPoint(Vector3 worldPosition)
     {
+        //gets the tile form the world position provided by rounding the x and z values down to give a grid position
         int x = Mathf.RoundToInt(MathF.Floor(worldPosition.x));
         int y = Mathf.RoundToInt(MathF.Floor(worldPosition.z));
         return gridArray[x, y];

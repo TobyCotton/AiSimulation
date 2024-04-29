@@ -18,6 +18,7 @@ public class Heap<T> where T : IHeapItem<T>
 
     public void Add(T item)
     {
+        //adds an item to the heap of the heap and calls for it to be sorted 
         item.HeapIndex = currentItemCount;
         items[currentItemCount] = item;
         SortUp(item);
@@ -26,6 +27,7 @@ public class Heap<T> where T : IHeapItem<T>
 
     public T RemoveFirst()
     {
+        //removes the first node from the heap and calls for the items to be sorted 
         T firstItem = items[0];
         currentItemCount--;
         items[0] = items[currentItemCount];
@@ -46,6 +48,7 @@ public class Heap<T> where T : IHeapItem<T>
 	}
     
     public bool Contains(T item) {
+        //checks to see if the heap contains a certain node
         if (item.HeapIndex < currentItemCount)
         {
             return Equals(items[item.HeapIndex], item);
@@ -58,19 +61,23 @@ public class Heap<T> where T : IHeapItem<T>
     void SortDown(T item)
     {
         while (true) {
+            //gets the indexes for the children of the current node
             int childIndexLeft = item.HeapIndex * 2 + 1;
             int childIndexRight = item.HeapIndex * 2 + 2;
             int swapIndex = 0;
 
+            //checks the current left index to make sure its still with in the range of the heap
             if (childIndexLeft < currentItemCount) {
                 swapIndex = childIndexLeft;
 
+                //checks the current left index to make sure its still with in the range of the heap
                 if (childIndexRight < currentItemCount) {
+                    //compares the left and right nodes
                     if (comparer.Compare(items[childIndexLeft],items[childIndexRight]) < 0) {
                         swapIndex = childIndexRight;
                     }
                 }
-
+                //compares the decided child node against its parent
                 if (comparer.Compare(item,items[swapIndex]) < 0) {
                     Swap (item,items[swapIndex]);
                 }
@@ -92,6 +99,7 @@ public class Heap<T> where T : IHeapItem<T>
 		
         while (true) {
             T parentItem = items[parentIndex];
+            //compares node against its parent and swaps if the comparison shows they are in the wrong positiosn
             if (comparer.Compare(item,parentItem) > 0) {
                 Swap (item,parentItem);
             }
@@ -105,6 +113,7 @@ public class Heap<T> where T : IHeapItem<T>
 
     void Swap(T itemA, T itemB)
     {
+        //this swaps the position of two items in the heap
         items[itemA.HeapIndex] = itemB;
         items[itemB.HeapIndex] = itemA;
         int itemAIndex = itemA.HeapIndex;

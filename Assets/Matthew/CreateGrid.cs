@@ -62,7 +62,7 @@ public class CreateGrid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (update)
+        if (update && aiMovement != null)
         {
             Vector3 startPos = new Vector3(startPoint.x + 0.5f, 1, startPoint.y + 0.5f);
             Vector3 endPos = new Vector3(endPoint.x + 0.5f, 1f, endPoint.y + 0.5f);

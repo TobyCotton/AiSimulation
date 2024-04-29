@@ -38,18 +38,21 @@ public class GridTile : IHeapItem<GridTile>
 
     public void SetIsGrass()
     {
+        //sets the tile to be grass and sets the weight for the tile
         isGrass = true;
         weight = 1.6f;
     }
 
     public void SetIsPath()
     {
+        //sets the tile to not be grass and sets the weight for the tile 
         isGrass = false;
         weight = 0;
     }
 
     public int HeapIndex
     {
+        //the tiles position within the heap
         get { return heapIndex;} 
         set { heapIndex = value; }
     }
