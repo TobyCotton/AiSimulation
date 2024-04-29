@@ -299,6 +299,10 @@ public class AI_Movement : MonoBehaviour
                     {
                         openSet.Add(neighbour);
                     }
+                    else
+                    {
+                        openSet.UpdateItem(neighbour);
+                    }
                 }
             }
 
@@ -428,14 +432,7 @@ public class AI_Movement : MonoBehaviour
                     neighbour.h = GetDistance(neighbour, targetTile);
                     openSet.Add(neighbour);
                     closedSet.Add(neighbour);
-                    if (tile.previousTile == null)
-                    {
-                        tile.previousTile = neighbour;
-                    }
-                    else
-                    {
-                        neighbour.previousTile = tile;
-                    }
+                    neighbour.previousTile = tile;
                 }
             }
             if (Visualise)
@@ -519,7 +516,7 @@ public class AI_Movement : MonoBehaviour
                 {
                     if (grid.gridArray[i,j].isWalkable)
                     {
-                        s.color = Color.clear;
+                        s.color = Color.green;
                     }
                     else
                     {
