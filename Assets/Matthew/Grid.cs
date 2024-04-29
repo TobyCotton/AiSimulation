@@ -83,21 +83,16 @@ public class Grid
             {
                 gridArray[i, j].Tile = new GameObject("x: " + gridArray[i, j].worldPos.x + " z: " + gridArray[i, j].worldPos.z);
                 gridArray[i, j].Tile.transform.position = gridArray[i, j].worldPos;
-                gridArray[i, j].Tile.transform.position = new Vector3(gridArray[i, j].Tile.transform.position.x, 0.001f, gridArray[i, j].Tile.transform.position.z);
+                gridArray[i, j].Tile.transform.position = new Vector3(gridArray[i, j].Tile.transform.position.x, 0.15f, gridArray[i, j].Tile.transform.position.z);
                 gridArray[i, j].Tile.transform.Rotate(new Vector3(90, 0, 0));
                 gridArray[i, j].Tile.layer = LayerMask.NameToLayer("GridTile");
                 
                 var s = gridArray[i, j].Tile.AddComponent<SpriteRenderer>();
-//                var k = gridArray[i, j].Tile.GetComponent<GridTile>();
-                // if (k != null)
-                // {
-                //     Debug.Log("NOT NULL");
-                // }
                 s.sprite = sprite;
                
                 if (gridArray[i, j].isWalkable)
                 {
-                    s.color = gridArray[i,j].isGrass ? Color.clear : Color.blue;
+                    s.color = gridArray[i,j].isGrass ? Color.green : Color.blue;
                 }
                 else
                 {
