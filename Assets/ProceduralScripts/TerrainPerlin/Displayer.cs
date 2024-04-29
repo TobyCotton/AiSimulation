@@ -9,7 +9,7 @@ public class Displayer : MonoBehaviour
     private int m_number = 0;
     public string m_name;
 
-    public void OutputMap()
+    public void OutputMap()//Used to output to explorer
     {
         int width = heights.GetLength(0);
         int height = heights.GetLength(1);
@@ -22,7 +22,7 @@ public class Displayer : MonoBehaviour
         {
             for(int x = 0; x < width; x++)
             {
-                colourMap[(y * width) + x] = Color.Lerp(Color.black, Color.white, heights[x,y]);
+                colourMap[(y * width) + x] = Color.Lerp(Color.black, Color.white, heights[x,y]);//Make height map between the colors of black and white
             }
         }
         texture.SetPixels(colourMap);
@@ -30,7 +30,7 @@ public class Displayer : MonoBehaviour
 
         byte[] outputMap = texture.EncodeToPNG();
         var dirPath = Application.dataPath + "/../SaveImages/";
-        if (!System.IO.Directory.Exists(dirPath))
+        if (!System.IO.Directory.Exists(dirPath))//Make sure dir exists if not create it
         {
             System.IO.Directory.CreateDirectory(dirPath);
         }

@@ -39,7 +39,7 @@ public class Generator : MonoBehaviour
     public Displayer m_display;
     public string m_name;
 
-    public void GenerateMap()
+    public void GenerateMap()//Function that is called everytime we change the terrain
     {
         float[,] heights = PerlinNoiseTerrain.GenerateNoise(m_width, m_height, m_scale,m_octaves,m_persistance,m_octaveFrequency,m_seed, m_offset,permutation,perlinSlope,perlinSlope2,m_weight);
         if(m_display == null)
@@ -47,7 +47,7 @@ public class Generator : MonoBehaviour
             m_display = gameObject.GetComponent<Displayer>();
         }
         TerrainData thisData = theTerrain.terrainData;
-        if (thisData != null)
+        if (thisData != null)// Apply the heights if valid target found
         {
             m_display.heights = heights;
             m_display.m_name = m_name;
@@ -55,7 +55,7 @@ public class Generator : MonoBehaviour
         }
     }
 
-    void OnValidate()
+    void OnValidate()// Do not want these to be able to go lower than this
     {
         if(m_width < 1)
         {

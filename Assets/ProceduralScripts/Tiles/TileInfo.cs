@@ -17,15 +17,15 @@ public class TileInfo : MonoBehaviour
         m_availableTiles.Add(tile2);
         m_availableTiles.Add(tile3);
         m_availableTiles.Add(tile4);
-        for(int i =0; i < 100; i++)
+        for(int i =0; i < 100; i++)//More heavily weight these tiles
         {
             m_availableTiles.Add(tile5);
         }
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 15; i++)//More heavily weight these tiles
         {
             m_availableTiles.Add(tile6);
         }
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 15; i++)//More heavily weight these tiles
         {
             m_availableTiles.Add(tile7);
         }

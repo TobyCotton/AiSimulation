@@ -9,7 +9,7 @@ public class MapEditor : Editor
     public override void OnInspectorGUI()
     {
         Generator gen = target as Generator;
-        if(DrawDefaultInspector())
+        if(DrawDefaultInspector())//When anything changes in inspector do this
         {
             if(gen.m_autoUpdate)
             {
@@ -17,7 +17,7 @@ public class MapEditor : Editor
             }
         }
 
-        if(GUILayout.Button("Generate"))
+        if(GUILayout.Button("Generate"))// reset heights
         {
             gen.GenerateMap();
         }

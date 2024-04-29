@@ -13,7 +13,7 @@ public class PerlinNoiseTerrain
 
 
         System.Random rand = new System.Random(seed);
-        for (int i = 0; i < octaves; i++)
+        for (int i = 0; i < octaves; i++)//making the octave values
         {
             float offsetX = rand.Next(-10000, 10000) + offset.x;
             float offsetY = rand.Next(-10000, 10000) + offset.y;
@@ -23,10 +23,10 @@ public class PerlinNoiseTerrain
         float max = float.MinValue;
         float min = float.MaxValue;
 
-        float halfW = width/2;
+        float halfW = width/2;// Zoom into the centre
         float halfH = height/2;
 
-        if(scale <= 0.251f)
+        if(scale <= 0.251f)// Secondary check to make sure it definetly cannot crash a 0 value would break the program
         {
             scale = 0.251f;
         }
@@ -40,20 +40,20 @@ public class PerlinNoiseTerrain
 
                 for (int i = 0; i < octaves; i++)
                 {
-                    float sampleX = (x- halfW) / (scale * frequency) + octaveOffsets[i].x;
+                    float sampleX = (x- halfW) / (scale * frequency) + octaveOffsets[i].x;// Apply octave frequency
                     float sampleY = (y-halfH) / (scale * frequency) + octaveOffsets[i].y;
 
                     float perlinValue = Noise2D(sampleX, sampleY, Permutation) * 2 -1;
                     noiseHeight += perlinValue * amplitude;
-                    amplitude *= persistance;
+                    amplitude *= persistance;// Apply persistance
                     frequency *= octaveIncrease;
                 }
                 heights[x, y] = noiseHeight;
-                if(noiseHeight > max)
+                if(noiseHeight > max)// Need the max height for inverse lerp
                 {
                     max = noiseHeight;
                 }
-                else if(noiseHeight < min)
+                else if(noiseHeight < min)// Need the min height for inverse lerp
                 {
                     min = noiseHeight;
                 }
@@ -110,7 +110,7 @@ public class PerlinNoiseTerrain
 
         return LerpMine(u,
             LerpMine(v, dotBottomLeft, dotTopLeft),
-            LerpMine(v, dotBottomRight, dotTopRight)
+            LerpMine(v, dotBottomRight, dotTopRight)//Hardcoded lerp (unity one works differently and can mess up the program slightly)
         );
     }
     private static Vector2 SelectCorner(int c)
